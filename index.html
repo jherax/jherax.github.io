@@ -1,666 +1,100 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <title>jherax.github.io by jherax</title>
-  </head>
-
-  <body>
-    <header>
-      <div class="inner">
-        <h1>jherax.github.io</h1>
-        <h2>This site shows examples for the plugins developed by jherax</h2>
-        <a href="https://github.com/jherax" class="button"><small>Follow me on</small>GitHub</a>
-      </div>
-    </header>
-
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
-<a name="js-utils" class="anchor" href="#js-utils"><span class="octicon octicon-link"></span></a><a href="https://github.com/jherax/js-utils.git">js-utils</a>
-</h1>
-
-<p>These are a suite of utilities for javascript and jquery, including tools for validating, text formatting, and misc.</p>
-
-<h2>
-<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
-
-<p>The tools has a dependency on <a href="http://code.jquery.com/jquery-1.10.2.min.js">jQuery 1.9+</a>, which must be loaded before <em><a href="https://github.com/jherax/js-utils/tree/master/assets/js/jherax.js">js-utils</a></em>.<br>
-Also require some <a href="https://github.com/jherax/js-utils/tree/master/assets/css/jherax.css">CSS</a> for tooltip elements and other stuff.<br>
-Some functions depend on <a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js">jQuery.UI</a><br><br>
-The namespace is <code>js.utils</code>, so we must use it to access the methods exposed.<br>
-A property called <code>wrapper</code> was exposed in <code>js</code> namespace to specify where the <a href="#fnshowtooltip-dom-message">tooltip</a> and <a href="#fnloading-options">loading</a> elements will be appended. By default <code>js.wrapper = "body"</code><br></p>
-
-<h2>
-<a name="namespacing" class="anchor" href="#namespacing"><span class="octicon octicon-link"></span></a>Namespacing</h2>
-
-<p>In many programming languages, namespacing is a technique employed to avoid collisions with other objects or variables in the global namespace. They're also extremely useful for helping organize blocks of functionality in your application into easily manageable groups that can be uniquely identified.<br></p>
-
-<p>In JavaScript, namespacing at an enterprise level is critical as it's important to safeguard your code from breaking in the event of another script on the page using the same variable or method names as you are.</p>
-
-<h2>
-<a name="list-of-methods" class="anchor" href="#list-of-methods"><span class="octicon octicon-link"></span></a>List of methods</h2>
-
-<ul>
-<li><a href="#browser">browser</a></li>
-<li><a href="#isdom-object">isDOM</a></li>
-<li><a href="#isevent-object">isEvent</a></li>
-<li><a href="#isfunction-object">isFunction</a></li>
-<li><a href="#fnstringify-json">fnStringify</a></li>
-<li><a href="#fngetdate-">fnGetDate</a></li>
-<li><a href="#fngethtmltext-index-value">fnGetHtmlText</a></li>
-<li><a href="#fngetselectedtext-">fnGetSelectedText</a></li>
-<li><a href="#fngetcaretposition-dom">fnGetCaretPosition</a></li>
-<li><a href="#fnsetcaretposition-dom-position">fnSetCaretPosition</a></li>
-<li><a href="#fnescaperegexp-text">fnEscapeRegExp</a></li>
-<li><a href="#fncapitalize-object-type">fnCapitalize</a></li>
-<li><a href="#fnnumericformat-object">fnNumericFormat</a></li>
-<li><a href="#fnisvalidformat-object-type">fnIsValidFormat</a></li>
-<li><a href="#fnisvaliddate-dom-options">fnIsValidDate</a></li>
-<li><a href="#fnshowtooltip-dom-message">fnShowTooltip</a></li>
-<li><a href="#fnloading-options">fnLoading</a></li>
-<li><a href="#fnsetfocus-">fnSetFocus</a></li>
-</ul><h2>
-<a name="jquery-extensions" class="anchor" href="#jquery-extensions"><span class="octicon octicon-link"></span></a>jQuery extensions</h2>
-
-<ul>
-<li><a href="#jqueryfncenter-">$.fnCenter</a></li>
-<li><a href="#jqueryfnmaxlength-length">$.fnMaxLength</a></li>
-<li><a href="#jqueryfncapitalize-type">$.fnCapitalize</a></li>
-<li><a href="#jqueryfnnumericformat-">$.fnNumericFormat</a></li>
-<li><a href="#jqueryfnnumericinput-">$.fnNumericInput</a></li>
-<li><a href="#jqueryfncustominput-mask">$.fnCustomInput</a></li>
-<li><a href="#jqueryfndisablekey-keys">$.fnDisableKey</a></li>
-<li><a href="#jqueryfneasyvalidate-fnvalidator">$.fnEasyValidate</a></li>
-</ul><h2>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
-
-<h3>
-<a name="browser" class="anchor" href="#browser"><span class="octicon octicon-link"></span></a>browser</h3>
-
-<p>Adds support for browser detect, because jquery 1.9+ deprecates the <em>[browser]</em> property.<br>
-For detecting capabilities, better to use <a href="http://modernizr.com/docs/">Modernizr</a>.<br><strong>Returns</strong> <code>Object</code></p>
-
-<div class="highlight highlight-javascript"><pre>  <span class="k">if</span> <span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">msie</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">chrome</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">mozilla</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">opera</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
-  <span class="c1">// you can see what is your browser</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">browser</span><span class="p">);</span>
-  <span class="c1">// you can also know the browser version</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">version</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-<a name="isdom-object" class="anchor" href="#isdom-object"><span class="octicon octicon-link"></span></a>isDOM <em>(object)</em>
-</h3>
-
-<p>Determines if a object is DOM element.<br><strong>Returns</strong> <code>Boolean</code></p>
-
-<ul>
-<li>
-<strong>object:</strong> <code>Object</code> to validate</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">_dom</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"txtName"</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">_dom</span><span class="p">));</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">_dom</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
-</pre></div>
-
-<h3>
-<a name="isevent-object" class="anchor" href="#isevent-object"><span class="octicon octicon-link"></span></a>isEvent <em>(object)</em>
-</h3>
-
-<p>Determines if the entry parameter is a normalized <a href="http://api.jquery.com/category/events/event-object/">Event Object</a>.<br><strong>Returns</strong> <code>Boolean</code></p>
-
-<ul>
-<li>
-<strong>object:</strong> <code>Object</code> to validate</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">"click"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">isEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">));</span>
-  <span class="p">});</span>
-</pre></div>
-
-<h3>
-<a name="isfunction-object" class="anchor" href="#isfunction-object"><span class="octicon octicon-link"></span></a>isFunction <em>(object)</em>
-</h3>
-
-<p>Determines if the entry parameter is a function.<br><strong>Returns</strong> <code>Boolean</code></p>
-
-<ul>
-<li>
-<strong>object:</strong> <code>Object</code> to validate</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">myObj</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
-  <span class="c1">//myObj = "function";</span>
-  <span class="c1">//myObj = null;</span>
-  <span class="c1">//myObj = {};</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">myObj</span><span class="p">));</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">myObj</span><span class="p">))</span> <span class="p">{</span>
-    <span class="c1">//call the method</span>
-    <span class="nx">myObj</span><span class="p">();</span>
-  <span class="p">}</span>
-</pre></div>
-
-<h3>
-<a name="fnstringify-json" class="anchor" href="#fnstringify-json"><span class="octicon octicon-link"></span></a>fnStringify <em>(json)</em>
-</h3>
-
-<p>This is a facade of <code>JSON.stringify</code> and provides support in old browsers.<br>
-fnStringify serializes a <em>JSON</em> object and returns its string representation.<br><strong>Returns</strong> <code>String</code></p>
-
-<ul>
-<li>
-<strong>json:</strong> <code>JSON</code> object to be serialized</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">jsonPerson</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">name</span><span class="o">:</span> <span class="s2">"David"</span><span class="p">,</span>
-      <span class="nx">sex</span><span class="o">:</span> <span class="s2">"male"</span><span class="p">,</span>
-      <span class="nx">age</span><span class="o">:</span> <span class="mi">30</span>
-  <span class="p">};</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnStringify</span><span class="p">(</span><span class="nx">jsonPerson</span><span class="p">));</span>
-  <span class="c1">// '{"name":"David","age":30,"sex":"male"}'</span>
-
-  <span class="c1">// We use jQuery.extend to merge the contents of</span>
-  <span class="c1">// two or more objects together into the first object.</span>
-  <span class="kd">var</span> <span class="nx">jsonNew</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span> <span class="nx">alias</span><span class="o">:</span> <span class="s1">'jherax'</span> <span class="p">},</span> <span class="nx">jsonPerson</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnStringify</span><span class="p">(</span><span class="nx">jsonNew</span><span class="p">));</span>
-</pre></div>
-
-<h3>
-<a name="fngetdate-" class="anchor" href="#fngetdate-"><span class="octicon octicon-link"></span></a>fnGetDate ()</h3>
-
-<p>Gets the text of current date in <strong>es-CO</strong> culture.<br><strong>Returns</strong> <code>Object</code> with the following properties:</p>
-
-<div class="highlight highlight-javascript"><pre><span class="p">{</span>
-  <span class="nx">date</span><span class="o">:</span> <span class="nb">String</span> <span class="c1">//gets the date in dd/MM/yyyy format</span>
-  <span class="nx">time</span><span class="o">:</span> <span class="nb">String</span> <span class="c1">//gets the time in HH:mm:ss format</span>
-  <span class="nx">dateTime</span><span class="o">:</span> <span class="nb">String</span> <span class="c1">//gets the date in dd/MM/yyyy HH:mm:ss format</span>
-<span class="p">}</span>
-</pre></div>
-
-<div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnGetDate</span><span class="p">();</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#span-time"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">date</span> <span class="o">+</span><span class="s2">" &lt;b&gt;"</span><span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">time</span> <span class="o">+</span><span class="s2">"&lt;/b&gt;"</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-<a name="fngethtmltext-index-value" class="anchor" href="#fngethtmltext-index-value"><span class="octicon octicon-link"></span></a>fnGetHtmlText <em>(index, value)</em>
-</h3>
-
-<p>Gets the text as html encoded.<br>
-This is a delegate for <a href="http://api.jquery.com/val/#val2">jQuery.val()</a> or <a href="http://api.jquery.com/text/#text2">jQuery.text()</a><br><strong>Returns</strong> <code>String</code> with encoded html text</p>
-
-<div class="highlight highlight-html"><pre>  <span class="nt">&lt;textarea</span> <span class="na">rows=</span><span class="s">"4"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
-  <span class="nt">&lt;textarea</span> <span class="na">rows=</span><span class="s">"6"</span> <span class="na">class=</span><span class="s">"target"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
-  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"demo-wrapper"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;h3&gt;</span>fnGetHtmlText<span class="nt">&lt;/h3&gt;</span>
-    <span class="nt">&lt;p&gt;&lt;u&gt;</span>Demo for delegated function<span class="nt">&lt;/u&gt;&lt;/p&gt;</span>
-  <span class="nt">&lt;/div&gt;</span>
-</pre></div>
-
-<div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#demo-wrapper"</span><span class="p">).</span><span class="nx">html</span><span class="p">();</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"textarea"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">html</span><span class="p">));</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">".target"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnGetHtmlText</span><span class="p">);</span>
-  <span class="c1">//also can run it as invoked function</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnGetHtmlText</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">html</span><span class="p">));</span>
-</pre></div>
-
-<h3>
-<a name="fngetselectedtext-" class="anchor" href="#fngetselectedtext-"><span class="octicon octicon-link"></span></a>fnGetSelectedText ()</h3>
-
-<p>Gets the selected text in the document.<br><strong>Returns</strong> <code>Object</code> with the following properties:</p>
-
-<div class="highlight highlight-javascript"><pre><span class="p">{</span>
-  <span class="nx">text</span><span class="o">:</span> <span class="nb">String</span> <span class="c1">//selected text (whitespace removed from the beginning and end of text)</span>
-  <span class="nx">slice</span><span class="o">:</span> <span class="nb">String</span> <span class="c1">//complement of selected text (if active element is category:text)</span>
-  <span class="nx">start</span><span class="o">:</span> <span class="nb">Number</span> <span class="c1">//initial cursor position (if active element is category:text)</span>
-  <span class="nx">end</span><span class="o">:</span> <span class="nb">Number</span> <span class="c1">//final cursor position (if active element is category:text)</span>
-<span class="p">}</span>
-</pre></div>
-
-<div align="right">Take a look at <a href="#categorytext">category:text</a> </div>
-
-<div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">sel</span> <span class="o">=</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnGetSelectedText</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">sel</span><span class="p">.</span><span class="nx">text</span> <span class="o">!==</span> <span class="s2">""</span><span class="p">)</span> <span class="nx">alert</span><span class="p">(</span><span class="nx">sel</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sel</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-<a name="fngetcaretposition-dom" class="anchor" href="#fngetcaretposition-dom"><span class="octicon octicon-link"></span></a>fnGetCaretPosition <em>(dom)</em>
-</h3>
-
-<p>Gets the cursor position in the text.<br><strong>Returns</strong> <code>Number</code></p>
-
-<ul>
-<li>
-<strong>dom:</strong> <code>DOM</code> active element <a href="#categorytext">category:text</a>
-</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"txtName"</span><span class="p">);</span>
-  <span class="c1">//text = $("#txtName").get(0);</span>
-  <span class="nx">text</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">"Hello World!"</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnGetCaretPosition</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pos</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-<a name="fnsetcaretposition-dom-position" class="anchor" href="#fnsetcaretposition-dom-position"><span class="octicon octicon-link"></span></a>fnSetCaretPosition <em>(dom, position)</em>
-</h3>
-
-<p>Sets the cursor position in the text.<br></p>
-
-<ul>
-<li>
-<strong>dom:</strong> <code>DOM</code> element <a href="#categorytext">category:text</a>
-</li>
-<li>
-<strong>position</strong> <code>Number</code> of the position where the cursor is set</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="nx">text</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">"Hello World!"</span><span class="p">;</span>
-  <span class="nx">text</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
-  <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnSetCaretPosition</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
-  <span class="c1">//cursor must be positioned after "Hello"</span>
-</pre></div>
-
-<h3>
-<a name="fnescaperegexp-text" class="anchor" href="#fnescaperegexp-text"><span class="octicon octicon-link"></span></a>fnEscapeRegExp <em>(text)</em>
-</h3>
-
-<p>Escaping user input to be treated as a literal string within a regular expression.<br><strong>Returns</strong> <code>String</code> or <code>null</code> if <em>text</em> parameter is not a string</p>
-
-<div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">re1</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"[abc]+\\d"</span><span class="p">);</span> <span class="c1">//treats the string as a regular expression pattern</span>
-  <span class="kd">var</span> <span class="nx">re2</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnEscapeRegExp</span><span class="p">(</span><span class="s2">"[abc]+\\d"</span><span class="p">));</span> <span class="c1">//treats the string as a literal</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">re1</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"ac1"</span><span class="p">));</span> <span class="c1">//RegExp is: /[abc]+\d/</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">re2</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"ac1"</span><span class="p">));</span> <span class="c1">//RegExp is: /\[abc\]\+\\d/</span>
-</pre></div>
-
-<h3>
-<a name="fncapitalize-object-type" class="anchor" href="#fncapitalize-object-type"><span class="octicon octicon-link"></span></a>fnCapitalize <em>(object, type)</em>
-</h3>
-
-<p>Transforms the text to capital letter. (Some articles are lowercased according to <strong>es-CO</strong> culture)<br>
-This function also removes all newlines, spaces, and tabs from the beginning and end of the supplied string.<br>
-If the whitespace characters occur in the middle of the string, also they are removed.<br><strong>Returns</strong> <code>String</code></p>
-
-<ul>
-<li>
-<strong>object:</strong> <code>String</code> or <code>DOM</code> element <a href="#categorytext">category:text</a>
-</li>
-<li>
-<strong>type:</strong> <code>String</code> specifying the text transformation. Can be one of the following values:
-
-<ul>
-<li>
-<code>word</code> transform to lowercase and then turns the first letter of each word into uppercase</li>
-<li>
-<code>title</code> turns the first letter of each word into uppercase</li>
-<li>
-<code>lower</code> transform to lowercase</li>
-<li>
-<code>upper</code> transform to uppercase</li>
-</ul>
-</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="s2">"  \t  hello  to  THE \t  wOrLD  \n   "</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"word : "</span> <span class="o">+</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">test</span><span class="p">,</span> <span class="s2">"word"</span><span class="p">));</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"title: "</span> <span class="o">+</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">test</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">));</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"lower: "</span> <span class="o">+</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">test</span><span class="p">,</span> <span class="s2">"lower"</span><span class="p">));</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"upper: "</span> <span class="o">+</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">test</span><span class="p">,</span> <span class="s2">"upper"</span><span class="p">));</span>
-</pre></div>
-
-<h3>
-<a name="fnnumericformat-object" class="anchor" href="#fnnumericformat-object"><span class="octicon octicon-link"></span></a>fnNumericFormat <em>(object)</em>
-</h3>
-
-<p>Sets the numeric format according to <strong>es-CO</strong> culture.<br>
-Places the decimal<code>.</code> and thousand<code>,</code> separator.<br><strong>Returns</strong> <code>String</code> with the formatted number</p>
-
-<ul>
-<li>
-<strong>object:</strong> <code>String</code> or <code>DOM</code> element <a href="#categorytext">category:text</a>
-</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="s2">"123456789,47.15"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">num</span><span class="p">));</span> <span class="c1">//sends String</span>
-  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span>
-  <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">text</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="c1">//sends DOM</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">text</span><span class="p">.</span><span class="nx">val</span><span class="p">());</span>
-</pre></div>
-
-<h3>
-<a name="fnisvalidformat-object-type" class="anchor" href="#fnisvalidformat-object-type"><span class="octicon octicon-link"></span></a>fnIsValidFormat <em>(object, type)</em>
-</h3>
-
-<p>Validates the format of text, depending on the type supplied.<br><strong>Note:</strong> Date validations are performed according to <strong>es-CO</strong> culture.<br><strong>Returns</strong> <code>Boolean</code></p>
-
-<ul>
-<li>
-<strong>object:</strong> <code>String</code> or <code>DOM</code> element <a href="#categorytext">category:text</a>
-</li>
-<li>
-<strong>type:</strong> <code>String</code> specifying the type of validation. Can be one of the following values:
-
-<ul>
-<li>
-<code>d</code> validates the date format - dd/MM/yyyy</li>
-<li>
-<code>t</code> validates the time format - HH:mm:ss</li>
-<li>
-<code>dt</code> Validates DateTime format - dd/MM/yyyy HH:mm:ss</li>
-<li>
-<code>email</code> Validates an email address</li>
-<li>
-<code>pass</code> Validates the password strength (must have 8-20 characters, one+ uppercase, one+ number)</li>
-<li>
-<code>lat</code> Validates the latitude</li>
-<li>
-<code>lon</code> Validates the longitude</li>
-</ul>
-</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">_dateTime</span> <span class="o">=</span> <span class="s2">"31/10/2013 16:10:00"</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">_email</span> <span class="o">=</span> <span class="s2">"jherax-12gmail.com"</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">_pass</span> <span class="o">=</span> <span class="s2">"insufficient"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnIsValidFormat</span><span class="p">(</span><span class="nx">_dateTime</span><span class="p">,</span> <span class="s2">"dt"</span><span class="p">));</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnIsValidFormat</span><span class="p">(</span><span class="nx">_email</span><span class="p">,</span> <span class="s2">"email"</span><span class="p">));</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnIsValidFormat</span><span class="p">(</span><span class="nx">_pass</span><span class="p">,</span> <span class="s2">"pass"</span><span class="p">));</span>
-</pre></div>
-
-<h3>
-<a name="fnisvaliddate-dom-options" class="anchor" href="#fnisvaliddate-dom-options"><span class="octicon octicon-link"></span></a>fnIsValidDate <em>(dom, options)</em>
-</h3>
-
-<p>Evaluates whether the value of text is a date or not.<br>
-The validation outcome will be shown in a tooltip.<br>
-Tooltip has a dependency on <a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js">jQuery.UI</a><br><strong>Note:</strong> Date validations are performed according to <strong>es-CO</strong> culture.<br><strong>Important:</strong> You can set up the format error message through the property:<br><code>js.utils.</code><b><code>fnIsValidDate.formatError</code></b><br><strong>Returns</strong> <code>Boolean</code></p>
-
-<ul>
-<li>
-<strong>dom:</strong> <code>DOM</code> element <a href="#categorytext">category:text</a>
-</li>
-<li>
-<strong>options:</strong> <code>Object</code> that provides the following settings:</li>
-</ul><div class="highlight highlight-javascript"><pre><span class="p">{</span>
-  <span class="nx">compareTo</span><span class="o">:</span> <span class="nb">Date</span><span class="p">,</span> <span class="nb">String</span> <span class="c1">//date against which to compare the entry value (Default: new Date())</span>
-  <span class="nx">isFuture</span><span class="o">:</span> <span class="nb">Boolean</span> <span class="c1">//determines whether entry date must be greater than [compareTo] (Default:false)</span>
-  <span class="nx">warning</span><span class="o">:</span> <span class="nb">String</span> <span class="c1">//message indicating that entry date did not meet the requirements</span>
-<span class="p">}</span>
-</pre></div>
-
-<div class="highlight highlight-javascript"><pre>  <span class="c1">//this can be specified in a master page or using a singleton</span>
-  <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnIsValidDate</span><span class="p">.</span><span class="nx">formatError</span> <span class="o">=</span> <span class="s2">"The date format is incorrect"</span><span class="p">;</span>
-
-  <span class="c1">//validates the form</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#btnSendForm"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">"click"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-
-    <span class="kd">var</span> <span class="nx">dBirthday</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtBirthday"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="nx">dBirthday</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnGetDate</span><span class="p">().</span><span class="nx">date</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">dDriverLic</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtDriverLic"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s2">"28/02/2010"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnIsValidDate</span><span class="p">(</span><span class="nx">dDriverLic</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">warning</span><span class="o">:</span> <span class="s2">"The driver's license expedition can't be greater than today"</span>
-    <span class="p">}))</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnIsValidDate</span><span class="p">(</span><span class="nx">dBirthday</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">compareTo</span><span class="o">:</span> <span class="nx">dDriverLic</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span>
-        <span class="nx">warning</span><span class="o">:</span> <span class="s2">"Your birthday can't be greater than the driver's license expedition"</span>
-    <span class="p">}))</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-
-  <span class="p">});</span>
-</pre></div>
-
-<h3>
-<a name="fnshowtooltip-dom-message" class="anchor" href="#fnshowtooltip-dom-message"><span class="octicon octicon-link"></span></a>fnShowTooltip <em>(dom, message)</em>
-</h3>
-
-<p>Shows a tooltip <strong><em>message</em></strong> at the right side of the <strong><em>dom</em></strong> element and focuses that element.<br>
-This function is very useful when need to notify the validation outcome.<br>
-It has a dependency on <a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js">jQuery.UI</a> and also has a <a href="https://github.com/jherax/js-utils/tree/master/assets/css/jherax.css">css class</a> <code>.vld-tooltip</code><br><strong>Returns</strong> <code>Boolean</code>, always returns <code>false</code></p>
-
-<ul>
-<li>
-<strong>message:</strong> <code>String</code> with the text to show</li>
-<li>
-<strong>dom:</strong> <code>DOM</code> element</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">_email</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"txtEmail"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnIsValidFormat</span><span class="p">(</span><span class="nx">_email</span><span class="p">,</span> <span class="s2">"email"</span><span class="p">))</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnShowTooltip</span><span class="p">(</span><span class="nx">_email</span><span class="p">,</span> <span class="s2">"The email address is not valid"</span><span class="p">);</span>
-  <span class="p">}</span>
-</pre></div>
-
-<h3>
-<a name="fnloading-options" class="anchor" href="#fnloading-options"><span class="octicon octicon-link"></span></a>fnLoading <em>(options)</em>
-</h3>
-
-<p>Shows a overlay screen with the "loading" indicator at the center.<br>
-The progress animation is performed through CSS3, so you must add the <a href="https://github.com/jherax/js-utils/tree/master/assets/css/jherax.css">css class</a>:<br><code>#floatingBarsG</code> <code>.blockG</code> <code>@keyframes fadeG</code> <code>.bg-fixed</code> <code>.bg-opacity</code><br><strong>Returns</strong> <code>Boolean</code>, always returns <code>true</code></p>
-
-<ul>
-<li>
-<strong>options:</strong> <code>Object</code> that provides the following settings:</li>
-</ul><div class="highlight highlight-javascript"><pre><span class="p">{</span>
-  <span class="nx">show</span><span class="o">:</span> <span class="nb">Boolean</span> <span class="c1">//shows the loading screen (Default: true)</span>
-  <span class="nx">hide</span><span class="o">:</span> <span class="nb">Boolean</span> <span class="c1">//hides the loading screen (Default: false)</span>
-  <span class="nx">delay</span><span class="o">:</span> <span class="nb">Number</span> <span class="c1">//miliseconds of fadeIn animation (Default: 2600)</span>
-<span class="p">}</span>
-</pre></div>
-
-<div class="highlight highlight-javascript"><pre>  <span class="nx">$</span><span class="p">(</span><span class="s2">"#btnTest"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">"click"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnLoading</span><span class="p">();</span>
-      <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-          <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnLoading</span><span class="p">({</span> <span class="nx">hide</span><span class="o">:</span><span class="kc">true</span> <span class="p">});</span>
-    <span class="p">},</span> <span class="mi">8000</span><span class="p">);</span>
-  <span class="p">});</span>
-</pre></div>
-
-<h3>
-<a name="fnsetfocus-" class="anchor" href="#fnsetfocus-"><span class="octicon octicon-link"></span></a>fnSetFocus ()</h3>
-
-<p>Sets the focus on all <code>input:text</code> and <code>textarea</code> elements, except those that have <code>.no-auto-focus</code> class.<br>
-This function is util when you need validate form fields.</p>
-
-<div class="highlight highlight-javascript"><pre>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtDate"</span><span class="p">).</span><span class="nx">datepicker</span><span class="p">().</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">"no-auto-focus"</span><span class="p">);</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="s2">"word"</span><span class="p">);</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtID"</span><span class="p">).</span><span class="nx">fnNumericInput</span><span class="p">();</span>
-  <span class="p">});</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#btnSendForm"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">"click"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnSetFocus</span><span class="p">();</span>
-  <span class="p">});</span>
-</pre></div>
-
-<h2>
-<a name="jquery-plugins" class="anchor" href="#jquery-plugins"><span class="octicon octicon-link"></span></a>jQuery plugins</h2>
-
-<p>This is a set of utilities for <a href="http://jquery.com/">jQuery</a>.<br>
-jQuery is a fast, small, and feature-rich JavaScript library. It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy API that works cross-browser.<br>
-If you want to learn more about jQuery, here is a full guide: <a href="http://learn.jquery.com/about-jquery/how-jquery-works/">How jQuery Works</a>.</p>
-
-<h3>
-<a name="jqueryfncenter-" class="anchor" href="#jqueryfncenter-"><span class="octicon octicon-link"></span></a>jQuery.fnCenter ()</h3>
-
-<p>Sets the collection of jquery objects in the center of screen.<br>
-Elements are centered using fixed position.<br><strong>Returns</strong> <code>jQuery</code></p>
-
-<div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'&lt;div id="divHello" /&gt;'</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
-    <span class="s1">'padding'</span><span class="o">:</span> <span class="s1">'20px'</span><span class="p">,</span>
-    <span class="s1">'background'</span><span class="o">:</span> <span class="s1">'#ccc'</span><span class="p">,</span>
-    <span class="s1">'borderRadius'</span><span class="o">:</span> <span class="s1">'5px'</span>
-  <span class="p">}).</span><span class="nx">appendTo</span><span class="p">(</span><span class="s2">"body"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s2">"&lt;h4&gt;Hello jQuery&lt;/h4&gt;"</span><span class="p">);</span>
-  <span class="nx">div</span><span class="p">.</span><span class="nx">fnCenter</span><span class="p">();</span>
-</pre></div>
-
-<h3>
-<a name="jqueryfnmaxlength-length" class="anchor" href="#jqueryfnmaxlength-length"><span class="octicon octicon-link"></span></a>jQuery.fnMaxLength <em>(length)</em>
-</h3>
-
-<p>Limits the max length of characters in the elements <a href="#categorytext">category:text</a><br>
-A tooltip will be placed on the right side of input element showing the characters remaining.<br>
-It has a dependency on <a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js">jQuery.UI</a> and also has a <a href="https://github.com/jherax/js-utils/tree/master/assets/css/jherax.css">css class</a> <code>.vld-tooltip</code><br><strong>Returns</strong> <code>jQuery</code></p>
-
-<ul>
-<li>
-<strong>length:</strong> <code>Number</code> specifying the max length of characters</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">fnMaxLength</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">".numbers"</span><span class="p">).</span><span class="nx">fnMaxLength</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-<a name="jqueryfncapitalize-type" class="anchor" href="#jqueryfncapitalize-type"><span class="octicon octicon-link"></span></a>jQuery.fnCapitalize <em>(type)</em>
-</h3>
-
-<p>This is the jQuery version of <a href="#fncapitalize-object-type">fnCapitalize</a>.<br>
-Transforms the text to capital letter. (Some articles are lowercased according to <strong>es-CO</strong> culture)<br>
-The plugin also removes all newlines, spaces, and tabs from the beginning and end of the string.<br>
-If the whitespace characters occur in the middle of the string, also they are removed.<br><strong>Note:</strong> The text is transformed when the <code>blur</code> event occurs.<br><strong>Returns</strong> <code>jQuery</code></p>
-
-<ul>
-<li>
-<strong>type:</strong> <code>String</code> specifying the text transformation. Can be one of the following values:
-
-<ul>
-<li>
-<code>word</code> transform to lowercase and then turns the first letter of each word into uppercase</li>
-<li>
-<code>title</code> turns the first letter of each word into uppercase</li>
-<li>
-<code>lower</code> transform to lowercase</li>
-<li>
-<code>upper</code> transform to uppercase</li>
-</ul>
-</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">"  \t  hello \t\t  jQuery\t\n "</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-  <span class="nx">name</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="s2">"title"</span><span class="p">).</span><span class="nx">focus</span><span class="p">();</span>
-  <span class="c1">//raise blur event to transform text</span>
-</pre></div>
-
-<h3>
-<a name="jqueryfnnumericformat-" class="anchor" href="#jqueryfnnumericformat-"><span class="octicon octicon-link"></span></a>jQuery.fnNumericFormat ()</h3>
-
-<p>This is the jQuery version of <a href="#fnnumericformat-object">fnNumericFormat</a>.<br>
-Sets the numeric format according to <strong>es-CO</strong> culture.<br>
-Places the decimal<code>.</code> and thousand<code>,</code> separator.<br><strong>Note:</strong> The text is formatted when the <code>keyup, blur</code> events occurs.<br><strong>Returns</strong> <code>jQuery</code></p>
-
-<div class="highlight highlight-javascript"><pre>  <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="s2">"123456789,47.15"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span> <span class="c1">//number to be formatted</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">fnNumericFormat</span><span class="p">().</span><span class="nx">focus</span><span class="p">();</span>
-</pre></div>
-
-<h3>
-<a name="jqueryfnnumericinput-" class="anchor" href="#jqueryfnnumericinput-"><span class="octicon octicon-link"></span></a>jQuery.fnNumericInput ()</h3>
-
-<p>This function allows that only numeric keys can be pressed at the input.<br><strong>Returns</strong> <code>jQuery</code></p>
-
-<div class="highlight highlight-javascript"><pre>  <span class="nx">$</span><span class="p">(</span><span class="s2">".vld-numeric"</span><span class="p">).</span><span class="nx">fnNumericInput</span><span class="p">();</span>
-</pre></div>
-
-<h3>
-<a name="jqueryfncustominput-mask" class="anchor" href="#jqueryfncustominput-mask"><span class="octicon octicon-link"></span></a>jQuery.fnCustomInput <em>(mask)</em>
-</h3>
-
-<p>This function applies a mask for the allowed characters.<br><strong>Returns</strong> <code>jQuery</code></p>
-
-<ul>
-<li>
-<strong>mask:</strong> It can be one of these:<br><code>String</code>: is a literal with the allowed characters.<br><code>RegExp</code>: is a regular expression for the allowed characters.</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtGrade"</span><span class="p">).</span><span class="nx">fnCustomInput</span><span class="p">(</span><span class="s2">"abc1-6"</span><span class="p">);</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtEmail"</span><span class="p">).</span><span class="nx">fnCustomInput</span><span class="p">(</span><span class="sr">/[@ñ;.\-\w]/</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-<a name="jqueryfndisablekey-keys" class="anchor" href="#jqueryfndisablekey-keys"><span class="octicon octicon-link"></span></a>jQuery.fnDisableKey <em>(keys)</em>
-</h3>
-
-<p>Disables the specified keyboard keys.<br>
-To allow a set of characters, better use <em><a href="#jqueryfncustominput-mask">$.fnCustomInput</a></em><br><strong>Returns</strong> <code>jQuery</code></p>
-
-<ul>
-<li>
-<strong>keys:</strong> <code>String</code> with character(s) that will be blocked</li>
-</ul><div class="highlight highlight-javascript"><pre>  <span class="c1">// prevents the spacebar is pressed in document</span>
-  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">fnDisableKey</span><span class="p">(</span><span class="s2">" "</span><span class="p">);</span>
-  <span class="c1">// avoids pressing the keys q,w,e,r,t on the input</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">fnDisableKey</span><span class="p">(</span><span class="s2">"qwert"</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-<a name="jqueryfneasyvalidate-fnvalidator" class="anchor" href="#jqueryfneasyvalidate-fnvalidator"><span class="octicon octicon-link"></span></a>jQuery.fnEasyValidate <em>(fnvalidator)</em>
-</h3>
-
-<p>Validates the form fields with css class <code>.vld-required</code> through a submit button.<br>
-It has a dependency on <a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js">jQuery.UI</a> for the validation notification.<br>
-If you wish to validate only a set of elements in the form, you can specify a <strong>validation group</strong> by adding the <code>data-validation</code> attribute to the elements to validate and also to the submit button.<br><strong>Returns</strong> <code>jQuery</code></p>
-
-<ul>
-<li>
-<strong>fnvalidator:</strong> <code>Function</code>. If it is specified, this function performs a custom validation and must return:<br><code>true</code>: submit the form.<br><code>false</code>: cancel submit.</li>
-</ul><div class="highlight highlight-html"><pre><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"ddlType"</span> <span class="na">class=</span><span class="s">"vld-required"</span> <span class="na">data-validation=</span><span class="s">"group.a"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"0"</span><span class="nt">&gt;</span>Select...<span class="nt">&lt;/option&gt;</span>
-  <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"1"</span><span class="nt">&gt;</span>Magnetic<span class="nt">&lt;/option&gt;</span>
-  <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"2"</span><span class="nt">&gt;</span>Electric<span class="nt">&lt;/option&gt;</span>
-<span class="nt">&lt;/select&gt;</span>
-<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"number"</span> <span class="na">id=</span><span class="s">"txtValue"</span> <span class="na">class=</span><span class="s">"vld-numeric vld-required"</span> <span class="na">data-validation=</span><span class="s">"group.a"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"date"</span> <span class="na">id=</span><span class="s">"txtDate"</span> <span class="na">class=</span><span class="s">"vld-required"</span> <span class="nt">/&gt;</span><span class="c">&lt;!--This one isn't in the validation group--&gt;</span>
-<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">id=</span><span class="s">"btnAdd"</span> <span class="na">data-validation=</span><span class="s">"group.a"</span><span class="nt">&gt;</span>Add new item<span class="nt">&lt;/button&gt;</span>
-</pre></div>
-
-<div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">".vld-numeric"</span><span class="p">).</span><span class="nx">fnNumericInput</span><span class="p">();</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtDate"</span><span class="p">).</span><span class="nx">datepicker</span><span class="p">().</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">"no-auto-focus"</span><span class="p">);</span>
-    <span class="c1">//$("#btnAdd").fnEasyValidate(); //only validates that required fields are not empty</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">"#btnAdd"</span><span class="p">).</span><span class="nx">fnEasyValidate</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">btn</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//this function is fnvalidator parameter</span>
-        <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'#txtValue'</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">num</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">js</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">fnShowTooltip</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="s2">"Price must be greater than $999"</span><span class="p">);</span> <span class="c1">//cancels submit</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span> <span class="c1">//submits the form</span>
-    <span class="p">});</span>
-<span class="p">});</span>
-</pre></div>
-
-<h2>
-<a name="appendix" class="anchor" href="#appendix"><span class="octicon octicon-link"></span></a>Appendix</h2>
-
-<h3>
-<a name="categorytext" class="anchor" href="#categorytext"><span class="octicon octicon-link"></span></a>Category:text</h3>
-
-<p>We speak about <em>DOM element category:text</em> when that object belongs to one of the following html elements:</p>
-
-<div class="highlight highlight-html"><pre>  <span class="nt">&lt;textarea&gt;&lt;/textarea&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"password"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"number"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"search"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"tel"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"url"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"email"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"datetime"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"datetime-local"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"date"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"month"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"week"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"file"</span> <span class="nt">/&gt;</span>
-</pre></div>
-
-
-        </section>
-
-        <aside id="sidebar">
-
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
-
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset='utf-8'/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>jherax.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="index, follow"/>
+  <meta name="keywords" content="jherax, javascript, jquery, formatting, positioning, tooltip, utilities, validation, david rivera"/>
+  <meta name="description" content="jherax's javascript programming"/>
+  <meta name="author" content="david rivera perez"/>
+  <meta name="layout" content="main"/>
   
-  </body>
+  <link rel="icon" type="image/png" href="https://dl.dropboxusercontent.com/u/91579606/js-icon32.png" />
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Architects+Daughter"/>
+  <link rel="stylesheet" type="text/css" href="stylesheets/jherax.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+  <!--[if lte IE 9]>
+    <script src="javascripts/polyfills/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="javascripts/polyfills/selectivizr.js"></script>
+  <![endif]-->
+</head>
+
+<body ontouchstart="">
+  <header>
+    <div class="inner">
+      <h1>jherax.github.io</h1>
+      <h2 id="mainTitle">This site shows examples for the plugins developed by jherax</h2>
+      <a href="https://github.com/jherax" class="button" target="_blank"><small>Follow me on</small>GitHub</a>
+      <div class="wrapper-language">
+        <select id="select-language">
+          <option value="english">english</option>
+          <option value="spanish">español...</option>
+        </select>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </header>
+
+  <div id="content-wrapper">
+    <div class="inner clearfix">
+      <section id="main-content">
+        <!-- Dynamic content here -->
+      </section>
+      <aside id="sidebar">
+        <p id="asideTheme">This page was generated by <a href="https://pages.github.com" target="_blank">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong" target="_blank">Jason Long</a>.</p>
+        <hr>
+        <p id="asideBlogs">Recomended blogs:</p>
+        <ul class="no-title">
+          <li><a target="_blank" href="http://alexsexton.com">Alex Sexton</a>, <a target="_blank" href="http://twitter.com/slexaxton">@slexaxton</a></li>
+          <li><a target="_blank" href="http://addyosmani.com/blog/">Addy Osmani</a>, <a target="_blank" href="http://twitter.com/addyosmani">@addyosmani</a></li>
+          <li><a target="_blank" href="http://michaux.ca">Peter Michaux</a>, <a target="_blank" href="http://twitter.com/petermichaux">@petermichaux</a></li>
+          <li><a target="_blank" href="http://andreehansson.se/">Andrée Hansson</a>, <a target="_blank" href="http://twitter.com/peolanha">@peolanha</a></li>
+          <li><a target="_blank" href="http://nczonline.net/">Nicholas Zakas</a>, <a target="_blank" href="http://twitter.com/slicknet">@slicknet</a></li>
+          <li><a target="_blank" href="https://jherax.wordpress.com/">David Rivera</a>, <a target="_blank" href="#"></a></li>
+        </ul>
+        <hr>
+        <p id="asideArticles">Recomended articles:</p>
+        <ul class="no-title">
+          <li><a target="_blank" href="https://jherax.wordpress.com/2014/07/14/javascript-features/">¿Sabías esto de JavaScript?</a></li>
+          <li><a target="_blank" href="https://developer.mozilla.org/docs/Web/JavaScript/Guide/Details_of_the_Object_Model">Details of the object model</a></li>
+          <li><a target="_blank" href="http://addyosmani.com/blog/essential-js-namespacing/">JavaScript Namespacing Patterns</a></li>
+          <li><a target="_blank" href="http://michaux.ca/articles/javascript-namespacing">JavaScript Namespacing Common Practices</a></li>
+          <li><a target="_blank" href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">Immediately-Invoked Function Expression (IIFE)</a></li>
+          <li><a target="_blank" href="http://peter.michaux.ca/articles/lazy-function-definition-pattern">Lazy Function Definition Pattern</a></li>
+          <li><a target="_blank" href="http://blog.osteele.com/posts/2006/04/javascript-memoization">One-Line JavaScript Memoization</a></li>
+        </ul>
+        <hr>
+        <p id="asidePractices">Collection of best articles:</p>
+        <ul class="no-title">
+          <li><a target="_blank" href="http://superherojs.com/">Superhero.js</a></li>
+          <li><a target="_blank" href="http://bonsaiden.github.io/JavaScript-Garden/">JavaScript Garden</a></li>
+          <li><a target="_blank" href="http://jstherightway.org/">JavaScript: The Right Way</a></li>
+          <li><a target="_blank" href="http://github.com/stevekwan/best-practices/blob/master/javascript/best-practices.md">JavaScript: Best Practices</a></li>
+        </ul>
+      </aside>
+      <aside id="loader-iframe">
+        <div id="circleG">
+          <div id="circleG_1" class="circleG"></div>
+          <div id="circleG_2" class="circleG"></div>
+          <div id="circleG_3" class="circleG"></div>
+        </div>
+      </aside>
+    </div><!--.inner clearfix-->
+  </div><!--#content-wrapper-->
+
+  <script src="javascripts/jquery.colorbox-min.js"></script>
+  <script src="javascripts/jherax.js"></script>
+  <script src="javascripts/language.js"></script>
+  <script src="javascripts/main.js"></script>
+</body>
 </html>
