@@ -182,7 +182,14 @@ pre code {
   padding: 0;
 }
 pre > span[title], pre > span[title]:active {
-  cursor:help;
+  cursor: help;
+}
+span.tip {
+  cursor: help;
+  color: #878787;
+  font-weight: bold;
+  text-shadow: 0px 1px 1px white,
+               2px 2px 2px rgba(0,0,0,0.1);
 }
 a, a > code {
   color: #2879d0;
@@ -479,17 +486,41 @@ footer a:hover {
   color: #999;
   background: #fdfdfd;
 }
+#colorbox {
+  z-index: 2999;
+  box-sizing: border-box;
+}
+.category-wrapper {
+  padding: 12px 18px;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+.category-wrapper p {
+  margin-bottom: 12px;
+}
+.category-wrapper h3 {
+  margin: 5px 0;
+}
+.category-wrapper pre {
+  margin-bottom: 6px;
+  background-color: #f7f7f7;
+}
 
 /* LOADER ANIMATION
 ================================================== */
 .loader {
   position: relative;
   background-color: #fff;
-  opacity: 0.66; -moz-opacity: 0.66; -khtml-opacity: 0.66; filter: alpha(opacity=66);
+  opacity: 0.76; -moz-opacity: 0.76; -khtml-opacity: 0.76; filter: alpha(opacity=76);
+  outline: solid 1px #ddd;
+  box-sizing: border-box;
 }
-#loader-iframe {display: none;}
-#circleG{width:38.5px;}
-.circleG{
+#circleG {
+  width:38.5px;
+  z-index:3000;
+}
+.circleG {
   background-color:#FFFFFF;
   float:left;
   height:8px;

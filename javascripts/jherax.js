@@ -1,8 +1,8 @@
 /*
  *  JSU Library
  *  Author: David Rivera
- *  Created: 26/06/2013
- *  Version: 3.5.2
+ *  Created: 2013/06/26
+ *  Version: 3.5.3
  -----------------------------------
  *  Source:
  *  http://github.com/jherax/js-utils
@@ -49,9 +49,10 @@
 // Info about the library
 var jsu = window.jsu || {
     author: "jherax",
-    version: "3.5.2",
-    dependencies: ["jQuery","jQuery.ui","jherax.css"]
+    version: "3.5.3",
+    dependencies: ["jQuery", "jherax.css"]
 };
+
 // Specifies where tooltip and dialog elements will be appended
 jsu.wrapper = "body"; //#main-section
 
@@ -151,7 +152,7 @@ jsu.wrapper = "body"; //#main-section
     //-----------------------------------
     // Immediately-invoked Function Expressions (IIFE)
     // We pass the namespace as an argument to a self-invoking function.
-    // jherax is the local namespace context, and $ is the jQuery object
+    // jherax is the context of the local namespace, and $ is the jQuery object.
     (function(jherax, $, undefined) {
 
         //===================================
@@ -251,16 +252,19 @@ jsu.wrapper = "body"; //#main-section
     // Create the namespace for languages
 
     //-----------------------------------
-    // We provide an object to override default settings
+    // We provide an object to override default settings.
+    // jherax is the context of the local namespace, and $ is the jQuery object.
     (function(jherax, $) {
-        jherax.position = null;
-        // { at: null, my: null, collision: null };
+        jherax.position = null; //{ at:null, my:null };
+        jherax.release = false;
+        jherax.urlprefix = "";
     })(jsu.createNS("jsu.settings"), jQuery);
+    // Create the namespace for global settings
 
     //-----------------------------------
     // Immediately-invoked Function Expressions (IIFE)
     // We pass the namespace as an argument to a self-invoking function.
-    // jherax is the local namespace context, and $ is the jQuery object
+    // jherax is the context of the local namespace, and $ is the jQuery object.
     (function(jherax, $, undefined) {
 
         //===================================
@@ -297,14 +301,15 @@ jsu.wrapper = "body"; //#main-section
         })();
         //-----------------------------------
         // Determines if the @obj parameter is a DOM element
-        var isDOM = function (obj) {
-            return (!!obj && typeof obj === "object" && !!obj.nodeType);
-        };
+        function isDOM (obj) {
+            if ("HTMLElement" in window) return (!!obj && obj instanceof HTMLElement);
+            return (!!obj && typeof obj === "object" && obj.nodeType === 1 && !!obj.nodeName);
+        }
         //-----------------------------------
         // Determines if the @obj parameter is a function
-        var isFunction = function (obj) {
+        function isFunction (obj) {
             return (!!obj && Object.prototype.toString.call(obj) == '[object Function]');
-        };
+        }
         //-----------------------------------
         // This is a reference to JSON.stringify and provides a polyfill for old browsers
         var fnStringify = typeof JSON !== "undefined" ? JSON.stringify : function (json) {
@@ -335,21 +340,21 @@ jsu.wrapper = "body"; //#main-section
         };
         //-----------------------------------
         // Determines if an event handler was created previously by specifying a namespace
-        var handlerExist = function (dom, eventName, namespace) {
+        function handlerExist (dom, eventName, namespace) {
             var handler = ($._data(dom, 'events') || {})[eventName] || [];
             for (var h = 0; h < handler.length; h++) {
                 if (handler[h].namespace === namespace || (handler[h].data || {}).handler === namespace) return true;
             }
             h = null;
             return false;
-        };
+        }
         //-----------------------------------
         // Utility to create namespaced events
-        var nsEvents = function (eventName, namespace) {
+        function nsEvents (eventName, namespace) {
             namespace = "." + namespace;
             eventName = $.trim(eventName).replace(".", "") + namespace;
             return eventName.replace(/\s+|\t+/g, namespace + " ");
-        };
+        }
         //-----------------------------------
         // Seals the writable attribute of the object properties
         // @@Private
@@ -617,7 +622,7 @@ jsu.wrapper = "body"; //#main-section
             return _sel;
         }
         //-----------------------------------
-        // Gets the cursor position of the @dom element
+        // Gets the cursor position in the @dom element
         function fnGetCaretPosition(dom) {
             if ('selectionStart' in dom) {
                 return fixSelection(dom).start;
@@ -1095,7 +1100,6 @@ jsu.wrapper = "body"; //#main-section
         //-----------------------------------
         // Sets the numeric format according to current culture.
         // Places the decimal and thousand separators specified in _language
-        // http://jsbin.com/ekeSeG/2/edit
         $.fn.fnNumericFormat = function(o) {
             return this.each(function (i, dom) {
                 $(dom).off(".fnNumericFormat").on(nsEvents("keyup blur", "fnNumericFormat"), function() {
@@ -1240,7 +1244,7 @@ jsu.wrapper = "body"; //#main-section
                 }, o);
                 var fnValidateFirstItem = function(dom) {
                     if (dom.length === 0) return true;
-                    // Treat the first item of the <select> element as an invalid option
+                    //treat the first item of the <select> element as an invalid option
                     return (d.firstItemInvalid && dom.selectedIndex === 0);
                 };
                 var selector = this.selector;
@@ -1249,8 +1253,8 @@ jsu.wrapper = "body"; //#main-section
                         fnShowTooltip(btn, _language.validateForm);
                         return true; //continue with next element
                     }
-                    //Delegates the handler to execute a callback before displaying the tooltip,
-                    //useful to change the element to which show the tooltip against
+                    // Delegates the handler to execute a callback before displaying the tooltip,
+                    // useful to change the element to which show the tooltip against
                     if (isFunction(d.fnBeforeTooltip)) {
                         var event = nsEvents("beforeTooltip", "fnEasyValidate-" + index);
                         $(btn).data("nsEvent", event);
@@ -1554,8 +1558,10 @@ jsu.wrapper = "body"; //#main-section
         jherax.fnScrollbarWidth = fnScrollbarWidth;
         jherax.fnUpdateCache = fnUpdateCache; //undocumented
 
+        // Polyfill to get the host of the site
+        jherax.siteOrigin = window.location.origin || (window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : ''));
+
     })(jsu, jQuery);
-    // Set default namespace
 })();
 /*
 //-----------------------------------

@@ -30,10 +30,12 @@
   Este patrón hace uso de&#160;<em>"data-bindings"</em> declarativos, los cuales permiten la interacción entre la <em>"Vista"</em> y el <em>"Modelo"</em> mediante el&#160;objeto <em>"ViewModel"</em>.
   El viewModel es un objeto "observable" que hace uso del patrón <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#observerpatternjavascript" target="_blank">Observer</a> para notificar cambios y automáticamente actualizar las dependencias detectadas.
   En JavaScript podemos encontrar algunos frameworks MVVM como <a href="http://knockoutjs.com/" target="_blank">KnockoutJS</a> y <a href="http://docs.telerik.com/kendo-ui/getting-started/framework/mvvm/overview" target="_blank">Kendo MVVM</a> (<a href="http://demos.telerik.com/kendo-ui/web/mvvm/index.html#mainWrap" target="_blank">demo</a>)</p>
-<p>Existe un viejo refrán que dice: <strong><cite>La práctica hace al maestro</cite>,</strong> y aplica para todas las disciplinas. Leer, probar, e intentar por nuestra propia cuenta, marca la diferencia como el desarrollador que sólo "implementa código" y el que vas más allá de implementar lo que otros hacen.</p>
+<p>Existe un viejo refrán que dice: <strong><cite>La práctica hace al maestro</cite>;</strong> leer, documentarse, y hacer pruebas son buenos hábitos que debemos adquirir, el tiempo y la perseverancia pulirán nuestras habilidades y pasaremos de ser desarrolladores que "implementan componentes" a ser aquellos que crean soluciones.</p>
 
 <h1 id="jsu-library"><a href="https://github.com/jherax/js-utils.git" target="jherax-utilities">Jsu library</a></h1>
-<p style="width:96%">Es una librería de utilidades JavaScript / jQuery, que incluye herramientas para validación de datos y formato de texto, plugins para tooltips, ventanas modales y posicionamiento de elementos, inyección de recursos, manipulación de string y JSON, clonación de objetos, ordenamiento de arrays, entre otros.</p>
+<p style="width:96%">Es una librería de utilidades JavaScript / jQuery, que incluye herramientas para validación de datos y formato de texto,
+  plugins para tooltips, ventanas modales y posicionamiento de elementos, inyección de recursos, manipulación de string y JSON, clonación de objetos,
+  ordenamiento de arrays, entre otros. <a href="#list-of-methods">Ir a la referencia del API</a>.</p>
       
 <!-- Getting Started -->
 <h2 id="getting-started"><a href="#getting-started">A tener en cuenta</a></h2>
@@ -50,13 +52,12 @@ Pero si no desea usar <em>jQuery.ui,</em> como su implementación predeterminada
       <li><code>version:</code> número de versión de despliegue</li>
       <li><code>dependencies:</code> array con los nombres de las dependencias</li>
       <li><code>createNS:</code> utilidad para crear namespaces seguros</li>
-      <li><code>wrapper:</code> selector en donde el contenido HTML dinámico es colocado</li>
+      <li><code>wrapper:</code> selector que alberga el <span class="tip" title="HTML generado por: fnShowTooltip, fnShowDialog, fnLoading">HTML dinámico</span></li>
       <li style="list-style:disc"><code>regional:</code> namespace para la configuración de idioma</li>
       <li style="list-style:disc"><code>settings:</code> namespace para configuraciones globales</li>
     </ul>
   </li>
 </ul>
-<p><a href="#list-of-methods">Ir a los métodos públicos del API</a></p>
 
 <!-- A Glance -->
 <h2 id="glance" class="add-top-link"><a href="#glance">Un vistazo</a></h2>
@@ -346,14 +347,14 @@ Para la detección de capacidades, es mejor utilizar <a href="http://modernizr.c
 </ul>
 <div class="highlight highlight-javascript">
 <pre>
-  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"Mordecai"</span> <span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">nodeType</span><span class="o">:</span> <span class="s2">"Element"</span> <span class="p">};</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//false : Object</span>
 
   <span class="nx">obj</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"txtName"</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//true : DOM Node</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//true : DOM Element</span>
 
   <span class="nx">obj</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">":button"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//true : DOM Node</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//true : DOM Element</span>
 
   <span class="nx">obj</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">":button"</span><span class="p">);</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//false : jQuery</span>
@@ -415,7 +416,7 @@ Para la detección de capacidades, es mejor utilizar <a href="http://modernizr.c
 <p>Este objeto tiene dos métodos para determinar la categoría de un elemento <code>&lt;input&gt;</code></p>
 <ul class="no-title">
   <li class="tab"><strong><code>isText (dom)</code></strong>: Esta función retorna <code>true</code> cuando el parámetro <strong><em>dom</em></strong> es un elemento <code>&lt;input&gt;</code> de escritura.
-    Los elementos clasificados en esta categoría se describen en <a href="#categorytext" class="open-window">Category:text</a>.</li>
+    Los elementos clasificados en esta categoría se describen en <a href="#" class="open-window">inputType:text</a>.</li>
   <li class="tab"><strong><code>isCheck (dom)</code></strong>: Esta función retorna <code>true</code> cuando el parámetro <strong><em>dom</em></strong> es un elemento <code>&lt;input&gt;</code> de marcar.
     Los elementos clasificados en esta categoría son: input <strong>checkbox</strong> y input <strong>radio</strong>.</li>
 </ul>
@@ -434,7 +435,7 @@ Para la detección de capacidades, es mejor utilizar <a href="http://modernizr.c
     <span class="kd">var</span> <span class="nx">area</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#area"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
         <span class="nx">date</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#date"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
         <span class="nx">radio</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#radio"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">inputType</span><span class="p">.</span><span class="nx">isText</span><span class="p">(</span><span class="nx">area</span><span class="p">))</span> <span class="nx">area</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">"I am category:text"</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">inputType</span><span class="p">.</span><span class="nx">isText</span><span class="p">(</span><span class="nx">area</span><span class="p">))</span> <span class="nx">area</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">"I am inputType:text"</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">inputType</span><span class="p">.</span><span class="nx">isText</span><span class="p">(</span><span class="nx">date</span><span class="p">))</span> <span class="nx">date</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toISOString</span><span class="p">().</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">inputType</span><span class="p">.</span><span class="nx">isCheck</span><span class="p">(</span><span class="nx">radio</span><span class="p">))</span> <span class="nx">radio</span><span class="p">.</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
   <span class="p">})();</span>
@@ -850,9 +851,9 @@ Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la 
 </p>
 <ul class="no-title">
   <li><strong>text:</strong> <code>String</code> Texto seleccionado. Se eliminan los espacios en blanco al inicio y al final del texto.</li>
-  <li><strong>slice:</strong> <code>String</code> Complemento del texto seleccionado (si el elemento activo es <a href="#categorytext" class="open-window">category:text</a>)</li>
-  <li><strong>start:</strong> <code>Number</code> Posición inicial del cursor (si el elemento activo es <a href="#categorytext" class="open-window">category:text</a>)</li>
-  <li><strong>end:</strong> <code>Number</code> Posición final del cursor (si el elemento activo es <a href="#categorytext" class="open-window">category:text</a>)</li>
+  <li><strong>slice:</strong> <code>String</code> Complemento del texto seleccionado (si el elemento activo es <a href="#" class="open-window">inputType:text</a>)</li>
+  <li><strong>start:</strong> <code>Number</code> Posición inicial del cursor (si el elemento activo es <a href="#" class="open-window">inputType:text</a>)</li>
+  <li><strong>end:</strong> <code>Number</code> Posición final del cursor (si el elemento activo es <a href="#" class="open-window">inputType:text</a>)</li>
 </ul>
 <div class="highlight highlight-javascript">
 <pre>
@@ -870,7 +871,7 @@ Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la 
   <strong>Retorna</strong> <code>Number</code>
 </p>
 <ul>
-  <li><strong>dom:</strong> <code>DOM</code> Elemento <a href="#categorytext" class="open-window">category:text</a></li>
+  <li><strong>dom:</strong> <code>DOM</code> Elemento <a href="#" class="open-window">inputType:text</a></li>
 </ul>
 <div class="highlight highlight-javascript">
 <pre>
@@ -888,7 +889,7 @@ Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la 
   <strong>Retorna</strong> <code>undefined</code>
 </p>
 <ul>
-  <li><strong>dom:</strong> <code>DOM</code> Elemento <a href="#categorytext" class="open-window">category:text</a>.</li>
+  <li><strong>dom:</strong> <code>DOM</code> Elemento <a href="#" class="open-window">inputType:text</a>.</li>
   <li><strong>position:</strong> <code>Number</code> índice donde se establecerá el cursor.</li>
 </ul>
 <div class="highlight highlight-javascript">
@@ -903,23 +904,22 @@ Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la 
 
 <!-- fnCapitalize -->
 <h3 id="fncapitalize-object-type" class="add-methods-link"><a href="#fncapitalize-object-type">fnCapitalize (object, type)</a></h3>
-<p>Applies a transformation to the text, removing all line-breaks, spaces, and tabs from the beginning and end&#160;of supplied string.
-  If the whitespace characters occur in middle of the string, also they are removed.<br/>
-  <strong>Note:</strong> When <strong><em>object</em></strong> parameter is a <code>DOM</code> element, the <code>value</code> property is used as the string to transform.<br/>
-  <strong>Note:</strong> The object defined in <a href="#jsuregional"><code>jsu.regional.&lt;language&gt;.wordPattern</code></a> is a regular expression used to lowercasing some words after text capitalization.
-  Only works when <strong><em>type</em></strong> parameter is <code>"word"</code><br/>
-  <strong>Note:</strong> You can use this function as a jQuery extension, see <a href="#jqueryfncapitalize-type">jQuery.fnCapitalize</a>.<br/>
-  <strong>Returns</strong> <code>String</code>
+<p>Elimina todos los saltos de línea consecutivos, espacios, y tabs, al comienzo y al final del texto.
+  <nobr>Si los espacios</nobr> consecutivos se encuentran dentro del texto, también son eliminados.<br/>
+  <strong>Nota:</strong> Si el parámetro <strong><em>object</em></strong> es un nodo <code>INPUT</code>, la propiedad <code>value</code> se usa como el texto a formatear.<br/>
+  <strong>Nota:</strong> Puede definir sus propias reglas para capitalizar el texto usando la opción <code>"word"</code>. La propiedad <a href="#jsuregional"><code>jsu.regional.&lt;language&gt;.wordPattern</code></a> es una expresión regular que define las palabras que no aplican la&nbsp;letra capital.<br/>
+  <strong>Nota:</strong> Puede usar esta función como método de extensión jQuery, vea <a href="#jqueryfncapitalize-type">jQuery.fnCapitalize</a>.<br/>
+  <strong>Retorna</strong> <code>String</code>
 </p>
 <ul>
-  <li class="tab"><strong>object:</strong> <code>String</code> or <code>DOM</code> element <a href="#categorytext" class="open-window">category:text</a>.</li>
-  <li class="tab"><strong>type:</strong> <code>String</code> specifying the text transformation. Can be one of the following values:
+  <li><strong>object:</strong> <code>String</code> o elemento <code>INPUT</code> <a href="#" class="open-window">inputType:text</a>.</li>
+  <li><strong>type:</strong> <code>String</code> que especifica el tipo de transformación. Puede ser uno de los siguientes valores:
     <ul>
-      <li><code>"word"</code> transform to lowercase and then turns the first letter of each word into uppercase.</li>
-      <li><code>"title"</code> turns the first letter of each word into uppercase.</li>
-      <li><code>"first"</code> turns only the first letter to uppercase.</li>
-      <li><code>"upper"</code> transform to uppercase.</li>
-      <li><code>"lower"</code> transform to lowercase.</li>
+      <li><code>"word"</code> transforma a minúsculas y luego pone en mayúscula la primera letra de cada palabra.</li>
+      <li><code>"title"</code> pone en mayúscula la primera letra de cada palabra.</li>
+      <li><code>"first"</code> pone en mayúscula sólo la primera letra del texto.</li>
+      <li><code>"upper"</code> convierte todo el texto a mayúsculas.</li>
+      <li><code>"lower"</code> convierte todo el texto a minúsculas.</li>
     </ul>
   </li>
 </ul>
@@ -934,17 +934,17 @@ Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la 
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'lower: "'</span> <span class="o">+</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="s2">"lower"</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
 </pre>
 </div>
-<p>If you want to lowercase specific words, you can do it this way:</p>
+<p>Puede definir las palabras que no llevan letra capital:</p>
 <div class="highlight highlight-javascript">
 <pre>
   <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// We configure the global language setting</span>
-    <span class="c1">// The following words will always be lowercase</span>
+    <span class="c1">// Definimos las palabras que no llevan letra capital</span>
     <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">.</span><span class="nx">wordPattern</span> <span class="o">=</span> <span class="sr">/\s(?:And|Are|At|A|O[nrf]|By|In|The)\b/g</span><span class="p">;</span>
+    <span class="c1">// Establecemos la configuración de idioma</span>
     <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">" pc AND KEYBOARD\t ArE oN tHe table "</span><span class="p">;</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Before: "</span><span class="p">,</span> <span class="s1">'"'</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-    <span class="c1">// Transforms the text after 2 seconds</span>
+    <span class="c1">// Transforma el texto después de 2 segundos</span>
     <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="nx">text</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="s2">"word"</span><span class="p">);</span>
       <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"After: "</span><span class="p">,</span> <span class="s1">'"'</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
@@ -955,28 +955,46 @@ Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la 
 
 <!-- fnNumericFormat -->
 <h3 id="fnnumericformat-object-options" class="add-methods-link"><a href="#fnnumericformat-object-options">fnNumericFormat (object, options)</a></h3>
-<p>Establece el formato numérico de acuerdo con la cultura actual. Si no se proporciona el parámetro <strong>options</strong>, se toman los separadores de las propiedades <code>decimalMark</code> y <code>thousandsMark</code> en el idioma <code><a href="#jsuregional">jsu.regional.current</a></code><br/>
-  <strong>Note:</strong> When <strong><em>object</em></strong> parameter is a <code>DOM</code> element, the <code>value</code> property is used as the string to format.<br/>
-  <strong>Note:</strong> You can use this function as a jQuery extension, see <a href="#jqueryfnnumericformat-">jQuery.fnNumericFormat</a>.<br/>
-  <strong>Returns</strong> <code>String</code> with the formatted number.</p>
+<p>Establece el formato numérico de acuerdo a la configuración de cultura actual. Si no se proporciona el parámetro <strong>options</strong>, el separador de miles y el separador decimal, reciben su valor de las propiedades <code>decimalMark</code> y <code>thousandsMark</code> en la configuración de idioma actual: <code><a href="#jsuregional">jsu.regional.current</a></code><br/>
+  <strong>Nota:</strong> Si el parámetro <strong><em>object</em></strong> es un nodo <code>INPUT</code>, la propiedad <code>value</code> se usa como el texto a formatear.<br/>
+  <strong>Nota:</strong> Puede usar esta función como método de extensión jQuery, vea <a href="#jqueryfnnumericformat-options">jQuery.fnNumericFormat</a>.<br/>
+  <strong>Retorna</strong> <code>String</code> con el número formateado.</p>
 <ul>
-  <li><strong>object:</strong> <code>String</code> or <code>DOM</code> element <a href="#categorytext" class="open-window">category:text</a></li>
-  <li><strong>options:</strong> <code>Object</code> with the following properties:
+  <li><strong>object:</strong> <code>String</code> o elemento <code>INPUT</code> <a href="#" class="open-window">inputType:text</a>.</li>
+  <li><strong>options:</strong> <code>Object</code> con las siguientes propiedades:
     <ul>
-      <li><strong>inDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>The decimal separator for the input text.</li>
-      <li><strong>inThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>The thousands separator for the input text.</li>
-      <li><strong>outDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>The decimal separator for the output text.</li>
-      <li><strong>outThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>The thousands separator for the output text.</li>
+      <li><strong>inDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto de entrada.</li>
+      <li><strong>inThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto de entrada.</li>
+      <li><strong>outDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto de salida.</li>
+      <li><strong>outThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto de salida.</li>
     </ul>
   </li>
 </ul>
 <div class="highlight highlight-javascript">
 <pre>
-  <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="s2">"123456789,47.15"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">num</span><span class="p">));</span> <span class="c1">//sends string</span>
-  <span class="kd">var</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">dom</span><span class="p">)</span> <span class="c1">//sends DOM</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//establece la configuración de idioma a español</span>
+    <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">spanish</span><span class="p">);</span>
+    <span class="c1">//ver el objeto del idioma actual</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">current</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">numEn</span> <span class="o">=</span> <span class="s2">"6079.2499"</span><span class="p">,</span> <span class="c1">//"." es el separador decimal (inglés)</span>
+        <span class="nx">numEs</span> <span class="o">=</span> <span class="s2">"123456789,4715"</span><span class="p">,</span> <span class="c1">//"," es el separador decimal (español)</span>
+        <span class="nx">formatEs</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">numEs</span><span class="p">),</span>
+        <span class="nx">formatEn</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">numEn</span><span class="p">,</span> <span class="p">{</span>
+          <span class="nx">inDecimalMark</span><span class="o">:</span> <span class="s2">"."</span><span class="p">,</span> <span class="c1">//separador decimal del texto de entrada</span>
+          <span class="nx">inThousandsMark</span><span class="o">:</span> <span class="s2">","</span> <span class="c1">//separador de miles del texto de entrada</span>
+        <span class="p">});</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"original numEn:"</span><span class="p">,</span> <span class="nx">numEn</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"formatted text:"</span><span class="p">,</span> <span class="nx">formatEn</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"original numEs:"</span><span class="p">,</span> <span class="nx">numEs</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"formatted text:"</span><span class="p">,</span> <span class="nx">formatEs</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">numEs</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">dom</span><span class="p">);</span> <span class="c1">//envía un elemento DOM</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"formatted DOM:"</span><span class="p">,</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+  <span class="p">})();</span>
 </pre>
 </div>
 
@@ -986,7 +1004,7 @@ Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la 
 Each function defined in the namespace receives the <strong><em>value</em></strong> parameter as the text to validate.<br/>
 <strong>Note:</strong> Validators are also implemented as a jQuery extension, see <a href="#jqueryfnisvalidformat-type">jQuery.fnIsValidFormat</a>.<br/>
 <strong>Important</strong> The validator functions return <code>Boolean</code></p>
-<p>The <strong><em>value</em></strong> parameter is a <code>String</code> or <code>DOM</code> element <a href="#categorytext" class="open-window">category:text</a>.</p>
+<p>The <strong><em>value</em></strong> parameter is a <code>String</code> or <code>DOM</code> element <a href="#" class="open-window">inputType:text</a>.</p>
 <ul class="no-title">
   <li><strong><code>time (value)</code></strong> Validates the time format according to <a href="#jsuregional"><code>timeFormat</code></a></li>
   <li><strong><code>date (value)</code></strong> Validates the date format according to <a href="#jsuregional"><code>dateFormat</code></a></li>
@@ -1046,7 +1064,7 @@ The validation message is displayed with a tooltip. If <a href="http://api.jquer
 <code>dateIsGreater</code> <code>dateIsLesser</code> <code>dateFormatError</code><br/>
 <strong>Returns</strong> <code>Boolean</code></p>
 <ul>
-  <li><strong>dom:</strong> <code>DOM</code> element <a href="#categorytext" class="open-window">category:text</a></li>
+  <li><strong>dom:</strong> <code>DOM</code> element <a href="#" class="open-window">inputType:text</a></li>
   <li><strong>options:</strong> <code>Object</code> with the following properties:
     <ul>
       <li><strong>compareTo:</strong> <code>Date</code> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="k">new</span> <span class="nb">Date</span></code> The date to compare against.</li>
@@ -1447,7 +1465,7 @@ If no arguments or the <code>of</code> property is not set, the default <a href=
 
 <!-- jQuery.fnMaxLength -->
 <h3 id="jqueryfnmaxlength-length-position" class="add-jquery-link"><a href="#jqueryfnmaxlength-length-position">jQuery.fnMaxLength (length, position)</a></h3>
-<p>Limits the maximum number of characters allowed for the matching elements <a href="#categorytext" class="open-window">category:text</a>.<br/>
+<p>Limits the maximum number of characters allowed for the matching elements <a href="#" class="open-window">inputType:text</a>.<br/>
 A tooltip is placed to the right of the element, showing the actual number of characters typed.<br/>
 By default the tooltip is positioned by <a href="#jqueryposition-options">.position()</a> <code>at: "right bottom"</code> but this position can be overridden for all tooltips by setting the <a href="#jsusettings"><code>jsu.settings.position</code></a> property;
 if you do not want to affect all tooltips, then you can specify the position by providing the <strong><em>position</em></strong> parameter to the function.<br/>
@@ -1475,22 +1493,22 @@ The appearance of the tooltip is ruled by the <a href="https://github.com/jherax
 
 <!-- jQuery.fnCapitalize -->
 <h3 id="jqueryfncapitalize-type" class="add-jquery-link"><a href="#jqueryfncapitalize-type">jQuery.fnCapitalize (type)</a></h3>
-<p>This is the jQuery extension for <a href="#fncapitalize-object-type">fnCapitalize</a> function.<br/>
-  Applies a transformation to the text, removing all line-breaks, spaces, and tabs from the beginning and end&#160;of supplied string.
-  If the whitespace characters occur in middle of the string, also they are removed.<br/>
-  <strong>Note:</strong> The object defined in <a href="#jsuregional"><code>jsu.regional.&lt;language&gt;.wordPattern</code></a> is a regular expression used to lowercasing some words after text capitalization.
-  Only works when <strong><em>type</em></strong> parameter is <code>"word"</code><br/>
-  <strong>Note:</strong> The text is transformed when the <code>blur</code> event is triggered.<br/>
-  <strong>Returns</strong> <code>jQuery</code>
+<p>Elimina todos los saltos de línea consecutivos, espacios, y tabs, al comienzo y al final del texto.
+  <nobr>Si los espacios</nobr> consecutivos se encuentran dentro del texto, también son eliminados.<br/>
+  <strong>Nota:</strong> Esta es la versión jQuery de la función <a href="#fncapitalize-object-type">fnCapitalize</a>.<br/>
+  <strong>Nota:</strong> Se usa la propiedad <code>value</code> como el texto a formatear.<br/>
+  <strong>Nota:</strong> El texto es transformado cuando el evento <code>blur</code> es disparado.<br/>
+  <strong>Nota:</strong> Puede definir sus propias reglas para capitalizar el texto usando la opción <code>"word"</code>. La propiedad <a href="#jsuregional"><code>jsu.regional.&lt;language&gt;.wordPattern</code></a> es una expresión regular que define las palabras que no aplican la&nbsp;letra capital.<br/>
+  <strong>Retorna</strong> <code>jQuery</code>
 </p>
 <ul>
-  <li><strong>type:</strong> <code>String</code> specifying the text transformation. Can be one of the following values:
+  <li><strong>type:</strong> <code>String</code> que especifica el tipo de transformación. Puede ser uno de los siguientes valores:
     <ul>
-      <li><code>"word"</code> transform to lowercase and then turns the first letter of each word into uppercase.</li>
-      <li><code>"title"</code> turns the first letter of each word into uppercase.</li>
-      <li><code>"first"</code> turns only the first letter to uppercase.</li>
-      <li><code>"upper"</code> transform to uppercase.</li>
-      <li><code>"lower"</code> transform to lowercase.</li>
+      <li><code>"word"</code> transforma a minúsculas y luego pone en mayúscula la primera letra de cada palabra.</li>
+      <li><code>"title"</code> pone en mayúscula la primera letra de cada palabra.</li>
+      <li><code>"first"</code> pone en mayúscula sólo la primera letra del texto.</li>
+      <li><code>"upper"</code> convierte todo el texto a mayúsculas.</li>
+      <li><code>"lower"</code> convierte todo el texto a minúsculas.</li>
     </ul>
   </li>
 </ul>
@@ -1503,25 +1521,25 @@ The appearance of the tooltip is ruled by the <a href="https://github.com/jherax
     <span class="nx">$input</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="s2">"title"</span><span class="p">).</span><span class="nx">focus</span><span class="p">();</span>
   <span class="p">},</span> <span class="mi">1</span><span class="p">);</span>
 
-  <span class="c1">//raise blur event to transform text</span>
+  <span class="c1">//dispara el evento "blur"</span>
   <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">alert</span><span class="p">(</span><span class="s2">"click to transform"</span><span class="p">);</span>
     <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">blur</span><span class="p">();</span>
   <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
 </pre>
 </div>
-<p>If you want to lowercase specific words, you can do it this way:</p>
+<p>Puede definir las palabras que no llevan letra capital:</p>
 <div class="highlight highlight-javascript">
 <pre>
   <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// We configure the global language setting</span>
-    <span class="c1">// The following words will always be lowercase</span>
+    <span class="c1">// Definimos las palabras que no llevan letra capital</span>
     <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">.</span><span class="nx">wordPattern</span> <span class="o">=</span> <span class="sr">/\s(?:And|Are|At|A|O[nrf]|By|In|The)\b/g</span><span class="p">;</span>
+    <span class="c1">// Establecemos la configuración de idioma</span>
     <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">);</span>
-    <span class="c1">// You can bind the event handler at beginning</span>
+    <span class="c1">// Inicializamos el plugin</span>
     <span class="kd">var</span> <span class="nx">$input</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="s2">"word"</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">" pc AND KEYBOARD\t ArE oN tHe table "</span><span class="p">;</span>
-    <span class="c1">// Raise blur event to transform text</span>
+    <span class="c1">// Dispara el evento "blur" que transforma el texto</span>
     <span class="nx">$input</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">text</span><span class="p">).</span><span class="nx">focus</span><span class="p">();</span>
     <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="nx">alert</span><span class="p">(</span><span class="s2">"transform"</span><span class="p">);</span>
@@ -1533,25 +1551,30 @@ The appearance of the tooltip is ruled by the <a href="https://github.com/jherax
 
 <!-- jQuery.fnNumericFormat -->
 <h3 id="jqueryfnnumericformat-options" class="add-jquery-link"><a href="#jqueryfnnumericformat-options">jQuery.fnNumericFormat (options)</a></h3>
-<p>Establece el formato numérico de acuerdo con la cultura actual. Si no se proporciona el parámetro <strong>options</strong>, se toman los separadores de las propiedades <code>decimalMark</code> y <code>thousandsMark</code> en el idioma <code><a href="#jsuregional">jsu.regional.current</a></code>
-This is the jQuery extension for the <a href="#fnnumericformat-object-options">fnNumericFormat</a> function.<br/>
-<strong>Note:</strong> The text is formatted when the <code>keyup</code> or <code>blur</code> event occurs.<br/>
-<strong>Returns</strong> <code>jQuery</code></p>
+<p>Establece el formato numérico de acuerdo a la configuración de cultura actual. Si no se proporciona el parámetro <strong>options</strong>, el separador de miles y el separador decimal, reciben su valor de las propiedades <code>decimalMark</code> y <code>thousandsMark</code> en la configuración de idioma actual: <code><a href="#jsuregional">jsu.regional.current</a></code><br/>
+  <strong>Nota:</strong> Esta es la versión jQuery de la función <a href="#fnnumericformat-object-options">fnNumericFormat</a>.<br/>
+  <strong>Nota:</strong> Se usa la propiedad <code>value</code> como el texto a formatear.<br/>
+  <strong>Nota:</strong> El texto es formateado cuando los eventos <code>blur</code> o <code>keyup</code> son disparados.<br/>
+  <strong>Retorna</strong> <code>jQuery</code>
+</p>
 <ul>
-  <li><strong>options:</strong> <code>Object</code> with the following properties:
+  <li><strong>options:</strong> <code>Object</code> con las siguientes propiedades:
     <ul>
-      <li><strong>inDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Determina el separador decimal para el texto de entrada.</li>
-      <li><strong>inThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Determina el separador de miles para el texto de entrada.</li>
-      <li><strong>outDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Determina el separador decimal para el texto de salida.</li>
-      <li><strong>outThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Determina el separador de miles para el texto de salida.</li>
+      <li><strong>inDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto de entrada.</li>
+      <li><strong>inThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto de entrada.</li>
+      <li><strong>outDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto de salida.</li>
+      <li><strong>outThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto de salida.</li>
     </ul>
   </li>
 </ul>
 <div class="highlight highlight-javascript">
 <pre>
   <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="s2">"123456789,47.15"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span> <span class="c1">// string formatting</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">fnNumericFormat</span><span class="p">().</span><span class="nx">focus</span><span class="p">();</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"original text:"</span><span class="p">,</span> <span class="nx">num</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">fnNumericFormat</span><span class="p">({</span>
+      <span class="nx">inDecimalMark</span><span class="o">:</span> <span class="s2">","</span><span class="p">,</span> <span class="c1">//separador decimal del texto de entrada</span>
+      <span class="nx">inThousandsMark</span><span class="o">:</span> <span class="s2">"."</span> <span class="c1">//separador de miles del texto de entrada</span>
+  <span class="p">}).</span><span class="nx">blur</span><span class="p">();</span>
 </pre>
 </div>
 
