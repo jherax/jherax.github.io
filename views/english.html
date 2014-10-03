@@ -35,7 +35,7 @@
 <h1 id="jsu-library"><a href="https://github.com/jherax/js-utils.git" target="jherax-utilities">Jsu library</a></h1>
 <p style="width:96%">This is a library of JavaScript / jQuery utilities, which includes tools for data validation and text formatting,
   plugins for tooltip, modal-windows and positioning elements, resources injection, <nobr>string and JSON manipulation</nobr>, object cloning, sorting arrays,
-  and other features.<br/><a href="#list-of-methods">Go to the API reference</a>.</p>
+  and other features.<br/><a href="#list-of-methods"><strong>Go to the API reference</strong></a>.</p>
       
 <!-- Getting Started -->
 <h2 id="getting-started"><a href="#getting-started">Getting Started</a></h2>
@@ -280,7 +280,7 @@ Also you can define a new language settings, consider the following example:</p>
   <li><a href="#fngetquerytostring-key">fnGetQueryToString</a></li>
   <li><a href="#fngetquerytojson-key">fnGetQueryToJSON</a></li>
   <!--<li><a href="#fngetdatatojson-data">fnGetDataToJSON</a></li>-->
-  <li><a href="#fnfreezejson-object">fnFreezeJSON</a></li>
+  <li><a href="#fnfreezeobject-object">fnFreezeObject</a></li>
   <!--<li><a href="#fnextend-from-to">fnExtend</a></li>-->
   <li><a href="#fngetdate-options">fnGetDate</a></li>
   <li><a href="#fndatefromiso8601-date">fnDateFromISO8601</a></li>
@@ -669,9 +669,9 @@ Take a look at these articles: <a href="http://www.learningjquery.com/2007/09/na
 
 <!-- fnGetQueryToJSON -->
 <h3 id="fngetquerytojson-key" class="add-methods-link"><a href="#fngetquerytojson-key">fnGetQueryToJSON (key)</a></h3>
-<p>Gets the values from the <em>querystring</em> in the url and saves them as object in <strong>key : value</strong> notation.<br/>
-<strong>Note:</strong> The <strong><em>key</em></strong> parameter is not mandatory, and if it is not specified, all keys found in the <em>querystring</em> will be retrieved in a <code>JSON</code> object.<br/>
-<strong>Returns</strong> <code>Object</code> in JSON notation.</p>
+<p>Gets the values from the <em>querystring</em> in the url and saves them as an <strong>Object literal</strong>.<br/>
+<strong>Note:</strong> The <strong><em>key</em></strong> parameter is not mandatory, and if it is not specified, all keys found in the <em>querystring</em> will be retrieved in a <code>Object</code> literal.<br/>
+<strong>Returns</strong> <code>Object</code></p>
 <ul>
   <li><strong>key:</strong> <code>String</code> Determines the specific key to retrieve.</li>
 </ul>
@@ -690,8 +690,8 @@ Take a look at these articles: <a href="http://www.learningjquery.com/2007/09/na
 </pre>
 </div>
 
-<!-- fnFreezeJSON -->
-<h3 id="fnfreezejson-object" class="add-methods-link"><a href="#fnfreezejson-object">fnFreezeJSON (object)</a></h3>
+<!-- fnFreezeObject -->
+<h3 id="fnfreezeobject-object" class="add-methods-link"><a href="#fnfreezeobject-object">fnFreezeObject (object)</a></h3>
 <p>Clones and freezes an object (set all navigable properties to read-only).<br/>
 In some cases it is necessary to ensure to keep an object intact, immutable, 
 and for that we can use this function, which clones the object and seals the attributes that make it writable.<br/>
@@ -716,7 +716,7 @@ and for that we can use this function, which clones the object and seals the att
     <span class="p">}</span>
   <span class="p">};</span>
   <span class="c1">//clones and freezes an object</span>
-  <span class="kd">var</span> <span class="nx">oFrozen</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnFreezeJSON</span><span class="p">(</span><span class="nx">oSource</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">oFrozen</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnFreezeObject</span><span class="p">(</span><span class="nx">oSource</span><span class="p">);</span>
 
   <span class="c1">//changes some properties in both objects</span>
   <span class="nx">oSource</span><span class="p">.</span><span class="nx">getBasicInfo</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>

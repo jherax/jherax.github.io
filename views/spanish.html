@@ -35,7 +35,7 @@
 <h1 id="jsu-library"><a href="https://github.com/jherax/js-utils.git" target="jherax-utilities">Jsu library</a></h1>
 <p style="width:96%">Es una librería de utilidades JavaScript / jQuery, que incluye herramientas para validación de datos y formato de texto,
   plugins para tooltips, ventanas modales y posicionamiento de elementos, inyección de recursos, manipulación de string y JSON, clonación de objetos,
-  ordenamiento de arrays, entre otros. <a href="#list-of-methods">Ir a la referencia del API</a>.</p>
+  ordenamiento de arrays, entre otros. <a href="#list-of-methods"><strong>Ir a la referencia del API</strong></a>.</p>
       
 <!-- Getting Started -->
 <h2 id="getting-started"><a href="#getting-started">A tener en cuenta</a></h2>
@@ -278,7 +278,7 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
   <li><a href="#fngetquerytostring-key">fnGetQueryToString</a></li>
   <li><a href="#fngetquerytojson-key">fnGetQueryToJSON</a></li>
   <!--<li><a href="#fngetdatatojson-data">fnGetDataToJSON</a></li>-->
-  <li><a href="#fnfreezejson-object">fnFreezeJSON</a></li>
+  <li><a href="#fnfreezeobject-object">fnFreezeObject</a></li>
   <!--<li><a href="#fnextend-from-to">fnExtend</a></li>-->
   <li><a href="#fngetdate-options">fnGetDate</a></li>
   <li><a href="#fndatefromiso8601-date">fnDateFromISO8601</a></li>
@@ -666,9 +666,9 @@ Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/
 
 <!-- fnGetQueryToJSON -->
 <h3 id="fngetquerytojson-key" class="add-methods-link"><a href="#fngetquerytojson-key">fnGetQueryToJSON (key)</a></h3>
-<p>Obtiene los valores del <em>querystring</em> en la url y los guarda como objeto en la notación <strong>clave : valor</strong>.<br/>
-<strong>Nota:</strong> El parámetro <strong><em>key</em></strong> no es obligatorio, y si no se especifica, todas las variables encontradas en el <em>querystring</em> serán retornadas en un objeto <code>JSON</code><br/>
-<strong>Retorna</strong> <code>Object</code> en notación JSON.</p>
+<p>Obtiene los valores del <em>querystring</em> en la url y los guarda como un <strong>Object literal</strong>.<br/>
+<strong>Nota:</strong> El parámetro <strong><em>key</em></strong> no es obligatorio, y si no se especifica, todas las variables encontradas en el <em>querystring</em> serán retornadas en un <code>Object</code> literal.<br/>
+<strong>Retorna</strong> <code>Object</code></p>
 <ul>
   <li><strong>key:</strong> <code>String</code> Determina la variable específica a recuperar.</li>
 </ul>
@@ -687,8 +687,8 @@ Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/
 </pre>
 </div>
 
-<!-- fnFreezeJSON -->
-<h3 id="fnfreezejson-object" class="add-methods-link"><a href="#fnfreezejson-object">fnFreezeJSON (object)</a></h3>
+<!-- fnFreezeObject -->
+<h3 id="fnfreezeobject-object" class="add-methods-link"><a href="#fnfreezeobject-object">fnFreezeObject (object)</a></h3>
 <p>Clona y congela un objeto (establece todas las propiedades navegables a sólo lectura).<br/>
 En algunos casos es necesario asegurarnos de mantener un objeto intacto, inmodificable,
 y para ello podemos usar esta función, la cual clona el objeto y sella los atributos que lo hacen escribible.<br/>
@@ -713,7 +713,7 @@ y para ello podemos usar esta función, la cual clona el objeto y sella los atri
     <span class="p">}</span>
   <span class="p">};</span>
   <span class="c1">//clona y congela un objeto</span>
-  <span class="kd">var</span> <span class="nx">oFrozen</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnFreezeJSON</span><span class="p">(</span><span class="nx">oSource</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">oFrozen</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnFreezeObject</span><span class="p">(</span><span class="nx">oSource</span><span class="p">);</span>
 
   <span class="c1">//cambia algunas propiedades en ambos objetos</span>
   <span class="nx">oSource</span><span class="p">.</span><span class="nx">getBasicInfo</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
