@@ -119,11 +119,12 @@ table.pretty-table, .pretty-table caption, .pretty-table tbody, .pretty-table tf
 /* ==========================================================================
    Kendo window
    ========================================================================== */
-.k-window-titlebar { font-size: 18px; line-height: 20px; text-shadow: 0 1px 0 #FFF; color: #727272; }
 .k-window .k-header .k-window-title { line-height: 20px; font-size: small; font-weight: bold; }
+.k-window-titlebar { font-size: 18px; line-height: 20px; text-shadow: 0 1px 0 #FFF; color: #727272; }
 .k-window-titlebar .k-window-actions { right: .27em; padding-top: .35em; }
-.jsu-wnd-wrapper { padding: 8px 12px; color: #696969; }
-.jsu-wnd-wrapper > .wnd-text { font-size: 16px; line-height: 1.4em; }
+.jsu-dialog .jsu-wnd-wrapper { padding: 8px 12px; color: #696969; }
+.jsu-dialog .jsu-wnd-wrapper > .wnd-text { font-size: 16px; line-height: 1.4em; }
+.jsu-dialog  { margin-top: -17px; /*fixes top position because of padding-top*/ }
 
 /* ==========================================================================
    jQuery ui dialog
