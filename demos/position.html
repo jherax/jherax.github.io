@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head profile="http://www.w3.org/2005/10/profile">
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>JSU $.position</title>
+
+	<link rel="icon" type="image/png" href="https://dl.dropboxusercontent.com/u/91579606/js-icon32.png" />
+	<link rel="stylesheet" type="text/css" href="../stylesheets/jherax.css" media="screen"/>
+	<style type="text/css">
+		section { padding: 20px 40px; }
+		input, select { box-sizing: border-box; width: 68px; }
+		.bg-fixed { background-color: #6CA0FF; }
+	</style>
+
+	<!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
+	<!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  	<!--[if lte IE 9]>
+		<script src="../javascripts/polyfills/html5shiv.min.js"></script>
+  	<![endif]-->
+
+  	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  	<script>window.jQuery || document.write('<script src="../javascripts/jquery-2.1.1.min.js"><\/script>')</script>
+
+  	<!-- CSS3 selectors for IE -->
+  	<!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
+	<!--[if lt IE 9]>
+		<script src="../javascripts/polyfills/selectivizr.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<section>
+		<div style="display:inline-block; width:200px; line-height:34px; text-align:center; font-weight:bold;">target</div><br>
+		<div id="target" style="display: inline-block; width: 200px; height: 200px; border:1px solid #A7ABB4; border-radius:10px; background: #eee;"></div>
+		<table style="margin-top:50px; clear:both;" cellspacing="4">
+			<tr>
+				<th>of:</th>
+				<td>target</td>
+			</tr>
+			<tr>
+				<th>at:</th>
+				<td>
+					<select id="at_horizontal">
+						<option value="left">left</option>
+						<option value="center" selected>center</option>
+						<option value="right">right</option>
+					</select>
+					<select id="at_vertical">
+						<option value="top">top</option>
+						<option value="center" selected>center</option>
+						<option value="bottom">bottom</option>
+					</select>
+					<br>
+					<input type="number" id="at_horizontal_offset" value="0" min="-99" max="99" step="1" maxlength="3"/>
+					<input type="number" id="at_vertical_offset" value="0" min="-99" max="99" step="1" maxlength="3"/>
+				</td>
+			</tr>
+			<tr>
+				<th>my:</th>
+				<td>
+					<select id="my_horizontal">
+						<option value="left">left</option>
+						<option value="center" selected>center</option>
+						<option value="right">right</option>
+					</select>
+					<select id="my_vertical">
+						<option value="top">top</option>
+						<option value="center" selected>center</option>
+						<option value="bottom">bottom</option>
+					</select>
+					<br>
+					<input type="number" id="my_horizontal_offset" value="0" min="-99" max="99" step="1" maxlength="3"/>
+					<input type="number" id="my_vertical_offset" value="0" min="-99" max="99" step="1" maxlength="3"/>
+				</td>
+			</tr>
+		</table>
+	</section>
+
+	<!-- AGREGAR SCRIPTS ADICIONALES -->
+	<!--<script type="text/javascript" src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>-->
+	<script type="text/javascript" src="../javascripts/jherax.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			jsu.fnLoading({ of: "#target" });
+			$("[type=number]").fnCustomInput(/[\d\-]/);
+			setTimeout(function() {
+				jsu.fnLoading({ hide: true });
+				var div = $('<div id="dialogWrapper"/>').css({
+					'display': 'inline-block',
+					'padding': '20px',
+					'background': '#ACC9C3',
+					'border': 'solid 1px #61948A',
+					'borderRadius': '10px'
+				}).appendTo("body").html("<h4>positioning</h4>");
+				div.fnCenter({ of: "#target" });
+			}, 5000);
+			
+			var setPosition = function() {
+				var offset = function(selector) {
+					var t = $(selector).val();
+					if (!(/-/).test(t)) t = "+" + t;
+					return t;
+				};
+				$("#dialogWrapper").css("position", "absolute").position({
+					of: "#target",
+					at: $("#at_horizontal").val() + offset("#at_horizontal_offset") + " " + $("#at_vertical").val() + offset("#at_vertical_offset"),
+					my: $("#my_horizontal").val() + offset("#my_horizontal_offset") + " " + $("#my_vertical").val() + offset("#my_vertical_offset"),
+					collision: "none"
+				});
+			};
+			$("select").bind("change", setPosition);
+			$("input").bind("input", setPosition);
+		});
+	</script>
+	
+</body>
+</html>

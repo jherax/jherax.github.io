@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>fnAddScript</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="demo fnAddScript"/>
+  <meta name="author" content="david rivera perez"/>
+  <meta name="layout" content="main"/>
+  
+  <link rel="icon" type="image/png" href="https://dl.dropboxusercontent.com/u/91579606/js-icon32.png" />
+  <link rel="stylesheet" type="text/css" href="../../stylesheets/jherax.css" />
+
+  <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
+  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!--[if lte IE 9]>
+      <script src="../../javascripts/polyfills/html5shiv.min.js"></script>
+  <![endif]-->
+  
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../../javascripts/jquery-2.1.1.min.js"><\/script>')</script>
+  
+  <!-- CSS3 selectors for IE -->
+  <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
+  <!--[if lt IE 9]>
+      <script src="../../javascripts/polyfills/selectivizr.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <header>
+    <!-- Menu de navegacion -->
+  </header>
+
+  <section id="main-section" class="container">
+    <!-- Vista de las páginas -->
+    <div id="page-wrapper">
+
+      <!--[if lt IE 7]>
+          <p class="browsehappy">
+            You are using an <strong>outdated</strong> browser.
+            Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+
+      <h2>Demo de jsu.fnAddScript</h2>
+      <input type="button" id="load" value="Cargar JS" />
+
+    </div><!-- End #page-wrapper -->
+  </section><!-- End #main-section -->
+
+  <aside>
+    <!-- Contenido tangencial, como publcidad, facebook, twitter, etc. -->
+  </aside>
+
+  <!-- Pie de página -->
+  <footer>
+    <div class="footer">
+        <strong>&copy; David Rivera</strong> &#10023; <span>JSU Library</span> &#10023;
+        Hora: <strong><span id="hora"></span></strong>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS ADICIONALES -->
+  <script src="../../javascripts/jherax.js"></script>
+  <script src="main.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    $("#hora").text(jsu.fnGetDate().dateTime);
+  </script>
+  
+</body>
+</html>

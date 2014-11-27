@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es"><!--manifest="cache-files.manifest"-->
+
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset='utf-8'/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>fnEasyValidate</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="demos: fnGetDate, fnMaxLength, fnEasyValidate, fnShowDialog, fnConfirm"/>
+  <meta name="author" content="david rivera perez"/>
+  <meta name="layout" content="main"/>
+  
+  <link rel="icon" type="image/png" href="https://dl.dropboxusercontent.com/u/91579606/js-icon32.png" />
+  <!--<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/hot-sneaks/jquery-ui.css"/>-->
+  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/pepper-grinder/jquery-ui.css" />
+  <link rel="stylesheet" type="text/css" href="../stylesheets/jherax.css" media="screen"/>
+
+  <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
+  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!--[if lte IE 9]>
+    <script src="../javascripts/polyfills/html5shiv.min.js"></script>
+  <![endif]-->
+
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../javascripts/jquery-2.1.1.min.js"><\/script>')</script>
+
+  <!-- CSS3 selectors for IE -->
+  <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
+  <!--[if lt IE 9]>
+    <script src="../javascripts/polyfills/selectivizr.js"></script>
+  <![endif]-->
+
+  <style type="text/css">
+    label, input, button, select, textarea {
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 13px; font-weight: normal; line-height: 20px;
+    }
+    textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+      padding: 2px 4px; background-color: #fff; border: 1px solid #ccc; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075); box-shadow: inset 0 1px 1px rgba(0,0,0,0.075); -webkit-transition: border linear .2s,box-shadow linear .2s; -moz-transition: border linear .2s,box-shadow linear .2s; -o-transition: border linear .2s,box-shadow linear .2s; transition: border linear .2s,box-shadow linear .2s; border-radius: 3px;
+    }
+    textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
+      border-color: rgb(82,168,236); border-color: rgba(82,168,236,0.8); outline: 0; outline: thin dotted \9; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6); box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6);
+    }
+    textarea { resize: vertical; } /* none|horizontal|vertical|both */
+    button, input[type="button"], input[type="submit"] { margin: 6px 1px; }
+    #output { display: inline-block; margin: 15px 10px; font-family: Arial; font-size: 16px; color: #555; }
+    #output > em { font-style: normal; color: #DB4900; }
+    input:not([type="submit"]), textarea { width: 195px; box-sizing: border-box; }
+    ul { margin-bottom: 20px; padding-left: 16px; }
+    form p > input { margin-right: 8px; }
+    form span { color: #777; font-size: .9em; cursor: default; }
+    form span + span { color: #C03030; }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <!-- Menu de navegacion -->
+  </header>
+
+  <!-- Vista de las páginas -->
+  <section id="main-section" class="container">
+      <div id="page-wrapper">
+        <form action="" method="post">
+          <h2>Demos</h2>
+          <ul>
+            <li><a href="http://jherax.github.io/?lang=spanish#fngetdate-options" target="_blank">fnGetDate</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnmaxlength-length-position" target="_blank">fnMaxLength</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfneasyvalidate-options" target="_blank">fnEasyValidate</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#fnshowdialog-options" target="_blank">fnShowDialog</a></li>
+            <li><a href="#" target="_blank">fnConfirm</a></li>
+          </ul>
+          <a href="#" id="link">Abrir ventana</a>
+          <div id="panel" style="display:none">
+            <ul id="lista">
+              <li>1 item</li>
+              <li>2 item</li>
+              <li>3 item</li>
+            </ul>
+          </div>
+          <p><input type="text" id="fecha" class="vld-required vld-date no-auto-focus" placeholder="Ingresar fecha"/><span>type=</span><span>"text"</span></p>
+          <p><input type="date" id="date" data-group="group.2" class="vld-required"/><span>type=</span><span>"date"</span></p>
+          <p><input type="datetime-local" id="datetime" data-group="group.2" class="vld-required"/><span>type=</span><span>"datetime-local"</span></p>
+          <p><input type="time" id="time" data-group="group.2" class="vld-required"/><span>type=</span><span>"time"</span></p>
+          <p><textarea id="area" class="vld-email" placeholder="Ingresar email"></textarea></p>
+          <p style="padding-top: 4px">
+            <button id="btn-text" class="validator">Validar texto</button>
+            <button id="btn-date" class="validator" data-group="group.2">Validar fechas</button>
+          </p>
+          <br/>
+          <article>
+            <div id="output">Open console to view results &#187; <em>F12</em> or <em>shift</em> + <em>ctrl</em> + <em>i</em></div>
+          </article>
+        </form>
+      </div>
+  </section>
+  
+  <!-- Pie de página -->
+  <footer>
+    <div class="footer">
+        <strong>&copy; David Rivera</strong> &#10023; <span>JSU Library</span> &#10023;
+        Hora: <strong><span id="hora"></span></strong>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS ADICIONALES -->
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+  <!--<script type="text/javascript">var jsu = "hello";</script>-->
+  <script type="text/javascript" src="../javascripts/jherax.js"></script>
+
+  <script type="text/javascript">
+    $(document).on("ready", function() {
+      
+      //sets the default container
+      jsu.wrapper = "#main-section";
+
+      //configure the global language setting
+      jsu.regional.english.dialogTitle = "System message";
+      jsu.regional.set(jsu.regional.english);
+      
+      //gets the current time
+      $("#hora").text(jsu.fnGetDate().dateTime);
+
+      //initializes the plugins
+      $("#fecha").datepicker();
+      $("#area").fnMaxLength(20, {
+        at: "right bottom",
+        my: "right top+4"
+      });
+
+      //sets specific dates
+      $("#date").val(jsu.fnGetDate({ ISO8601: true }).date);
+      $("#datetime").val(jsu.fnGetDate({ ISO8601: true }).dateTime);
+      $("#time").val(jsu.fnGetDate({ ISO8601: true }).time);
+
+      //opens the modal window with an existing HTML element
+      $("#link").on("click.dialog", function(e) {
+        e.preventDefault();
+        jsu.fnShowDialog({ appendTo: "#page-wrapper", content: $("#lista") });
+      }).trigger("click.dialog");
+
+      //creates the click handlers
+      $(".validator")
+        .click(function() { alert("1.click()"); })
+        .bind("click.a", function() { alert("2.bind('click.a')"); })
+        //initializes the fnEasyValidate plugin
+        .fnEasyValidate({
+          fnBeforeTooltip: function(args) {
+            if ((/textarea/i).test(args.target.nodeName)) {
+              args.target = $("#output").get(0);
+              args.position = { at: "left top-4", my: "left bottom" };
+            }
+          }
+        })
+        //initializes the fnConfirm plugin
+        .fnConfirm({
+          content: "<nobr>Demo de la función $.fnConfirm()</nobr>",
+          icon: "cancel",
+          beforeShow: function() { alert("4.fnConfirm() : beforeShow"); }
+        })
+        .on("click.b", function() { alert("5.on('click.b')"); });
+
+    }); //end document.ready
+  </script>
+<!--
+  <script type="text/javascript">
+    (function() {
+      // http://peter.michaux.ca/articles/lazy-function-definition-pattern
+      //---------------------------------
+      // Lazy Function Definition Pattern
+      // via self-invoking function
+      var writeInit = function() {
+        var t = new Date(); //{t} is created only at first call
+        //redefine function to return {t} in subsequent calls
+        writeInit = function() {
+          return "First execution: " + t.toString();
+        };
+        //this call is executed only the first time
+        return writeInit();
+      }
+      //---------------------------------
+      // Another implementation of
+      // Lazy Function Definition Pattern
+      writeInit = function() {
+        return arguments.callee.t || (function(fn) {
+          fn.t = "First execution: " + (new Date());
+          return fn.t;
+        }(arguments.callee));
+      }
+      //---------------------------------
+      // Object constructor
+      function Person (name, age, sex) {
+          this.name = name;
+          this.age = age;
+          this.sex = sex;
+          this.dateCreated = new Date();
+      }
+
+      // Function to extend in Person Object
+      function greet() {
+          var text = "Nice to meet you! My name is: " +
+              "{" + this.name + "}, I'm " +
+              "{" + this.age + "} years";
+          return text;
+      }
+
+      // Function to extend in Person Object
+      function creationDate() {
+        return "Created at: " + this.dateCreated;
+      }
+
+      // Creates a new instance of Person
+      var p2, p1 = new Person("David", 30, "Male");
+
+      // Extend Person object by adding new methods
+      Person.prototype.introduce = greet;
+      Person.prototype.writeCreated = creationDate;
+
+      // Test a future instance of Person
+      setTimeout(function() {
+          console.log("\nSECOND INSTANCE OF Person OBJECT:");
+          p2 = new Person("Nicole", 28, "Female");
+          console.log("p2:", p2);
+          console.log("p2:", p2.introduce());
+          console.log("p2:", p2.writeCreated());
+          // Writes the time of first call
+          console.log(writeInit(), "\n");
+      }, 2000);
+
+      console.log("\nFIRST INSTANCE OF Person OBJECT:");
+      console.log("p1:", p1);
+      console.log("p1:", p1.writeCreated());
+      // Writes the time of first call
+      console.log(writeInit(), "\n");
+
+      // Test the object context of greet() function
+      console.log("ASSIGN THE CONTEXT TO METHOD INVOCATION:");
+      console.log(greet()); //undefined properties
+      console.log(greet.apply(p1)); //p1 properties
+    })();
+  </script>
+-->
+</body>
+</html>

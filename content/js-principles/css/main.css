@@ -1,0 +1,568 @@
+/*
+    So you like the style of impress.js demo?
+    Or maybe you are just curious how it was done?
+
+    You couldn't find a better place to find out!
+
+    Welcome to the stylesheet impress.js demo presentation.
+
+    Please remember that it is not meant to be a part of impress.js and is
+    not required by impress.js.
+    I expect that anyone creating a presentation for impress.js would create
+    their own set of styles.
+
+    But feel free to read through it and learn how to get the most of what
+    impress.js provides.
+
+    And let me be your guide.
+
+    Shall we begin?
+*/
+
+
+/*
+    We start with a good ol' reset.
+    That's the one by Eric Meyer http://meyerweb.com/eric/tools/css/reset/
+
+    You can probably argue if it is needed here, or not, but for sure it
+    doesn't do any harm and gives us a fresh start.
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+blockquote, q {
+    color: #97756a;
+    margin-left: -0.4em;
+    padding-left: 22px;
+    font-style: italic;
+}
+blockquote:before, q:before {
+    content: "“";
+    margin-left: -0.5em;
+}
+blockquote:after, q:after {
+    content: "”";
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* ==========================================================================
+   BEGIN IMPRESS.JS STYLES
+   ========================================================================== */
+/*
+    Now here is when interesting things start to appear.
+
+    We set up <body> styles with default font and nice gradient in the background.
+    And yes, there is a lot of repetition there because of -prefixes but we don't
+    want to leave anybody behind.
+*/
+body {
+    font-family: 'PT Sans', sans-serif;
+    line-height: 1.5;
+    font-size: 36px;
+    color: #333;
+    min-height: 740px;
+    background: rgb(215, 215, 215);
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+    background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:    -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:     -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:      -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:         radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    -webkit-font-smoothing: antialiased;
+}
+
+/*
+    Now let's bring some text styles back ...
+*/
+b, strong { font-weight: bold; }
+i, em { font-style: italic; }
+p { margin-bottom: 0.5em; }
+
+/*
+    ... and give links a nice look.
+*/
+a {
+    color: #d25349;
+    font-size: .9em;
+    text-decoration: none;
+    background: rgba(255,255,255,0.3);
+    text-shadow: 1px 0 0px rgba(255,255,255,.6), -1px 0 1px rgba(100,100,100,0.5);
+    border-radius: 0.2em;
+    padding: 0 4px;
+    -webkit-transition: 0.5s;
+    -moz-transition:    0.5s;
+    -ms-transition:     0.5s;
+    -o-transition:      0.5s;
+    transition:         0.5s;
+}
+
+a:hover,
+a:focus {
+    background: rgba(255,255,255,1);
+    text-shadow: -1px -1px 2px rgba(100,100,100,0.5);
+}
+h1, h2 {
+    font-weight: normal;
+    text-align: center;
+    color: #222;
+}
+h1 { font-size: 2.5em; margin: 0.4em 0; }
+h2 { font-size: 2em; margin: 0.3em 0; }
+h3 { font-size: 1.6em; margin: 0.3em 0; color: #222; }
+h3 b { font-size: 1.1em; }
+h4 { font-size: 36px; margin: 0.3em 0; color: #4e4e4e; }
+
+ul { list-style-position: outside; opacity: 0.9; margin: 0.3em 0 0.6em; }
+
+/* ==========================================================================
+   COMMON STEP STYLES
+   ========================================================================== */
+/*
+    We start with basics to make sure it displays correctly in everywhere ...
+*/
+
+.step {
+    position: relative;
+    overflow: hidden;
+    width: 880px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    -ms-box-sizing:     border-box;
+    -o-box-sizing:      border-box;
+    box-sizing:         border-box;
+    font-family: 'PT Serif', georgia, serif;
+}
+
+/*
+    Basically we remove the margin and make inactive steps a little bit transparent.
+*/
+.impress-enabled .step {
+    margin: 0;
+    opacity: 0.015;
+    -webkit-transition: opacity 1s;
+    -moz-transition:    opacity 1s;
+    -ms-transition:     opacity 1s;
+    -o-transition:      opacity 1s;
+    transition:         opacity 1s;
+}
+/*
+    And as the last thing there is a workaround for quite strange bug.
+    It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
+
+    Sometimes the element positioned in 3D (especially when it's moved back
+    along Z axis) is not clickable, because it falls 'behind' the <body>
+    element.
+
+    To prevent this, I decided to make <body> non clickable by setting
+    pointer-events property to `none` value.
+    Value if this property is inherited, so to make everything else clickable
+    I bring it back on the #impress element.
+
+    If you want to know more about `pointer-events` here are some docs:
+    https://developer.mozilla.org/en/CSS/pointer-events
+
+    There is one very important thing to notice about this workaround - it makes
+    everything 'unclickable' except what's in #impress element.
+
+    So use it wisely ... or don't use at all.
+*/
+.impress-enabled          { pointer-events: none; }
+.impress-enabled #impress { pointer-events: auto; }
+.impress-enabled .step.active { opacity: 1; }
+
+.active.present { z-index: 3; }
+
+.step div.counter {
+    position: absolute;
+    bottom: 0.8em;
+    right: 1.2em;
+    font-size: 16px;
+    opacity: 0.3;
+    width: auto;
+}
+
+.wrap {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-left: 0.4em;
+    position: relative;
+    overflow: auto;
+    clear: both;
+}
+
+.center { text-align: center; }
+.hide { display: none; }
+
+/* ==========================================================================
+   HINT STYLE
+   ========================================================================== */
+/*
+    Now, when we have all the steps styled let's give users a hint how to navigate
+    around the presentation.
+
+    The best way to do this would be to use JavaScript, show a delayed hint for a
+    first time users, then hide it and store a status in cookie or localStorage...
+
+    But I wanted to have some CSS fun and avoid additional scripting...
+
+    Let me explain it first, so maybe the transition magic will be more readable
+    when you read the code.
+
+    First of all I wanted the hint to appear only when user is idle for a while.
+    You can't detect the 'idle' state in CSS, but I delayed a appearing of the
+    hint by 5s using transition-delay.
+
+    You also can't detect in CSS if the user is a first-time visitor, so I had to
+    make an assumption that I'll only show the hint on the first step. And when
+    the step is changed hide the hint, because I can assume that user already
+    knows how to navigate.
+
+    To summarize it - hint is shown when the user is on the first step for longer
+    than 5 seconds.
+
+    The other problem I had was caused by the fact that I wanted the hint to fade
+    in and out. It can be easily achieved by transitioning the opacity property.
+    But that also meant that the hint was always on the screen, even if totally
+    transparent. It covered part of the screen and you couldn't correctly clicked
+    through it.
+    Unfortunately you cannot transition between display `block` and `none` in pure
+    CSS, so I needed a way to not only fade out the hint but also move it out of
+    the screen.
+
+    I solved this problem by positioning the hint below the bottom of the screen
+    with CSS transform and moving it up to show it. But I also didn't want this move
+    to be visible. I wanted the hint only to fade in and out visually, so I delayed
+    the fade in transition, so it starts when the hint is already in its correct
+    position on the screen.
+*/
+
+.hint {
+    /*
+        We hide the hint until presentation is started and from browsers not supporting
+        impress.js, as they will have a linear scrollable view ...
+    */
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    background: rgba(0,0,0,0.5);
+    color: #EEE;
+    text-align: center;
+    font-size: 34px;
+    padding: 16px;
+    z-index: 100;
+    opacity: 0; /* By default we don't want the hint to be visible, so we make it transparent ... */
+    /* ... and position it below the bottom of the screen (relative to it's fixed position) */
+    -webkit-transform: translateY(200px);
+    -moz-transform:    translateY(200px);
+    -ms-transform:     translateY(200px);
+    -o-transform:      translateY(200px);
+    transform:         translateY(200px);
+    /*
+        Now let's imagine that the hint is visible and we want to fade it out and move out
+        of the screen.
+
+        So we define the transition on the opacity property with 1s duration and another
+        transition on transform property delayed by 1s so it will happen after the fade out
+        on opacity finished.
+
+        This way user will not see the hint moving down.
+    */
+    -webkit-transition: opacity 1s, -webkit-transform 0.5s 1s;
+    -moz-transition:    opacity 1s,    -moz-transform 0.5s 1s;
+    -ms-transition:     opacity 1s,     -ms-transform 0.5s 1s;
+    -o-transition:      opacity 1s,      -o-transform 0.5s 1s;
+    transition:         opacity 1s,         transform 0.5s 1s;
+}
+
+.hint p { margin: 0; }
+
+/*
+    Now we 'enable' the hint when presentation is initialized ...
+*/
+.impress-enabled .hint { display: block; }
+
+/*
+    ... and we will show it when the first step (with id 'bored') is active.
+*/
+.impress-on-title .hint {
+    opacity: 1; /* We remove the transparency and position the hint in its default fixed position. */
+    -webkit-transform: translateY(0px);
+    -moz-transform:    translateY(0px);
+    -ms-transform:     translateY(0px);
+    -o-transform:      translateY(0px);
+    transform:         translateY(0px);
+    /*
+        Now for fade in transition we have the oposite situation from the one above.
+
+        First after 4.5s delay we animate the transform property to move the hint
+        into its correct position and after that we fade it in with opacity transition.
+    */
+    -webkit-transition: opacity 1s 3s, -webkit-transform 0.5s 2.5s;
+    -moz-transition:    opacity 1s 3s,    -moz-transform 0.5s 2.5s;
+    -ms-transition:     opacity 1s 3s,     -ms-transform 0.5s 2.5s;
+    -o-transition:      opacity 1s 3s,      -o-transform 0.5s 2.5s;
+    transition:         opacity 1s 3s,         transform 0.5s 2.5s;
+}
+/*
+    There is one funny thing I just realized.
+
+    Thanks to this workaround above everything except #impress element is invisible
+    for click events. That means that the hint element is also not clickable.
+    So basically all of this transforms and delayed transitions trickery was probably
+    not needed at all...
+*/
+
+/* ==========================================================================
+   STEP SPECIFIC STYLES
+   ========================================================================== */
+/*
+    The last step is an overview.
+    There is no content in it, so we make sure it's not visible because we want
+    to be able to click on other steps.
+
+*/
+#overview { display: none; }
+/*
+    We also make other steps visible and give them a pointer cursor using the
+    `impress-on-` class.
+*/
+.impress-on-overview .step {
+    opacity: 1;
+    cursor: pointer;
+}
+pre + .counter { color: white; }
+#title { font-size: 1.48em; }
+#title span { padding-left: .5em; }
+#title h1 { margin: 0; }
+#dry h3 span { cursor: default; }
+
+div[id^="dry-eg"].active, div[id^="dry-eg"].past,
+#code-eg1.active, #code-eg1.past { width: 900px; }
+
+div[id^="dry-eg"] .wrap { margin-top: -14px; }
+div[id^="dry-eg"] p { margin-bottom: 20px; }
+#dry-eg4.active, #dry-eg4.past { width: 970px; }
+#coupling h3 + p { margin-bottom: 30px; }
+#coupling p > em { font-size: .9em; }
+#coupling blockquote strong { cursor: default; }
+#solution-1 .wrap { width: 740px; }
+#solution-1 p { margin: 15px 0; }
+#solution-2.active, #solution-2.past { width: 995px; }
+#solution-2 p > span { font-size: .9em; }
+#awsome .counter, #questions .counter, #thank-you .counter { display: none; }
+
+#awsome     img,
+#splash     img,
+#solution-1 img { position: relative; left: 50%; margin-left: -300px; } /* width: 600px */
+#strategy-1 img { position: relative; left: 50%; margin-left: -430px; } /* width: 860px */
+#questions  img { position: relative; left: 50%; margin-left: -150px; } /* width: 300px */
+#questions .wrap, #thank-you .wrap { width: 460px; }
+#thank-you li:first-child { margin-bottom: .6em; list-style: none; padding-left: 0.1em; font-size: 1.4em; font-weight: bold; text-shadow: -1px 0 rgba(0,0,0,.4), 1px 1px 3px rgba(0,0,0,.6); }
+#thank-you ul { margin: 0; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,.4); }
+
+
+/* ==========================================================================
+   IMPRESS NOT SUPPORTED STYLES
+   ========================================================================== */
+/*
+    Because the main point behind the impress.js demo is to demo impress.js
+    we display a fallback message for users with browsers that don't support
+    all the features required by it.
+
+    All of the content will be still fully accessible for them, but I want
+    them to know that they are missing something - that's what the demo is
+    about, isn't it?
+
+    And then we hide the message, when support is detected in the browser.
+*/
+
+.fallback-message {
+    display: none;
+    width: 840px;
+    padding: 10px 20px;
+    margin: 50px 20px 0 auto;
+    border: 1px solid #E4C652;
+    border-radius: 10px;
+    background: #EEDC94;
+    color: #444;
+    font-family: sans-serif;
+    line-height: 1.3;
+    font-size: 0.7em;
+}
+
+.fallback-message p {
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.impress-not-supported {
+    background: #A7B8BD;
+    overflow: hidden;
+    margin: 0 20px;
+}
+
+.impress-not-supported .step {
+    opacity: 1;
+    position: relative;
+    min-height: 640px;
+    margin: 150px auto;
+    background: rgb(215, 215, 215);
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+    background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:    -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:     -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:      -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:         radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    border-radius: 13px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -o-box;
+    display: box;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    -o-box-pack: center;
+    box-pack: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -o-box-align: center;
+    box-align: center;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -o-box-orient: vertical;
+    box-orient: vertical;
+}
+
+.impress-not-supported .step > * {
+    width: 880px;
+}
+
+.impress-not-supported .fallback-message {
+    display: block;
+}
+
+.fallback-message.hidden {
+    display: none !important;
+}
+
+.impress-not-supported #overview {
+    display: none;
+}
+
+/* ==========================================================================
+   PRETTYFY THE CODE
+   ========================================================================== */
+
+span.highlight-text:hover {
+    cursor: default;
+    text-shadow: 0 1px 1px black, 0 1px 2px white;
+}
+code {
+    position: relative;
+    top: -2px;
+    padding: 2px 5px;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 0.6em;
+    color: #d14;
+    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    background-color: rgba(247,247,249,.8);
+    border-radius: .3em;
+}
+pre {
+    margin: 0;
+    padding: 10px 0;
+    overflow: auto;
+    font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier;
+    font-size: 0.7em;
+    border-radius: 13px;
+}
+
+pre.tight { line-height: 1em; }
+/* desert scheme ported from vim to google prettify */
+pre.prettyprint { background-color: #333; }
+pre.prettyprint:not(.hide) { display: block; }
+pre .nocode { background-color: none; color: #000; }
+pre .str { color: #ffa0a0; } /* string  - pink */
+pre .kwd { color: #f0e68c; font-weight: bold; }
+pre .com { color: #87ceeb; } /* comment - skyblue */
+pre .typ { color: #98fb98; } /* type    - lightgreen */
+pre .lit { color: #cd5c5c; } /* literal - darkred */
+pre .pun { color: #fff; }    /* punctuation */
+pre .pln { color: #fff; }    /* plaintext */
+pre .tag { color: #f0e68c; font-weight: bold; } /* html/xml tag    - lightyellow */
+pre .atn { color: #bdb76b; font-weight: bold; } /* attribute name  - khaki */
+pre .atv { color: #ffa0a0; } /* attribute value - pink */
+pre .dec { color: #98fb98; } /* decimal         - lightgreen */
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums { margin-top: 0; margin-bottom: 0; margin-left: 36px; color: #AEAEAE; } /* IE indents via margin-left */
+ol.linenums li { color: #555; list-style-type: decimal; }
+/* li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none } */
+/* Alternate shading for lines */
+li.L1,li.L3,li.L5,li.L7,li.L9 { }
+
+@media print {
+    pre.prettyprint { background-color: none; }
+    pre .str, code .str { color: #060; }
+    pre .kwd, code .kwd { color: #006; font-weight: bold; }
+    pre .com, code .com { color: #600; font-style: italic; }
+    pre .typ, code .typ { color: #404; font-weight: bold; }
+    pre .lit, code .lit { color: #044; }
+    pre .pun, code .pun { color: #440; }
+    pre .pln, code .pln { color: #000; }
+    pre .tag, code .tag { color: #006; font-weight: bold; }
+    pre .atn, code .atn { color: #404; }
+    pre .atv, code .atv { color: #060; }
+}
+
+/* ==========================================================================
+   PRETTIFY TABLE
+   ========================================================================== */
+
+table.pretty-table, .pretty-table caption, .pretty-table tbody, .pretty-table tfoot, .pretty-table thead, .pretty-table tr, .pretty-table th, .pretty-table td { margin: 0; padding: 0; border: 0; outline: 0; vertical-align: baseline; background: transparent; }
+.pretty-table a:link { color: #666; font-weight: bold; text-decoration: none; }
+.pretty-table a:visited { color: #999; font-weight: bold; text-decoration: none; }
+.pretty-table a:active, .pretty-table a:hover { color: #bd5a35; text-decoration: underline; }
+.pretty-table { border-spacing: 0; font-family: Arial, Helvetica, sans-serif; color: #666; text-shadow: 1px 1px 0px #fff; background: #eaebec; border: #ccc 1px solid; border-radius: 13px; -moz-box-shadow: 0 1px 2px #d1d1d1; -webkit-box-shadow: 0 1px 2px #d1d1d1; box-shadow: 0 1px 2px #d1d1d1; border-collapse: separate; }
+.pretty-table th { padding: 12px; border-top: 1px solid #fafafa; border-bottom: 1px solid #e0e0e0; background: #ededed; background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb)); background: -moz-linear-gradient(top, #ededed, #ebebeb); font-variant: small-caps; }
+.pretty-table th:first-child { text-align: left; padding-left: 18px; }
+.pretty-table tr:first-child th:first-child { -moz-border-radius-topleft: 13px; -webkit-border-top-left-radius: 13px; border-top-left-radius: 13px; }
+.pretty-table tr:first-child th:last-child { -moz-border-radius-topright: 13px; -webkit-border-top-right-radius: 13px; border-top-right-radius: 13px; }
+.pretty-table tr td:first-child { text-align: left; padding-left: 18px; border-left: 0; }
+.pretty-table tr td { padding: 6px 10px; border-top: 1px solid #ffffff; border-bottom: 1px solid #e0e0e0; border-left: 1px solid #e0e0e0; background: #fafafa; background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa)); background: -moz-linear-gradient(top, #fbfbfb, #fafafa); }
+.pretty-table tr:nth-child(2n+1) td { background: #f6f6f6; background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6)); background: -moz-linear-gradient(top, #f8f8f8, #f6f6f6); }
+.pretty-table tr:last-child td { border-bottom: 0; }
+.pretty-table tr:last-child td:first-child { -moz-border-radius-bottomleft: 13px; -webkit-border-bottom-left-radius: 13px; border-bottom-left-radius: 13px; }
+.pretty-table tr:last-child td:last-child { -moz-border-radius-bottomright: 13px; -webkit-border-bottom-right-radius: 13px; border-bottom-right-radius: 13px; }
+.pretty-table tr:hover td { background: #f2f2f2; background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0)); background: -moz-linear-gradient(top, #f2f2f2, #f0f0f0); }
+.pretty-table tfoot td { border-top: 1px solid #e0e0e0; }

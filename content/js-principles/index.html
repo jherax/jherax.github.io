@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="utf-8"/>
+  <!--[if IE]>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <![endif]-->  
+  <title>JS: Buenas Prácticas</title>
+
+  <meta name="viewport" content="width=device-width" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="description" content="JavaScript: buenas practicas"/>
+  <meta name="author" content="david rivera perez"/>
+  <meta name="layout" content="main"/>
+  
+  <link rel="icon" type="image/png" href="js-icon32.png" />
+  <link rel="shortcut icon" href="js-icon32.png" />
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+
+  <link type="text/css" rel="stylesheet" href="css/main.css" />
+
+  <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
+  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!--[if lte IE 9]>
+      <script src="js/polyfills/html5shiv.min.js"></script>
+  <![endif]-->
+  
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>
+  
+  <!-- CSS3 selectors for IE -->
+  <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
+  <!--[if lt IE 9]>
+      <script src="js/polyfills/selectivizr.js"></script>
+  <![endif]-->
+</head>
+
+<body class="impress-not-supported">
+  <div class="fallback-message">
+    <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
+    <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div id="impress">
+
+    <!-- 1 -->
+    <div id="title" class="step">
+      <span>Buenas prácticas de</span>
+      <h1>Programación</h1>
+    </div>
+
+    <!-- 2 -->
+    <div id="principles" class="step">
+      <h3>Principios de programación</h3>
+      <p>Los <a href="http://www.genbetadev.com/metodologias-de-programacion/doce-principios-de-diseno-que-todo-desarrollador-deberia-conocer" title="Doce principios de diseño que todo desarrollador debería conocer" target="_blank">principios</a> de la buena programación están muy&nbsp;relacionados con los principios del diseño y la&nbsp;ingeniería. Vamos a mencionar algunos principios que se aplican en JavaScript, los cuales nos ayudarán a ser mejores programadores, y más eficientes al escribir código fácil de mantener.</p>
+    </div>
+
+    <!-- 3 -->
+    <div id="dry" class="step">
+      <h3><span title="DIE - Duplication is evil">DRY</span> - Don’t repeat yourself</h3>
+      <p>No repita código!! Éste es uno de los principio más importantes de la programación. El código duplicado es propenso a generar errores y difícil de mantener.</p>
+      <p>Extraiga el código repetido en una función para encapsularlo. Cree abstracciones, funciones, haga <nobr>uso de la <a title="Recurrencia, recursión o recursividad es la forma en la cual se especifica un proceso basado en su propia definición" href="http://es.wikipedia.org/wiki/Recursi%C3%B3n" target="_blank">recursividad</a></nobr></p>
+    </div>
+
+    <!-- 4 -->
+    <div id="dry-eg1" class="step">
+      <p>Veamos este ejemplo...</p>
+<pre class="prettyprint lang-js linenums">
+function afterEvent1 (obj, text) {
+  if (obj && obj instanceof HTMLElement && obj.value) {
+    console.log("Message: ", text);
+    obj.value = text;
+    obj.className = "";
+    obj.disabled = true;
+  }
+}
+
+function afterEvent2 (obj, text) {
+  if (obj && obj instanceof HTMLElement && obj.value) {
+    console.log("Message: ", text);
+    obj.value = text;
+    obj.className = "active";
+  }
+}
+</pre>
+    </div>
+
+    <!-- 5 -->
+    <div id="dry-eg2" class="step">
+      <p>Podríamos mejorarlo de la siguiente manera:</p>
+<pre class="prettyprint lang-js linenums tight">
+function doAfter (obj, text, fn) {
+  if (obj && obj instanceof HTMLElement && obj.value) {
+    console.log("Message: ", text);
+    obj.value = text;
+    //ejecutamos el callback "fn"
+    fn(obj);
+  }
+}
+
+function afterEvent1 (obj, text) {
+  doAfter(obj, text, function (o) {
+    o.className = "";
+    o.disabled = true;
+  });
+}
+
+function afterEvent2 (obj, text) {
+  doAfter(obj, text, function (o) {
+    o.className = "active";
+  });
+}
+</pre>
+    </div>
+
+    <!-- 6 -->
+    <div id="dry-eg3" class="step">
+      <p>Podríamos mejorarlo de la siguiente manera:</p>
+<pre class="prettyprint lang-js linenums tight">
+function doAfter (obj, text, fn) {
+  if (obj && obj instanceof HTMLElement && obj.value) {
+    console.log("Message: ", text);
+    obj.value = text;
+    if (({}).toString.call(fn) == '[object Function]')
+      fn(obj);
+  }
+}
+
+function afterEvent1 (obj, text) {
+  doAfter(obj, text, function (o) {
+    o.className = "";
+    o.disabled = true;
+  });
+}
+
+function afterEvent2 (obj, text) {
+  doAfter(obj, text, function (o) {
+    o.className = "active";
+  });
+}
+</pre>
+    </div>
+
+    <!-- 7 -->
+    <div id="dry-eg4" class="step">
+      <p>... y podemos mejorarlo aún más:</p>
+<pre class="prettyprint lang-js linenums tight">
+function isFunction (obj) {
+  var toString = Object.prototype.toString;
+  return (!!obj && toString.call(obj) == '[object Function]');
+}
+
+function doAfter (obj, text, callback) {
+  if (obj && obj instanceof HTMLElement && obj.value) {
+    console.log("Message: ", text);
+    obj.value = text;
+    if (isFunction(callback)) callback(obj);
+  }
+}
+
+function afterEvent1 (obj, text) {
+  doAfter(obj, text, function (o) {
+    o.className = "";
+    o.disabled = true;
+  });
+}
+
+function afterEvent2 (obj, text) {
+  doAfter(obj, text, function (o) {
+    o.className = "active";
+  });
+}
+</pre>
+    </div>
+
+    <!-- 8 -->
+    <div id="abstraction" class="step">
+      <h3>Principio de Abstracción</h3>
+      <p>Está relacionado con el principio DRY.</p>
+      <blockquote>Cada pieza funcional en un programa debería ser implementada en un único lugar del código fuente</blockquote>
+      <h3>KISS (Keep it simple, stupid!)</h3>
+      <p>El diseño de un programa debe ser sencillo. Hay que evitar la complejidad innecesaria. Un código sencillo es más fácil de escribir y mantener.</p>
+    </div>
+
+    <!-- 9 -->
+    <div id="open-closed" class="step">
+      <h3>Principio Open/Closed (OCP)</h3>
+      <p>Las entidades de software (clases, módulos) deberían estar abiertas para su extensión <em>(open),</em> pero cerradas para su modificación <em>(closed).</em></p>
+      <p>En otras palabras nos dice que el código está mejor diseñado si se puede modificar su comportamiento sin cambiar su código fuente.</p>
+    </div>
+
+    <!-- 10 -->
+    <div id="single-resp" class="step">
+      <h3>Single Responsibility (SRP)</h3>
+      <p>Una clase debe tener una sola responsabilidad, por lo tanto solo debe haber una razón para hacer cambios. Además esa clase o módulo debe ser la única con esa responsabilidad.</p>
+    </div>
+
+    <!-- 11 -->
+    <div id="coupling" class="step">
+      <h3>Minimizar el acoplamiento</h3>
+      <p>Cualquier sección de código (función, clase, etc.)<br/>debe minimizar las dependencias de otras áreas del código. Esto se logra reduciendo el uso de variables compartidas. <em>(<a href="http://csharperimage.jeremylikness.com/2009/05/solid-and-dry-part-2.html" title="IoC / DI" target="_blank"><span>Inversion of Control</span> / <span>Dependency Injection</span></a>)</em></p>
+      <blockquote>El bajo acoplamiento es a menudo un signo de un sistema informático bien estructurado, y cuando se combina con una alta <strong title="El código con funcionalidad similar debe encontrarse dentro del mismo componente">cohesión</strong>, es compatible con los&nbsp;objetivos generales de legibilidad y facilidad de mantenimiento.</blockquote>
+    </div>
+
+    <!-- 12 -->
+    <div id="case-eg1" class="step">
+      <h3>Show me the code!</h3>
+      <p>Supongamos que queremos medir el progreso de un&nbsp;arhivo que estamos descargando. Siguiendo los principios de <strong>abstracción</strong> y <strong>única responsabilidad</strong> crearemos las entidades necesarias...</p>
+    </div>
+
+    <!-- 13 -->
+    <div id="code-eg1" class="step">
+<pre class="prettyprint lang-cs linenums">
+class File {
+    public int length { get; set; }
+    public int sent { get; set; }
+}
+
+class Progress {
+    private File _file;
+ 
+    public Progress(File file) {
+        this._file = file;
+    }
+ 
+    public int getPercent() {
+        return this._file.sent * 100 / this._file.length;
+    }
+}
+</pre>
+    </div>
+
+    <!-- 14 -->
+    <div id="remarks" class="step">
+      <p>Aunque el código anterior parece correcto, está violando el principio <strong>Open/Closed</strong>, ya que si se desea agregar una nueva característica (como <em>streaming</em> de música/video) tendríamos que modificar la clase <code>Progress</code> ya que tiene una dependencia directa con la&nbsp;implementación de <code>File</code> <nobr>(alto acoplamiento)</nobr></p>
+    </div>
+
+    <!-- 15 -->
+    <div id="splash" class="step">
+      <img src="img/water-balloon.gif" alt="splash" width="600" />
+    </div>
+
+    <!-- 16 -->
+    <div id="solution-1" class="step">
+      <p class="center">Veamos cómo llegamos a la solución anterior</p>
+      <img src="img/diagram-1.png" alt="class diagram" width="600" />
+      <p>La clase <code>Progress</code> está directamente atada a la implementación de <code>File</code>, no hay manera de agregar nuevas características a <code>Progress</code> sin tener que modificarla.</p>
+    </div>
+
+    <!-- 17 -->
+    <div id="solution-2" class="step">
+      <p>Hablando estrictamente, podemos decir que cualquier clase que dependa directamente de otra está violando el principio <strong>Open/Closed</strong>, pero recordemos el principio <strong>KISS</strong>, no&nbsp;agregar complejidad innecesaria; a&nbsp;veces no se justifica el costo que implica modificar el código existente.</p>
+      <p>Bien, ahora vamos a modificar la solución anterior utilizando el patrón <a title="Strategy Pattern" href="http://es.wikipedia.org/wiki/Strategy_%28patr%C3%B3n_de_dise%C3%B1o%29" target="_blank">Strategy</a>, trabajando contra <strong>abstracciones</strong> en lugar de implementaciones <span>(<a href="http://csharperimage.jeremylikness.com/2009/05/solid-and-dry.html" target="_blank">Liskov Substitution</a>)</span>, y así respetamos de manera simple y efectiva el principio <strong>OCP</strong>.</p>
+    </div>
+
+    <!-- 18 -->
+    <div id="strategy-1" class="step">
+      <h3 class="center">Strategy Pattern</h3>
+      <img src="img/diagram-3.png" alt="strategy pattern diagram" width="860" />
+    </div>
+
+    <!-- 19 -->
+    <div id="strategy-2" class="step">
+<pre class="prettyprint lang-java linenums tight">
+interface IMedia {
+  int length { get; set; }
+  int sent { get; set; }
+}
+
+class File : IMedia {
+    private int _length;
+    private int _sent;
+    
+    public int length { 
+      get { return _length; }
+    }
+
+    public int sent { 
+      get { return _sent; }
+    }
+}
+
+class Progress {
+    private IMedia _data;
+ 
+    public Progress(IMedia file) {
+        this._data = file;
+    }
+ 
+    public int getPercent() {
+        return this._data.sent*100 / this._data.length;
+    }
+}</pre>
+    </div>
+
+    <!-- 20 -->
+    <div id="awsome" class="step">
+      <img src="img/awsome.gif" alt="asombroso!" width="600" />
+    </div>
+
+    <!-- 21 -->
+    <div id="questions" class="step">
+      <h2>¿Preguntas?</h2>
+      <img src="img/any-question.jpg" alt="¿preguntas?" width="300" />
+    </div>
+
+    <!-- 22 -->
+    <div id="thank-you" class="step">
+      <ul>
+        <li>David Rivera</li>
+        <li><a href="https://jherax.wordpress.com/" target="_blank">jherax.wordpress.com</a></li>
+        <li><a href="http://jherax.github.io/?lang=spanish" target="_blank">jherax.github.io</a></li>
+        <li><a href="https://github.com/jherax/js-utils" target="_blank">github.com/jherax</a></li>
+        <li><a href="https://plus.google.com/+davidriverajherax/posts" target="_blank">+davidriverajherax</a></li>
+      </ul> 
+    </div>
+    
+    <div id="overview" class="step" data-x="200" data-y="0" data-scale="10" data-rotate-y="360"></div>
+
+  </div><!-- #impress -->
+
+  <div class="hint">
+    <p>Use la barra espaciadora o las flechas para navegar</p>
+  </div>
+
+  <!-- SCRIPTS ADICIONALES -->
+  <script src="js/impress.js"></script>
+  <script src="js/prettify.min.js"></script>
+  <script src="js/main.js" charset="utf-8"></script>
+  
+</body>
+</html>

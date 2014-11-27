@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="utf-8"/>
+  <!--[if IE]>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <![endif]-->  
+  <title>JS: Module Pattern</title>
+
+  <meta name="viewport" content="width=device-width" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="description" content="JavaScript: Module Pattern"/>
+  <meta name="author" content="david rivera perez"/>
+  <meta name="layout" content="main"/>
+  
+  <link rel="icon" type="image/png" href="js-icon32.png" />
+  <link rel="shortcut icon" href="js-icon32.png" />
+
+  <link type="text/css" rel="stylesheet" href="css/font.css" />
+  <link type="text/css" rel="stylesheet" href="css/main.css" />
+
+  <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
+  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!--[if lte IE 9]>
+      <script src="js/polyfills/html5shiv.min.js"></script>
+  <![endif]-->
+  
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>
+  
+  <!-- CSS3 selectors for IE -->
+  <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
+  <!--[if lt IE 9]>
+      <script src="js/polyfills/selectivizr.js"></script>
+  <![endif]-->
+</head>
+
+<body class="impress-not-supported">
+  <div class="fallback-message">
+    <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
+    <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div id="impress">
+
+    <!-- 1 -->
+    <div id="title" class="step">
+      <span>El Patrón MODULE</span>
+      <h1>JavaScript<sup>*</sup></h1>
+    </div>
+
+    <!-- 2 -->
+    <div id="definition" class="step">
+      <h2>¿Qué es?</h2>
+      <p>El patrón <a href="http://en.wikipedia.org/wiki/Module_pattern" target="_blank">Module (Módulo)</a> es un <b>patrón creacional</b> que usa el concepto de la <a href="http://en.wikipedia.org/wiki/Modular_programming" target="_blank">programación modular</a>, encapsulando unidades de código y separando la funcionalidad en módulos intercambiables.</p>
+      <p></p>
+    </div>
+
+    <!-- 3 -->
+    <div id="merits" class="step">
+      <h2>Ventajas</h2>
+      <ul>
+        <li>Permite la creación de miembros privados.</li>
+        <li>Mantiene el estado interno privado (<b>closure</b>)</li>
+        <li>Mantiene limpio de objetos el ámbito global.</li>
+        <li>Resuelve conflictos de colisión de nombres.</li>
+      </ul>
+    </div>
+
+    <!-- 4 -->
+    <div id="demerits" class="step">
+      <h2>Desventajas</h2>
+      <ul>
+        <li>Los objetos agregados posteriormente no tienen acceso a los miembros privados.</li>
+        <li>Es complejo hacer un <b>patch</b> para corregir bugs&nbsp;en miembros privados.</li>
+        <li>No se puede crear instancias del módulo<br/>(es creado como un <b>singletón</b>)</li>
+        <li>No se puede hacer pruebas unitarias en <nobr>los miembros privados.</nobr></li>
+      </ul>
+    </div>
+
+    <!-- 5 -->
+    <div id="cat-wtf" class="step">
+      <img src="img/cat_wtf.jpg" alt="cat wtf" width="480" />
+    </div>
+
+    <!-- 6 -->
+    <div id="hoisting" class="step">
+      <h2>Hoisting, Scoping</h2>
+      <p>El <b>hoisting</b> o <em>“elevamiento”</em> es una característica de JavaScript que mueve la <a href="http://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var" target="_blank">declaración de una variable</a> al&nbsp;comienzo del contexto de ejecución.</p>
+      <p>En la mayoría de los lenguajes de programación, una variable tiene alcance hasta el bloque en el cual fue definida <b>(block-level scope)</b> por ejemplo, dentro de un bloque de instrucciones <em>if, for, while;</em> sin embargo en JavaScript el alcance de las variables es el de la <b>función</b> en la cual fueron declaradas <b>(function-level scope)</b>.</p>
+    </div>
+
+    <!-- 7 -->
+    <div id="hoisting-example" class="step">
+      <h3>Veamos un ejemplo</h3>
+      <p>No es lo mismo esto (C#)</p>
+<pre class="prettyprint lang-cs linenums">
+void Counter() {
+  for (int i = 0; i &lt; 10; i++) {
+    //do something
+  }
+  Console.WriteLine(i); //throws exception
+}</pre>
+      <p>... que esto (JavaScript)</p>
+<pre class="prettyprint lang-js linenums">
+function fnCounter() {
+  for (var i = 0; i &lt; 10; i++) {
+    //do comething
+  }
+  console.log(i, "still exists!");
+}</pre>
+    </div>
+
+    <!-- 8 -->
+    <div id="object-literal" class="step">
+      <h2>Object Literals</h2>
+      <p>La notación literal de un objeto se describe en pares de <em><b>clave : valor</b></em> contenidos entre corchetes <code>{ }</code>. El nombre de la <em><b>clave</b></em> puede ser <code>string</code> con caracteres especiales.</p>
+  <pre class="prettyprint lang-js linenums">
+  var obj = {
+    fnSuma: function(a, b) { return a + b; },
+    "#text": "fnSuma",
+    valueOf: 1
+  };
+  //agregar propiedades
+  obj.fnResta = function(a, b) { return a - b; };
+  obj["fecha"] = new Date();
+  //eliminar propiedades
+  delete obj["#text"];</pre>
+    </div>
+
+    <!-- 9 -->
+    <div id="creating-module" class="step">
+      <h2>Creando un módulo</h2>
+      <p>Los módulos se crean generalmente a partir de un <b>IIFE</b> <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/" target="_blank">(Immediately-Invoked-Function-Expressions)</a> en donde la función anónima crea un <b>closure</b> que mantiene el <em>"estado" y "privacidad"</em> de los objetos definidos en él.</p>
+    <pre class="prettyprint lang-js">
+    var Module = (function () {
+      // privacy and state
+      <span class="highlight-text" title="returns Anonymous Object Literal">return {
+        publicMethod: function () { /* code */ }
+      };</span>
+    })();</pre>
+      <p>Nótese que el objeto <code>Module</code> queda definido en el <b>global scope</b> ( <code>window</code> generalmente ) aunque podemos definir el&nbsp;contexto en el cual se ejecuta nuestro módulo.</p>
+    </div>
+
+    <!-- 10 -->
+    <div id="privacy" class="step">
+      <h3>public &amp; private</h3>
+      <p>A diferencia de los lenguajes POO fuertes, JavaScript (<a href="http://kangax.github.io/compat-table/es5/" target="_blank">ECMAScript 5</a>) no permite la declaración explícita de objetos privados, sin embargo, a través de las <b>funciones</b> podemos crear un <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures" target="_blank">closure</a> que encapsule la lógica y <b>emule</b> la privacidad, manteniendo "vivos" los objetos definidos al interior de la función. El propósito, es por lo tanto retornar un <b>objeto</b> únicamente con las partes que serán públicas.</p>
+    </div>
+
+    <!-- 11 -->
+    <div id="global-import" class="step">
+      <h2>Global Import</h2>
+      <p>Podemos <b>importar</b> objetos a nuestro módulo, pasándolos como parámetros en nuestra función anónima.</p>
+    <pre class="prettyprint lang-js">
+    var Module = (function ($, yui) {
+      // jQuery as $, YAHOO.utils as yui
+    }(jQuery, YAHOO.utils));</pre>
+    <p>De esta forma creamos una referencia local del objeto importado y mejoramos el rendimiento al acortar la cadena de referencia mediante un "alias", y evitamos la colisión de nombres.</p>
+    </div>
+
+    <!-- 12 -->
+    <div id="module-export" class="step">
+      <h2>Module Export</h2>
+      <p>Ésta es la implementación tradicional del <b>Patrón Module</b>. Definimos un objeto global <code>MODULE</code> el cual mantiene un <b>estado&nbsp;interno privado</b> mediante el <b>closure</b> de la función. Para <b>exportar</b> el módulo, retornamos un <b>Object Literal</b> con las propiedades públicas.</p>
+<pre class="prettyprint lang-js linenums tight">
+var MODULE = (function () {
+  var module = {},
+      privateObj = 1;
+
+  function privateMethod() { /* code */ }
+
+  module.publicProperty = "public";
+  module.publicMethod = function () { /* code */ };
+  <span class="highlight-text" title="returns Locally scoped Object Literal">return module;</span>
+}());</pre>
+    </div>
+
+    <!-- 13 -->
+    <div id="augmentation" class="step">
+      <h2>Augmentation</h2>
+      <p>Una de las ventajas del Patrón Module, es que podemos aumentar un módulo agregando nuevas propiedades.</p>
+<pre class="prettyprint lang-js linenums">
+var MODULE = (function (module) {
+
+  module.newMethod = function () {
+    // new method added
+  };
+
+  return module;
+}(MODULE));</pre>
+    <p>Primero importamos el módulo, luego añadimos las nuevas&nbsp;propiedades, y finalmente lo exportamos.</p>
+    </div>
+
+    <!-- 14 -->
+    <div id="loose-augmentation" class="step">
+      <h2>Loose Augmentation</h2>
+      <p>Podemos aumentar nuestro módulo o crearlo si no existe. La principal ventaja es que podemos crear módulos flexibles que se puedan cargar asíncronamente, por ejemplo desde diferentes archivos.</p>
+<pre class="prettyprint lang-js linenums tight">
+var MODULE = (function (module) {
+
+  // private members
+  var state,
+      isDOM = function() { /* code */ },
+      isFunction = function() { /* code */ };
+
+  // add public members
+  module.isDOM = isDOM;
+  module.isFunction = isFunction;
+
+  return module;
+}(MODULE || {}));</pre>
+    </div>
+
+    <!-- 15 -->
+    <div id="tight-augmentation" class="step">
+      <h2>Tight Augmentation</h2>
+      <p>Con este enfoque podemos sobrescribir propiedades de un módulo ( <b>override</b> ) de forma segura. La desventaja es que los módulos se deben cargar en un orden específico ya que no tendría sentido sobrescribir una propiedad que no ha sido inicializada o aún no se ha creado.</p>
+<pre class="prettyprint lang-js linenums tight">
+var UTILS = (function (module) {
+
+  // keeps the reference to original method
+  var _position = module.fn.position;
+
+  //@Override
+  module.fn.position = function(o) {
+    if (!o || !o.of)
+      return _position.apply(this, arguments);
+    // add implementation
+  };
+  return module;
+}(UTILS || {}));</pre>
+    </div>
+
+    <!-- 16 -->
+    <div id="revealing-module-1" class="step">
+      <h2>Revealing Module</h2>
+      <p>Esta variación del patrón módulo busca separar claramente los objetos privados de los públicos, retornando un <b>Object literal</b> con referencias a los métodos que serán públicos y manteniendo todo lo demás como privado.</p>
+    </div>
+
+    <!-- 17 -->
+    <div id="revealing-module-2" class="step">
+      <h3 class="center">Revealing Module</h3>
+<pre class="prettyprint lang-js linenums tight">
+var utils = (function (undefined) {
+
+  // @Private: Creates an exception notifier
+  function CustomError(message) {
+    this.message = message || "An exception occurred";
+    this.name = "Custom exception";
+    // @Override
+    this.toString = function() {
+        return this.name + ": " + this.message;
+    };
+  }
+  var _author = "jherax";
+  var fnAddScript = function (o) {
+      if (typeof o != "string")
+        throw new CustomError("The url is required");
+      //... add implementation
+  }
+  // Returns the public parts
+  return {
+    author: _author,
+    fnAddScript: fnAddScript
+  };
+})();</pre>
+    </div>
+
+    <!-- 18 -->
+    <div id="questions" class="step">
+      <h2>¿Preguntas?</h2>
+      <img src="img/any-question.jpg" alt="¿preguntas?" width="303" />
+    </div>
+
+    <!-- 19 -->
+    <div id="thank-you" class="step">
+      <h2>David Rivera</h2>
+      <ul>
+        <li><a href="https://jherax.wordpress.com/" target="_blank">jherax.wordpress.com</a></li>
+        <li><a href="http://jherax.github.io/?lang=spanish" target="_blank">jherax.github.io</a></li>
+        <li><a href="https://github.com/jherax/js-utils" target="_blank">github.com/jherax</a></li>
+        <li><a href="https://plus.google.com/+davidriverajherax/posts" target="_blank">+davidriverajherax</a></li>
+      </ul> 
+    </div>
+
+    <div id="overview" class="step" data-x="3400" data-y="1000" data-scale="10" data-rotate-y="360"></div>
+
+  </div><!-- #impress -->
+
+  <div class="hint">
+    <p>Use la barra espaciadora o las flechas para navegar</p>
+  </div>
+
+  <!-- SCRIPTS ADICIONALES -->
+  <script src="js/impress.js"></script>
+  <script src="js/prettify.min.js"></script>
+  <script src="js/main.js" charset="utf-8"></script>
+  
+</body>
+</html>

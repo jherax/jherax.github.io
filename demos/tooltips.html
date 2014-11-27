@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>JSU Tooltips</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="demos: fnGetDate, fnIsValidDate, fnIsValidFormat, fnShowTooltip"/>
+  <meta name="author" content="david rivera perez"/>
+  <meta name="layout" content="main"/>
+  
+  <link rel="icon" type="image/png" href="https://dl.dropboxusercontent.com/u/91579606/js-icon32.png" />
+  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/hot-sneaks/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="../stylesheets/jherax.css" media="screen"/>
+
+  <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
+  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!--[if lte IE 9]>
+    <script src="../javascripts/polyfills/html5shiv.min.js"></script>
+  <![endif]-->
+
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../javascripts/jquery-2.1.1.min.js"><\/script>')</script>
+
+  <!-- CSS3 selectors for IE -->
+  <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
+  <!--[if lt IE 9]>
+    <script src="../javascripts/polyfills/selectivizr.js"></script>
+  <![endif]-->
+
+  <style type="text/css">
+    label, input, button, select, textarea {
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 13px; font-weight: normal; line-height: 20px;
+    }
+    textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+      padding: 2px 4px; background-color: #fff; border: 1px solid #ccc; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075); box-shadow: inset 0 1px 1px rgba(0,0,0,0.075); -webkit-transition: border linear .2s,box-shadow linear .2s; -moz-transition: border linear .2s,box-shadow linear .2s; -o-transition: border linear .2s,box-shadow linear .2s; transition: border linear .2s,box-shadow linear .2s; border-radius: 3px;
+    }
+    textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
+      border-color: rgb(82,168,236); border-color: rgba(82,168,236,0.8); outline: 0; outline: thin dotted \9; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6); box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6);
+    }
+    textarea { resize: vertical; } /* none|horizontal|vertical|both */
+    button, input[type="button"], input[type="submit"] { margin: 6px 1px; }
+    input:not([type="submit"]), textarea { width: 195px; box-sizing: border-box; }
+    ul { margin-bottom: 20px; padding-left: 16px; }
+    .label > label > span { display: block; margin-bottom: 3px; }
+    .label > label { display: inline-block; color: #666; }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <!-- Menu de navegacion -->
+  </header>
+
+  <!-- Vista de las páginas -->
+  <section id="main-section" class="container">
+      <div id="page-wrapper">
+        <form action="" method="post">
+          <h2>Demos</h2>
+          <ul>
+            <li><a href="http://jherax.github.io/?lang=spanish#fngetdate-options" target="_blank">fnGetDate</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnisvaliddate-options" target="_blank">fnIsValidDate</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnisvalidformat-type" target="_blank">fnIsValidFormat</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnshowtooltip-message-position" target="_blank">fnShowTooltip</a></li>
+          </ul>
+          <p class="label">
+            <label>
+              <span>Driver license</span>
+              <input type="text" id="txtLicence" class="vld-required vld-date no-auto-focus" placeholder="Enter date"/>
+            </label>
+          </p>
+          <p class="label">
+            <label>
+              <span>Date of birth</span>
+              <input type="text" id="txtBirthday" class="vld-required" placeholder="Enter date"/>
+            </label>
+          </p>
+          <p class="label">
+            <label>
+              <span>Email address</span>
+              <textarea id="txtEmail" class="vld-email" placeholder="Enter email"></textarea>
+            </label>
+          </p>
+          <button id="btnDates" class="validator">Validate date</button>
+          <button id="btnEmail" class="validator">Validate email</button>
+        </form>
+      </div>
+  </section>
+  
+  <!-- Pie de página -->
+  <footer>
+    <div class="footer">
+        <strong>&copy; David Rivera</strong> &#10023; <span>JSU Library</span> &#10023;
+        Hora: <strong><span id="hora"></span></strong>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS ADICIONALES -->
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="../javascripts/jherax.js"></script>
+  <script type="text/javascript">
+    //-----------------------------------
+    (function() {
+      
+      //sets the default container
+      jsu.wrapper = "#page-wrapper";
+
+      //configure the global language setting
+      jsu.regional.set(jsu.regional.english);
+
+      //sets default setting for tooltips
+      jsu.settings.position = {
+        at: "left top",
+        my: "left+1 bottom-4"
+      };
+
+      //gets the current time
+      $("#hora").text(jsu.fnGetDate().dateTime);
+      
+    }());
+
+    //-----------------------------------
+    //document.ready
+    $(function() {
+      $(".vld-required").datepicker();
+      var d = new Date();
+      //sets specific dates
+      $("#txtLicence").val(
+        jsu.fnGetDate({ date: d.setHours(24) }).date);
+      $("#txtBirthday").val(
+        jsu.fnGetDate({ date: d.setHours(24) }).date);
+    }); //end document.ready
+
+    //-----------------------------------
+    // Validates the dates
+    $(document).on("click", "#btnDates", function() {
+      if (!$("#txtLicence").fnIsValidDate()) return false;
+      if (!$("#txtBirthday").fnIsValidDate({
+          compareTo: $("#txtLicence").val(),
+          warning: "Your birthday can't be greater than driver's license expedition"
+      })) return false;
+      alert("Submit dates");
+    }); //end #btnDates.click
+
+    //-----------------------------------
+    // Validates the email
+    $(document).on("click", "#btnEmail", function() {
+      var licence = $("#txtLicence");
+      var email = $("#txtEmail");
+
+      //displays the tooltip at the specified position
+      if (!licence.fnIsValidFormat("date")) {
+        return !licence.fnShowTooltip(
+          "The licensing date is not valid");
+      }
+      //displays the tooltip at the default position
+      if (!$("#txtBirthday").fnIsValidDate({
+          warning: "Your next birthday can't be lesser than today",
+          isFuture: true
+      })) return false;
+      //displays the tooltip at the specified position
+      if (!email.fnIsValidFormat("email")) {
+        return !email.fnShowTooltip(
+          "The email address is not valid", {
+              at: "right+5 center",
+              my: "left center"
+          });
+      }
+      alert("Submit email");
+    }); //end #btnEmail.click
+
+  </script>
+</body>
+</html>
