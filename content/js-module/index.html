@@ -153,28 +153,31 @@ function fnCounter() {
     <!-- 11 -->
     <div id="global-import" class="step">
       <h2>Global Import</h2>
-      <p>Podemos <b>importar</b> objetos a nuestro módulo, pasándolos como parámetros en nuestra función anónima.</p>
+      <p>Podemos <b>importar</b> objetos a nuestro módulo enviándolos como parámetros a la función anónima, de esta manera creamos un <em>alias</em> y&nbsp;evitamos la colisión de nombres.</p>
     <pre class="prettyprint lang-js">
-    var Module = (function ($, yui) {
-      // jQuery as $, YAHOO.utils as yui
-    }(jQuery, YAHOO.utils));</pre>
-    <p>De esta forma creamos una referencia local del objeto importado y mejoramos el rendimiento al acortar la cadena de referencia mediante un "alias", y evitamos la colisión de nombres.</p>
+    var Module = (function ($, yui) { //&#8678; alias
+      // jQuery alias $
+      // YAHOO.utils alias yui
+      return {
+        // Module Object
+      };
+    }(jQuery, YAHOO.utils)); //&#8678; import</pre>
+    <p>Al asignar el alias, creamos una referencia local del objeto importado, mejorando el rendimiento al acortar la cadena de referencias.</p>
     </div>
 
     <!-- 12 -->
     <div id="module-export" class="step">
       <h2>Module Export</h2>
       <p>Ésta es la implementación tradicional del <b>Patrón Module</b>. Definimos un objeto global <code>MODULE</code> el cual mantiene un <b>estado&nbsp;interno privado</b> mediante el <b>closure</b> de la función. Para <b>exportar</b> el módulo, retornamos un <b>Object Literal</b> con las propiedades públicas.</p>
-<pre class="prettyprint lang-js linenums tight">
-var MODULE = (function () {
+<pre class="prettyprint lang-js linenums">
+var MODULE = (function() {
   var module = {},
-      privateObj = 1;
+      _calls = 0; //private
 
-  function privateMethod() { /* code */ }
-
-  module.publicProperty = "public";
-  module.publicMethod = function () { /* code */ };
-  <span class="highlight-text" title="returns Locally scoped Object Literal">return module;</span>
+  //public API
+  module.makeCall = function() { _calls += 1; };
+  module.getCalls = function() { return _calls; };
+  <span class="highlight-text" title="returns: locally scoped Object Literal">return module;</span> //export
 }());</pre>
     </div>
 
@@ -183,55 +186,66 @@ var MODULE = (function () {
       <h2>Augmentation</h2>
       <p>Una de las ventajas del Patrón Module, es que podemos aumentar un módulo agregando nuevas propiedades.</p>
 <pre class="prettyprint lang-js linenums">
-var MODULE = (function (module) {
+var MODULE = (function (module) { //&#8678; alias
+
+  //private state is not shared
 
   module.newMethod = function () {
-    // new method added
+    //new method added
   };
 
-  return module;
-}(MODULE));</pre>
+  return module; //&#8678; export
+
+}(MODULE)); //&#8678; import</pre>
     <p>Primero importamos el módulo, luego añadimos las nuevas&nbsp;propiedades, y finalmente lo exportamos.</p>
     </div>
 
     <!-- 14 -->
     <div id="loose-augmentation" class="step">
       <h2>Loose Augmentation</h2>
-      <p>Podemos aumentar nuestro módulo o crearlo si no existe. La principal ventaja es que podemos crear módulos flexibles que se puedan cargar asíncronamente, por ejemplo desde diferentes archivos.</p>
+      <p>Podemos aumentar nuestro módulo o crearlo si no existe. La principal ventaja es que podemos crear módulos flexibles que se carguen asíncronamente en cualquier orden, por ejemplo desde diferentes archivos.</p>
 <pre class="prettyprint lang-js linenums tight">
 var MODULE = (function (module) {
 
   // private members
-  var state,
-      isDOM = function() { /* code */ },
-      isFunction = function() { /* code */ };
+  var _length = 0,
+      _items = [];
+      
+  function append (item) { _length = _items.push(item) }
+  function total () { return _length; }
 
-  // add public members
-  module.isDOM = isDOM;
-  module.isFunction = isFunction;
+  // public members
+  module.addItems = append;
+  module.getTotal = total;
 
   return module;
-}(MODULE || {}));</pre>
+}(MODULE || {})); <span class="highlight-text" title="suelto, no está sujeto a la existencia de MODULE">//loose</span></pre>
     </div>
 
     <!-- 15 -->
     <div id="tight-augmentation" class="step">
       <h2>Tight Augmentation</h2>
-      <p>Con este enfoque podemos sobrescribir propiedades de un módulo ( <b>override</b> ) de forma segura. La desventaja es que los módulos se deben cargar en un orden específico ya que no tendría sentido sobrescribir una propiedad que no ha sido inicializada o aún no se ha creado.</p>
+      <p>Con esta técnica podemos sobrescribir propiedades de un módulo ( <b>override</b> ) de forma segura. La desventaja es que los módulos se deben cargar en un orden específico ya que no tendría sentido sobrescribir una propiedad que no ha sido inicializada o no existe.</p>
 <pre class="prettyprint lang-js linenums tight">
-var UTILS = (function (module) {
+var MODULE = (function (module) { //&#8678; alias
+  var _toString = Object.prototype.toString;
 
+  // tight augmentation:
   // keeps the reference to original method
-  var _position = module.fn.position;
+  var _addItems = module.addItems;
 
-  //@Override
-  module.fn.position = function(o) {
-    if (!o || !o.of)
-      return _position.apply(this, arguments);
-    // add implementation
+  // @Override
+  module.addItems = function (item) {
+    var i, m;
+    if (_toString.call(item) == "[object Array]") {
+      for(i = 0, m = item.length; i &lt; m; i += 1)
+        _addItems(item);
+    }
+    else _addItems.apply(this, arguments);
   };
+
   return module;
-}(UTILS || {}));</pre>
+}(MODULE)); //&#8678; import</pre>
     </div>
 
     <!-- 16 -->
@@ -244,29 +258,31 @@ var UTILS = (function (module) {
     <div id="revealing-module-2" class="step">
       <h3 class="center">Revealing Module</h3>
 <pre class="prettyprint lang-js linenums tight">
-var utils = (function (undefined) {
+var MODULE = (function (undefined) {
 
-  // @Private: Creates an exception notifier
-  function CustomError(message) {
-    this.message = message || "An exception occurred";
-    this.name = "Custom exception";
-    // @Override
-    this.toString = function() {
-        return this.name + ": " + this.message;
-    };
+  // private members
+  var _toString = Object.prototype.toString,
+      _length = 0,
+      _items = [];
+      
+  function getTotal () { return _length; }
+  function getItems () { return _items; }
+  
+  function addItems (item) {
+    if (item === undefined) return;
+    if (_toString.call(item) != "[object Array]")
+        item = [item];
+    <span class="highlight-text" title="_length = Array.prototype.push.apply(_items, item)">_items = _items.concat(item);
+    _length = _items.length;</span>
   }
-  var _author = "jherax";
-  var fnAddScript = function (o) {
-      if (typeof o != "string")
-        throw new CustomError("The url is required");
-      //... add implementation
-  }
-  // Returns the public parts
+
+  // public API
   return {
-    author: _author,
-    fnAddScript: fnAddScript
+    addItems: addItems,
+    getItems: getItems,
+    getTotal: getTotal
   };
-})();</pre>
+}());</pre>
     </div>
 
     <!-- 18 -->

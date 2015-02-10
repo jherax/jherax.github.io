@@ -416,7 +416,7 @@ pre + .counter { color: white; }
     display: none;
     width: 840px;
     padding: 10px 20px;
-    margin: 50px 20px 0 auto;
+    margin: 50px auto 0;
     border: 1px solid #E4C652;
     border-radius: 10px;
     background: #EEDC94;
@@ -434,7 +434,8 @@ pre + .counter { color: white; }
 .impress-not-supported {
     background: #A7B8BD;
     overflow: hidden;
-    margin: 0 20px;
+    padding: 0 40px;
+    margin-right: 20px;
 }
 
 .impress-not-supported .step {
@@ -489,7 +490,7 @@ pre + .counter { color: white; }
    ========================================================================== */
 
 span.highlight-text:hover {
-    cursor: default;
+    cursor: help;
     text-shadow: 0 1px 1px black, 0 1px 2px white;
 }
 code {

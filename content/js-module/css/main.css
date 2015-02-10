@@ -227,7 +227,7 @@ b { color: #ddd; }
 #title h1 { margin: 0; }
 #cat-wtf img { position: relative; left: 50%; margin-left: -240px; } /* width: 480px */
 #hoisting-example h3 { margin-top: 0; }
-#global-import .wrap { width: 700px; }
+#global-import .wrap { width: 712px; }
 
 #object-literal h2,
 #creating-module h2,
@@ -256,7 +256,7 @@ b { color: #ddd; }
   display: none;
   width: 780px;
   padding: 10px 20px;
-  margin: 50px 20px 0 auto;
+  margin: 50px auto 0;
   border-radius: 10px;
   background: #0f3584;
   font-family: sans-serif;
@@ -272,7 +272,7 @@ b { color: #ddd; }
 .impress-not-supported {
   background: #002570;
   overflow: hidden;
-  margin: 0 20px;
+  padding: 0 20px;
 }
 
 .impress-not-supported .step {
@@ -321,7 +321,7 @@ b { color: #ddd; }
    ========================================================================== */
 
 span.highlight-text:hover {
-  cursor: default;
+  cursor: help;
   text-shadow: 0 1px 1px black, 0 1px 2px white;
 }
 code {

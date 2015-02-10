@@ -107,7 +107,7 @@
   <!-- SCRIPTS ADICIONALES -->
   <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
   <!--<script type="text/javascript">var jsu = "hello";</script>-->
-  <script type="text/javascript" src="../javascripts/jherax.js"></script>
+  <script type="text/javascript" src="../javascripts/jherax.min.js"></script>
 
   <script type="text/javascript">
     $(document).on("ready", function() {
@@ -177,68 +177,17 @@
           return "First execution: " + t.toString();
         };
         //this call is executed only the first time
+        //to create the objects
         return writeInit();
       }
       //---------------------------------
-      // Another implementation of
-      // Lazy Function Definition Pattern
+      // Another approach
       writeInit = function() {
         return arguments.callee.t || (function(fn) {
-          fn.t = "First execution: " + (new Date());
+          fn.t = "First execution: " + new Date();
           return fn.t;
         }(arguments.callee));
       }
-      //---------------------------------
-      // Object constructor
-      function Person (name, age, sex) {
-          this.name = name;
-          this.age = age;
-          this.sex = sex;
-          this.dateCreated = new Date();
-      }
-
-      // Function to extend in Person Object
-      function greet() {
-          var text = "Nice to meet you! My name is: " +
-              "{" + this.name + "}, I'm " +
-              "{" + this.age + "} years";
-          return text;
-      }
-
-      // Function to extend in Person Object
-      function creationDate() {
-        return "Created at: " + this.dateCreated;
-      }
-
-      // Creates a new instance of Person
-      var p2, p1 = new Person("David", 30, "Male");
-
-      // Extend Person object by adding new methods
-      Person.prototype.introduce = greet;
-      Person.prototype.writeCreated = creationDate;
-
-      // Test a future instance of Person
-      setTimeout(function() {
-          console.log("\nSECOND INSTANCE OF Person OBJECT:");
-          p2 = new Person("Nicole", 28, "Female");
-          console.log("p2:", p2);
-          console.log("p2:", p2.introduce());
-          console.log("p2:", p2.writeCreated());
-          // Writes the time of first call
-          console.log(writeInit(), "\n");
-      }, 2000);
-
-      console.log("\nFIRST INSTANCE OF Person OBJECT:");
-      console.log("p1:", p1);
-      console.log("p1:", p1.writeCreated());
-      // Writes the time of first call
-      console.log(writeInit(), "\n");
-
-      // Test the object context of greet() function
-      console.log("ASSIGN THE CONTEXT TO METHOD INVOCATION:");
-      console.log(greet()); //undefined properties
-      console.log(greet.apply(p1)); //p1 properties
-    })();
   </script>
 -->
 </body>
