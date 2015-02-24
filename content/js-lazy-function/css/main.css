@@ -33,8 +33,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-b, strong { font-weight: bold }
-i, em { font-style: italic }
+b, strong { font-weight: bold; }
+i, em { font-style: italic; }
 a {
   padding: 0.1em 0.3em;
   color: rgba(231, 237, 75, 0.9);
@@ -69,14 +69,15 @@ h1, h2 {
 }
 h1 { font-size: 2.5em; margin: 0.4em 0; }
 h2 { font-size: 2em; margin: 0.2em 0; }
-h3 { font-size: 42px; margin: 0.2em 0; color: #ddd; font-weight: normal; }
+h3 { font-size: 42px; margin: 0.2em 0 0.5em; font-weight: normal; }
 h3 b { font-size: 1.1em; }
-h4 { font-size: 36px; color: #ddd; }
+h4 { font-size: 36px; margin: 0.2em 0 0.5em; }
 
-ul { list-style-position: outside; opacity: 0.9; margin: 0.3em 0 0.6em; }
+ul, ol { list-style-position: outside; opacity: 0.9; margin: 0.3em 0 0.6em; }
+ol { padding-left: 1.5em; }
 q { quotes: none; font-style: italic; }
 p { font-size: 0.9em; margin: 0.5em 0; }
-b { color: #ddd; }
+strong { color: #ddd; }
 
 /* ==========================================================================
    COMMON STEP STYLES
@@ -85,7 +86,7 @@ b { color: #ddd; }
 .step {
   position: relative;
   overflow: hidden;
-  width: 820px;
+  width: 900px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing:    border-box;
   -ms-box-sizing:     border-box;
@@ -225,32 +226,48 @@ b { color: #ddd; }
 
 #title { font-size: 1.3em; }
 #title h1 { margin: 0; }
-#demerits .wrap { width: 730px; }
-#cat-wtf img { position: relative; left: 50%; margin-left: -240px; } /* width: 480px */
-#hoisting-example h3 { margin-top: 0; }
-#global-import .wrap { width: 712px; }
-#tight-augmentation { font-size: .9em; }
+#closure-code pre + pre { margin-top: 1.5em; }
 
-#object-literal     h2,
-#creating-module    h2,
-#module-export      h2,
-#loose-augmentation h2,
-#tight-augmentation h2,
-#revealing-module-2 h2 { margin: 0; }
+#awsome-img      h3,
+#all-right-img   h3,
+#van-damme-img   h3,
+#closure-scoping h3 { margin: 0 auto 0.5em; }
 
-#module-export.active, #module-export.past,
-#loose-augmentation.active, #loose-augmentation.past,
-#revealing-module-1.active, #revealing-module-1.past,
-#revealing-module-2.active, #revealing-module-2.past { width: 882px; }
+#awsome-img      p,
+#all-right-img   p,
+#van-damme-img   p,
+#closure-scoping p,
+#self-punish-img p { display: flex; margin: auto; }
 
-#cat-wtf   .counter,
-#questions .counter,
-#thank-you .counter { display: none; }
+#awsome-img      img,
+#all-right-img   img,
+#van-damme-img   img,
+#closure-scoping img,
+#self-punish-img img { margin: 0 auto; }
 
-#questions img { position: relative; left: 50%; margin-left: -150px; } /* width: 303px */
-#questions h2, #thank-you h2 { font-size: 1.9em; }
-#thank-you ul { margin-left: 2em; color: white; }
-#thank-you .wrap { width: 580px; }
+#definition      .wrap { width: 860px; }
+#advantages      .wrap { width: 800px; }
+#concepts        .wrap,
+#self-punish-img .wrap { width: 720px; }
+
+#closure.step div.counter { bottom: 0; }
+
+#all-right-img   .counter,
+#closure-scoping .counter,
+#van-damme-img   .counter,
+#awsome-img      .counter,
+#self-punish-img .counter,
+#thank-you       .counter { display: none; }
+
+#thank-you li:first-child { margin-bottom: .6em; list-style: none; padding-left: 0.1em; font-size: 1.4em; font-weight: bold; text-shadow: -1px 0 rgba(0,0,0,.4), 1px 1px 3px rgba(0,0,0,.6); }
+#thank-you ul { margin: 0; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,.4); }
+#thank-you .wrap {
+    width: 760px;
+    /* Yoda Icon :: Pixel Art from Star Wars http://www.pixeljoint.com/pixelart/1423.htm */
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAMAAACwUBm+AAAAAXNSR0IArs4c6QAAAKtQTFRFsAAAvbWSLUUrLEQqY1s8UYJMqJ1vNTEgOiIdIzYhjIFVLhsXZ6lgSEIsP2U8JhcCVzMsSXZEgXdOO145XJdWOl03LzAYMk4vSXNExr+hwcuxRTs1Qmk+RW9Am49eFRANQz4pUoNMQWc+OSMDTz0wLBsCNVMxa2NBOyUDUoNNSnlEWo9VRGxAVzYFl6tXCggHbLNmMUIcHhwTXkk5f3VNRT8wUT8xAAAACQocRBWFFwAAAAF0Uk5TAEDm2GYAAAPCSURBVHja7d3JctNAFIZRMwRCCGEmzPM8z/D+T8bu/ptbXXJFdij5fMt2Wuo+2UgqxVmtttq5WVotLzBgwIABAwYMGDCn0qVqbo69psPqVpWx+1XG5iaavF8wYMCAAQMGDBgwi4DJ6Y6qkxB1HNlcN3a92gbR5P2CAQMGDBgwYMCAWSxMlrU+UY5yu2l9okfV4bAxUVbf7TJnAwMGDBgwYMCAAbMLMHeqbGR82Zy+VR1Ht81nVca6R+UdTLaU24Ruzd3qM/e4yjnAgAEDBgwYMGDA7AJMd1l/3NRdVGcj3eX/2WEhCmDGxnM7yqygu8XIPjJj8iN/MGDAgAEDBgwYMAuDGb8q0RGlLCHLv1t9qDKWn3vdNHVuEI6HPaxO9Jo3GDBgwIABAwYMmIXBdC9ShGgMk+XnkXUeuGcsP/e1+lhNnZsL/G5Vs3OAAQMGDBgwYMCAWSxMR3SzOmraG5atdy9wZKzb+vg16qyqe2FltbnAgAEDBgwYMGDALAxmTJSuN3WA76rnVca6GTnemGN1WoEBAwYMGDBgwIBZGMxUomy4+xO899V4LAg5Xnc2MGDAgAEDBgwYMGA218Wq+2K1LDqvY9xZu8zN8fICdM6btYABAwYMGDBgwIABMzfH0+pGU5afze2tXebmeAfVz+p8BQYMGDBgwIABAwbMPBzZ+oWmfJrln1273FhkbHzee9WWbw7AgAEDBgwYMGDALAKm43hcdctKgblcPamOhuXnXlY5Xs6bsW4FGyQCAwYMGDBgwIABswiYMceZKgvMo+h8mrHLTdn676rj+FEFoTtHd8MwOxEYMGDAgAEDBgyYRcBM5UhXqiymW3R3c9ARhWO/OmjqfjVZy+xEYMCAAQMGDBgwYBYG073OnCV0RFNhMhaOa9WfKmOB6XjHMN1tQmaAAQMGDBgwYMCA2VWY7vXjz1U4croAzgPztwIDBgwYMGDAgAEDZhswh035NBw59Dww3RgYMGDAgAEDBgwYMJuD6f4tXT7NUqfCdBvZLkxXdgQGDBgwYMCAAQNmt2DGj8WzwAfV/w7T/aq7mxwwYMCAAQMGDBgwuwqTOo7uTwTngflSzQ3TdaJvAwEDBgwYMGDAgAED5gSvgbyo5oHZ4Pc+gwEDBgwYMGDAgAEzhOm+5G0qTGaAAQMGDBgwYMCAAXNaMOcnls3tNwWm+zRzp54NDBgwYMCAAQMGDJh5YNL36k1TLuGvVq+qnKMbS5n7tulT9asCAwYMGDBgwIABA2ZumKuztLnjgQEDBgwYMGDAgNl5mH/4/ltKA6vBNAAAAABJRU5ErkJggg==);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
 
 /* ==========================================================================
    IMPRESS NOT SUPPORTED STYLES
@@ -258,7 +275,7 @@ b { color: #ddd; }
 
 .fallback-message {
   display: none;
-  width: 780px;
+  width: 860px;
   padding: 10px 20px;
   margin: 50px auto 0;
   border-radius: 10px;
@@ -306,7 +323,7 @@ b { color: #ddd; }
 
 .impress-not-supported .step > *,
 .fallback-wrapper {
-  width: 820px;
+  width: 900px;
 }
 
 .impress-not-supported .fallback-message {

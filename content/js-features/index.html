@@ -37,9 +37,12 @@
 </head>
 
 <body class="impress-not-supported">
-  <div class="fallback-message">
-    <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
-    <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+
+  <div class="fallback-wrapper">
+    <div class="fallback-message">
+      <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
+      <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+    </div>
   </div>
 
   <!-- CONTENEDOR PRINCIPAL -->
@@ -114,7 +117,7 @@ class Main {
     
     //C# permite la tipificación dinámica
     //en tiempo de ejecución, mediante
-    //la palabra "dynamic"
+    //el tipo de datos "dynamic"
     void walk(dynamic pato) {
         pato.volar();
     }
@@ -184,7 +187,7 @@ console.log("msg2 = ", msg2);
 msg1 = { to: "all", from: "david" };
 msg2 = msg1;
 
-msg1.from = "jherax"; //msg2 is modified
+msg2.from = "jherax"; //msg1 is modified!
 console.log("msg1 = ", msg1);
 console.log("msg2 = ", msg2);
 </pre>
@@ -197,7 +200,7 @@ console.log("msg2 = ", msg2);
 <pre class="prettyprint lang-js linenums" style="width:97%">
 { clave1: valor1, clave2: valor2 }
 </pre>
-      <p>Una de sus principales ventajas es que podemos encapsular datos y reducir el uso de variables.</p>
+      <p>Una de sus principales ventajas es que podemos encapsular datos y reducir el uso de variables globales.</p>
     </div>
 
     <!-- 12 -->

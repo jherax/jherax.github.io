@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="utf-8"/>
+  <!--[if IE]>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <![endif]-->  
+  <title>JS: Lazy Function Definition</title>
+
+  <meta name="viewport" content="width=device-width" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="description" content="JavaScript: Lazy Function Definition Pattern"/>
+  <meta name="author" content="david rivera perez"/>
+  <meta name="layout" content="main"/>
+  
+  <link rel="icon" type="image/png" href="js-icon32.png" />
+  <link rel="shortcut icon" href="js-icon32.png" />
+
+  <link type="text/css" rel="stylesheet" href="css/font.css" />
+  <link type="text/css" rel="stylesheet" href="css/main.css" />
+
+  <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
+  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!--[if lte IE 9]>
+      <script src="js/polyfills/html5shiv.min.js"></script>
+  <![endif]-->
+  
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>
+  
+  <!-- CSS3 selectors for IE -->
+  <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
+  <!--[if lt IE 9]>
+      <script src="js/polyfills/selectivizr.js"></script>
+  <![endif]-->
+</head>
+
+<body class="impress-not-supported">
+  
+  <div class="fallback-wrapper">
+    <div class="fallback-message">
+      <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
+      <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div id="impress">
+
+    <!-- 1 -->
+    <div id="title" class="step">
+      <span>JavaScript</span>
+      <h1>Lazy Function Definition</h1>
+    </div>
+
+    <!-- 2 -->
+    <div id="definition" class="step">
+      <h2>Lazy Function Definition</h2>
+      <p>Éste es un patrón de diseño con el que conseguiremos reducir la ejecución de nuestro código haciendo que una porción del código sea ejecutada solo una vez y de allí que <strong>recuerde el resultado</strong> de una operación o el <strong>estado del <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" title="JavaScript: Closures" target="_jherax">closure</a></strong></p>
+    </div>
+
+    <!-- 3 -->
+    <div id="advantages" class="step">
+      <h2>Ventajas</h2>
+      <ul>
+        <li>La función es redefinida por una versión optimizada.</li>
+        <li>Se gana una mejora en el rendimiento en futuros llamados a la función.</li>
+        <li>Los objetos a inicializar sólo serán cargados cuando se invoque la función por primera vez.</li>
+        <li>Puede mantener en cache ( del<a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" title="JavaScript: Closures" target="_jherax">closure</a>) el resultado de una tarea.</li>
+        <li>Ideal para el uso interno de APIs.</li>
+      </ul>
+    </div>
+
+    <!-- 4 -->
+    <div id="drawbacks" class="step">
+      <h2>Desventajas</h2>
+      <ul>
+        <li>La función deja de ser un <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/#first-class-functions" title="Funciones: objetos de primera clase" target="_jherax">objeto de primera clase</a></li>
+        <li>La función redefinida crea una nueva referencia en memoria (un nuevo objeto es asignado).</li>
+        <li>No se debería usar como método público (como propiedad de un objeto).</li>
+        <li>Si insiste en utilizarla para ser accedida por referencia, se va a arrepentir ;)</li>
+      </ul>
+    </div>
+
+    <!-- 5 -->
+    <div id="all-right-img" class="step">
+      <h3 class="center">¿ Quedo claro ?</h3>
+      <p><img src="img/all-right.gif" alt="entendido" width="637" height="480" /></p>
+    </div>
+
+    <!-- 6 -->
+    <div id="concepts" class="step">
+      <h2>Conceptos</h2>
+      <p>A fin de entender con mayor claridad este patrón de diseño, vamos a repasar algunos conceptos:</p>
+      <ul>
+        <li><strong>Closure</strong></li>
+        <li><strong>Lazy evaluation</strong></li>
+        <li><strong>Lazy initialization</strong></li>
+      </ul>
+    </div>
+
+    <!-- 7 -->
+    <div id="closure" class="step">
+      <h2>¿Que es un closure?</h2>
+      <p>Un <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" title="JavaScript: Closures" target="_jherax">closure</a> es un tipo especial de objeto que combina dos cosas: <strong>una función, y el entorno en que se creó esa función</strong>. Es decir que una función definida dentro del closure “recuerda” el entorno en el que se ha creado y tiene acceso a las variables de ese entorno (el<a href="http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html" title="JavaScript Scoping and Hoisting " target="_blank">scope</a>de la función padre).</p>
+    </div>
+
+    <!-- 8 -->
+    <div id="closure-attr" class="step">
+      <h2>Atributos de un Closure</h2>
+      <ul>
+        <li>El <strong>closure</strong> permite encapsular el código.</li>
+        <li>El <strong>contexto</strong> de una función anidada incluye el <strong>scope</strong> de la función externa.</li>
+        <li>El entorno está formado por las variables locales dentro del ámbito (<strong>scope</strong>) cuando se creó el <strong>closure</strong> (variables libres).</li>
+        <li>Una función anidada sigue teniendo acceso al contexto de la función externa, incluso después de que ésta haya retornado.</li>
+      </ul>
+    </div>
+
+    <!-- 9 -->
+    <div id="closure-code" class="step">
+      <h3 class="center">Closure en acción</h3>
+<pre class="prettyprint lang-js linenums tight">
+//inicio closure
+function paddingLeft (total, fillchar) { //función externa
+
+    //variables libres
+    total = total || 2;
+    fillchar = fillchar || "0";
+
+    return function padding (text) { //función interna
+        var filled =
+            new Array(total).join(fillchar) + text;
+        return filled.slice(-total);
+    };
+}
+//fin closure
+</pre>
+<pre class="prettyprint lang-js linenums tight">
+  var zeroPad = paddingLeft();
+  console.log( zeroPad(9) );
+
+  var dotPad = paddingLeft(20, ".");
+  console.log( dotPad("pg 13") );
+</pre>
+    </div>
+
+    <!-- 10 -->
+    <div id="closure-scoping" class="step">
+      <h3 class="center">Scoping</h3>
+      <p><img src="img/closure-img.png" alt="scoping" width="672" /></p>
+    </div>
+
+    <!-- 11 -->
+    <div id="van-damme-img" class="step">
+      <h3 class="center">Ahora sí, que venga el tal Lazy...</h3>
+      <p><img src="img/van-damme-6.gif" alt="van-damme" width="798" height="442" /></p>
+    </div>
+
+    <!-- 12 -->
+    <div id="lazy-evaluation" class="step">
+      <h2>Lazy evaluation</h2>
+      <p>Se conoce también como <strong>call-by-need</strong> y es una estrategia que <strong>retrasa la evaluación de una expresión hasta que su valor es requerido</strong> evitando realizar cálculos innecesarios. En ocasiones, el <a href="http://en.wikipedia.org/wiki/Short-circuit_evaluation" title="Short-circuit evaluation" target="_blank">corto-circuito en la evaluación</a> de expresiones boleanas también es llamado <strong><em>lazy</em></strong>, en donde el segundo argumento es evaluado sólo si el primer argumento resulta satisfactorio para el operador lógico.</p>
+    </div>
+
+    <!-- 13 -->
+    <div id="lazy-evaluation-code" class="step">
+      <h3 class="center">Lazy evaluation en acción</h3>
+<pre class="prettyprint lang-js linenums">
+function test (nombre, edad) {
+    //lazy evaluation
+    if (nombre && edad && canVote(edad)) {
+        //ejecuta alguna tarea compleja
+        console.log(
+          "%c ejecuta alguna tarea compleja",
+          "color: green");
+    }
+}
+
+function canVote (edad) {
+    //se realiza algún cálculo
+    console.log("%c ejecuta canVote()", "color: blue");
+    return edad > 17;
+}
+</pre>
+    </div>
+
+    <!-- 14 -->
+    <div id="lazy-initialization" class="step">
+      <h2>Lazy initialization</h2>
+      <p>También conocido como <em><a href="http://en.wikipedia.org/wiki/Lazy_initialization" title="Lazy initialization" target="_blank">inicialización perezosa</a> o inicialización tardía,</em> es una técnica utilizada para retrasar la creación de un objeto, el cálculo de una operación, o algún otro proceso costoso hasta que sea necesitado la primera vez. La forma tradicional de lograr el objetivo, es mantener un <strong>flag</strong> <em>(indicador)</em> que nos permita saber si el objeto es requerido.</p>
+    </div>
+
+    <!-- 15 -->
+    <div id="lazy-initialization-code" class="step">
+      <h3 class="center">Lazy initialization en acción</h3>
+<pre class="prettyprint lang-js linenums">
+  function foo() {
+      
+      //t es el flag que determina
+      //si el objeto fue requerido
+      if (foo.t) {
+          return foo.t;
+      }
+
+      console.log("inicializar");
+      foo.t = new Date();
+      return foo.t;
+  }
+</pre>
+    </div>
+
+    <!-- 16 -->
+    <div id="awsome-img" class="step">
+      <h3 class="center">Asombrosooooo</h3>
+      <p><img src="img/awsome.gif" alt="asombroso" width="750" height="585" /></p>
+    </div>
+
+    <!-- 17 -->
+    <div id="lazy-function" class="step">
+      <h2><a href="https://jherax.wordpress.com/2015/02/24/js-lazy-function-definition/" target="_jherax">Lazy Function Definition</a></h2>
+      <p>Como todo patrón de diseño, debemos usarlo en el contexto adecuado, y una función puede implementar el patrón de <em><strong>función perezosa</strong></em> si requiere solucionar alguno de los siguientes problemas:</p>
+      <ul>
+        <li>la función una vez evaluada, retornará el mismo valor en las próximas llamadas.</li>
+        <li>la función requiere inicializar objetos.</li>
+        <li>mantener el estado de objetos (<a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" title="JavaScript: Closures" target="_jherax">closure</a>) que serán utilizados por la función principal.</li>
+      </ul>
+    </div>
+
+    <!-- 18 -->
+    <div id="lazy-function-code1" class="step">
+      <h3 class="center">Sobrescribiendo funciones</h3>
+<pre class="prettyprint lang-js linenums tight">
+  //declaramos una función
+  function pushButton() {
+
+      //mantenemos el estado interno
+      //de las veces que invoquemos la función
+      var _calls = 1;
+
+      //redefinimos la función
+      pushButton = function() {
+          _calls += 1;
+          alert(_calls + " call to pushButton()");
+      };
+
+      //ésto será ejecutado sólo la primera vez
+      //que se invoque la función pushButton()
+      alert("First call to pushButton()");
+  }
+
+  pushButton(); //primer llamado
+  pushButton(); //2
+  pushButton(); //3
+</pre>
+    </div>
+
+    <!-- 19 -->
+    <div id="lazy-function-parts" class="step">
+      <h2><a href="https://jherax.wordpress.com/2015/02/24/js-lazy-function-definition/" target="_jherax">Lazy Function Definition</a></h2>
+      <p>De manera sencilla hemos visto lo que es una función que se&nbsp;sobrescribe así misma. Sin embargo, en el patrón <strong>Lazy Function Definition</strong>, una <em>función perezosa</em> esta formada de tres partes:</p>
+      <ol>
+        <li><strong>Inicializar</strong>. Evaluar y hacer una serie de cálculos que&nbsp;determinan el valor a retornar.</li>
+        <li><strong>Redefinirse</strong> a sí misma. La función se sobrescribe a&nbsp;sí misma para evitar realizar de nuevo las operaciones efectuadas en el paso anterior.</li>
+        <li><strong>Autoinvocarse</strong>. La función se llama así misma para retornar el valor después de sobrescribirse.</li>
+      </ol>
+    </div>
+
+    <!-- 20 -->
+    <div id="lazy-function-code2" class="step">
+      <h3 class="center">Lazy function en acción</h3>
+<pre class="prettyprint lang-js linenums">
+  function foo() {
+
+      //1. inicializar
+      console.log("inicializar");
+      var t = new Date();
+
+      //2. sobrescribirse
+      console.log("sobrescribir");
+      foo = function() {
+          return t;
+      };
+
+      //3. autoinvocarse
+      console.log("autoinvocar");
+      return foo();
+  }
+</pre>
+    </div>
+
+    <!-- 21 -->
+    <div id="lazy-function-code3" class="step">
+      <h3 class="center">Lazy function condicional</h3>
+<pre class="prettyprint lang-js linenums">
+var getText = function (DOMNode) {
+
+    //inicializar y redefinir condicionalmente
+    getText =
+        typeof DOMNode.innerText !== "undefined"
+          ? function (DOMNode) {
+                return DOMNode.innerText }
+          : function (DOMNode) {
+                return DOMNode.textContent };
+ 
+    //autoinvocar
+    return getText(DOMNode);
+}
+</pre>
+    </div>
+
+    <!-- 22 -->
+    <div id="self-punish-img" class="step">
+      <p class="center">Utilicemos este patrón en el contexto adecuado,
+        <br/>para que luego no tengamos que hacer esto...
+      </p><br/>
+      <p><img src="img/self-punish.gif" alt="auto-golpearse" width="589" height="559" /></p>
+    </div>
+
+    <!-- 23 -->
+    <div id="thank-you" class="step">
+      <ul>
+        <li>David Rivera</li>
+        <li><a href="https://jherax.wordpress.com/" target="_blank">jherax.wordpress.com</a></li>
+        <li><a href="http://jherax.github.io/?lang=spanish" target="_blank">jherax.github.io</a></li>
+        <li><a href="https://github.com/jherax/js-utils" target="_blank">github.com/jherax</a></li>
+        <li><a href="https://plus.google.com/+davidriverajherax/posts" target="_blank">+davidriverajherax</a></li>
+      </ul> 
+    </div>
+
+    <div id="overview" class="step" data-x="2000" data-y="2000" data-scale="10" data-rotate-y="360"></div>
+
+  </div><!-- #impress -->
+
+  <div class="hint">
+    <p>Use la barra espaciadora o las flechas para navegar</p>
+  </div>
+
+  <!-- SCRIPTS ADICIONALES -->
+  <script src="js/impress.js"></script>
+  <script src="js/prettify.min.js"></script>
+  <script src="js/main.js" charset="utf-8"></script>
+  
+</body>
+</html>

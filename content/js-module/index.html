@@ -37,9 +37,12 @@
 </head>
 
 <body class="impress-not-supported">
-  <div class="fallback-message">
-    <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
-    <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+  
+  <div class="fallback-wrapper">
+    <div class="fallback-message">
+      <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
+      <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+    </div>
   </div>
 
   <!-- CONTENEDOR PRINCIPAL -->
@@ -75,7 +78,7 @@
       <ul>
         <li>Los objetos agregados posteriormente no tienen acceso a los miembros privados.</li>
         <li>Es complejo hacer un <b>patch</b> para corregir bugs&nbsp;en miembros privados.</li>
-        <li>No se puede crear instancias del módulo<br/>(es creado como un <b>singletón</b>)</li>
+        <li>No se puede crear instancias del módulo<br/>(es creado como <b>static</b> / <b>singletón</b>)</li>
         <li>No se puede hacer pruebas unitarias en <nobr>los miembros privados.</nobr></li>
       </ul>
     </div>
@@ -88,7 +91,7 @@
     <!-- 6 -->
     <div id="hoisting" class="step">
       <h2>Hoisting, Scoping</h2>
-      <p>El <b>hoisting</b> o <em>“elevamiento”</em> es una característica de JavaScript que mueve la <a href="http://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var" target="_blank">declaración de una variable</a> al&nbsp;comienzo del contexto de ejecución.</p>
+      <p>El <a href="https://jherax.wordpress.com/2014/07/04/javascript-hoisting/" title="Hoisting en JavaScript" target="_jherax">hoisting</a> o <em>“elevamiento”</em> es una característica de JavaScript que mueve la <a href="http://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var" target="_blank">declaración de una variable</a> al&nbsp;comienzo del contexto de ejecución.</p>
       <p>En la mayoría de los lenguajes de programación, una variable tiene alcance hasta el bloque en el cual fue definida <b>(block-level scope)</b> por ejemplo, dentro de un bloque de instrucciones <em>if, for, while;</em> sin embargo en JavaScript el alcance de las variables es el de la <b>función</b> en la cual fueron declaradas <b>(function-level scope)</b>.</p>
     </div>
 
@@ -133,7 +136,7 @@ function fnCounter() {
     <!-- 9 -->
     <div id="creating-module" class="step">
       <h2>Creando un módulo</h2>
-      <p>Los módulos se crean generalmente a partir de un <b>IIFE</b> <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/" target="_blank">(Immediately-Invoked-Function-Expressions)</a> en donde la función anónima crea un <b>closure</b> que mantiene el <em>"estado" y "privacidad"</em> de los objetos definidos en él.</p>
+      <p>Los módulos se crean generalmente a partir de un <b>IIFE</b> <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/" target="_blank">(Immediately-Invoked-Function-Expressions)</a> en donde la función anónima crea un <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" target="_jherax">closure</a> que mantiene el <em>"<b>estado</b>" y "<b>privacidad</b>"</em> de los objetos definidos en él.</p>
     <pre class="prettyprint lang-js">
     var Module = (function () {
       // privacy and state
@@ -141,13 +144,13 @@ function fnCounter() {
         publicMethod: function () { /* code */ }
       };</span>
     })();</pre>
-      <p>Nótese que el objeto <code>Module</code> queda definido en el <b>global scope</b> ( <code>window</code> generalmente ) aunque podemos definir el&nbsp;contexto en el cual se ejecuta nuestro módulo.</p>
+      <p>Nótese que el objeto <code>Module</code> queda definido en el <b>global scope</b> ( <code>window</code> generalmente ), aunque podemos definir el&nbsp;contexto en el cual se ejecuta nuestro módulo.</p>
     </div>
 
     <!-- 10 -->
     <div id="privacy" class="step">
       <h3>public &amp; private</h3>
-      <p>A diferencia de los lenguajes POO fuertes, JavaScript (<a href="http://kangax.github.io/compat-table/es5/" target="_blank">ECMAScript 5</a>) no permite la declaración explícita de objetos privados, sin embargo, a través de las <b>funciones</b> podemos crear un <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures" target="_blank">closure</a> que encapsule la lógica y <b>emule</b> la privacidad, manteniendo "vivos" los objetos definidos al interior de la función. El propósito, es por lo tanto retornar un <b>objeto</b> únicamente con las partes que serán públicas.</p>
+      <p>A diferencia de los lenguajes POO fuertes, JavaScript (<a href="http://kangax.github.io/compat-table/es5/" target="_blank">ECMAScript 5</a>) no permite la declaración explícita de objetos privados, sin embargo, a través de las <b>funciones</b> podemos crear un <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" target="_jherax">closure</a> que encapsule la lógica y <b>emule</b> la privacidad, manteniendo "vivos" los objetos definidos al interior de la función. El propósito, es por lo tanto retornar un <b>objeto</b> únicamente con las partes que serán públicas.</p>
     </div>
 
     <!-- 11 -->
@@ -171,7 +174,7 @@ function fnCounter() {
       <p>Ésta es la implementación tradicional del <b>Patrón Module</b>. Definimos un objeto global <code>MODULE</code> el cual mantiene un <b>estado&nbsp;interno privado</b> mediante el <b>closure</b> de la función. Para <b>exportar</b> el módulo, retornamos un <b>Object Literal</b> con las propiedades públicas.</p>
 <pre class="prettyprint lang-js linenums">
 var MODULE = (function() {
-  var module = {},
+  var module = {}, //object literal
       _calls = 0; //private
 
   //public API
@@ -225,7 +228,7 @@ var MODULE = (function (module) {
     <!-- 15 -->
     <div id="tight-augmentation" class="step">
       <h2>Tight Augmentation</h2>
-      <p>Con esta técnica podemos sobrescribir propiedades de un módulo ( <b>override</b> ) de forma segura. La desventaja es que los módulos se deben cargar en un orden específico ya que no tendría sentido sobrescribir una propiedad que no ha sido inicializada o no existe.</p>
+      <p>Con esta técnica podemos sobrescribir propiedades de un módulo ( <b>override</b> ) de forma segura. La desventaja es que los módulos se deben cargar en un orden específico ya que no tendría sentido sobrescribir una propiedad que no ha sido inicializada o no existe. <em><a href="http://en.wikipedia.org/wiki/Monkey_patch" target="_blank">— Monkey patching</a></em></p>
 <pre class="prettyprint lang-js linenums tight">
 var MODULE = (function (module) { //&#8678; alias
   var _toString = Object.prototype.toString;
@@ -244,7 +247,7 @@ var MODULE = (function (module) { //&#8678; alias
     else _addItems.apply(this, arguments);
   };
 
-  return module;
+  return module; //&#8678; export
 }(MODULE)); //&#8678; import</pre>
     </div>
 
@@ -278,9 +281,9 @@ var MODULE = (function (undefined) {
 
   // public API
   return {
-    addItems: addItems,
-    getItems: getItems,
-    getTotal: getTotal
+    "addItems": addItems,
+    "getItems": getItems,
+    "getTotal": getTotal
   };
 }());</pre>
     </div>

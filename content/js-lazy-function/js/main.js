@@ -7,69 +7,77 @@
 	//Creates the options for the slides
 	var steps = {
         "#title": {
-            x: -1000, y: -1500, scale: 5, rotate: { x: 90 }
+            x: 0, y: 0
         },
-        "#principles": {
-            x: -1500, y: 500, scale: 2, rotate: { y: -180, z: 90 }
+        "#definition": {
+            x: 0, y: 1000
         },
-        "#dry": {
-            x: -700, y: 500, scale: 1, z: 300, rotate: { y: -180, z: 90 }
+        "#advantages": {
+            x: 1000, y: 0
         },
-        "#dry-eg1": {
-            x: -700, y: 1700, scale: 1, z: 120, rotate: { y: -180, z: 90 }
+        "#drawbacks": {
+            x: 1000, y: 1000
         },
-        "#dry-eg2": {
-            x: -700, y: 1700, scale: 1, z: 420, rotate: { y: -180, z: 90, x: 180 }
+        "#all-right-img": {
+            x: 2000, y: 0
         },
-        "#dry-eg3": {
-            x: -700, y: 1700, scale: 1, z: 420, rotate: { y: -180, z: 90, x: 180 }
+        "#concepts": {
+            x: 2000, y: 1000
         },
-        "#dry-eg4": {
-            x: -1000, y: 1700, scale: 1, rotate: { y: -90, z: 90, x: 180 }
+        "#closure": {
+            x: 3000, y: 0
         },
-        "#abstraction": {
-            x: -1400, y: 700, scale: 2, rotate: { x: 90 }
+        "#closure-attr": {
+            x: 3000, y: 1000
         },
-        "#open-closed": {
-            scale: 2, rotate: { x: 90, y: 90 }
+        "#closure-code": {
+            x: 4000, y: 0
         },
-        "#single-resp": {
-            x: 680, y: -710, z: -400
+        "#closure-scoping": {
+            x: 4000, y: 1000
         },
-        "#coupling": {
-            y: -1500
+        //the middle
+        "#van-damme-img": {
+            x: 4000, y: 2000
         },
-        "#case-eg1": {
-            x: 1800, y: -1500
+        "#lazy-evaluation": {
+            x: 4000, y: 3000
         },
-        "#code-eg1": {
-            x: 1800, y: -900, z: 200, rotate: { x: 90 }
+        "#lazy-evaluation-code": {
+            x: 3000, y: 2000
         },
-        "#remarks": {
-            x: 2900, y: -540
+        "#lazy-initialization": {
+            x: 3000, y: 3000
         },
-        "#splash": {
-            x: 1800, y: -540, rotate: { x: 270 }
+        "#lazy-initialization-code": {
+            x: 2000, y: 2000
         },
-        "#solution-1": {
-            x: 1400, y: -2300, z: 600, scale: 2, rotate: { x: 270, y: 180 }
+        "#awsome-img": {
+            x: 2000, y: 3000
         },
-        "#solution-2": {
-            x: 2600, y: -1000, z: 500, scale: 2, rotate: { x: 270, y: 90 }
+        "#lazy-function": {
+            x: 1000, y: 2000
         },
-        "#strategy-1": {
-            x: 1500, y: 300, z: 500, scale: 2, rotate: { x: 270 }
+        "#lazy-function-code1": {
+            x: 1000, y: 3000
         },
-        "#strategy-2": {
-            x: 1500, y: 300, z: -900, rotate: { x: 270, y: 90 }
+        "#lazy-function-parts": {
+            x: 0, y: 2000
         },
-        "#awsome": {
-            x: 1500, y: 1400, scale: 1.6, rotate: { y: 90 }
+        "#lazy-function-code2": {
+            x: 0, y: 3000
+        },
+        //last segment
+        "#lazy-function-code3": {
+            x: 0, y: 4000
+        },
+        "#self-punish-img": {
+            x: 1000, y: 4000
         },
         "#thank-you": {
-            x: 2400, y: 1300, scale: 3, z: 500
+            x: 3000, y: 4000, z: 400, scale: 3
         }
-    };
+	};
 
     //Local reference declaration
     var toString = Object.prototype.toString;
@@ -100,7 +108,7 @@
     }
 
     i = 0;
-    total = $("div.step").length - 3;
+    total = $("div.step").length - 2;
 
     //Adds the data-* attributes to the slides
     $.each(steps, function(key, value) {
@@ -124,4 +132,4 @@
 	//Starts the impress
     impress().init("impress");
 
-})(jQuery);
+}(jQuery));

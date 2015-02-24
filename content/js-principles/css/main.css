@@ -368,26 +368,30 @@ pre + .counter { color: white; }
 #dry h3 span { cursor: default; }
 
 div[id^="dry-eg"].active, div[id^="dry-eg"].past,
-#code-eg1.active, #code-eg1.past { width: 900px; }
+#code-eg1.active,   #code-eg1.past   { width: 900px; }
+#dry-eg4.active,    #dry-eg4.past    { width: 970px; }
+#solution-2.active, #solution-2.past { width: 995px; }
+
+#solution-1 .wrap { width: 740px; }
+#thank-you  .wrap { width: 460px; }
 
 div[id^="dry-eg"] .wrap { margin-top: -14px; }
 div[id^="dry-eg"] p { margin-bottom: 20px; }
-#dry-eg4.active, #dry-eg4.past { width: 970px; }
 #coupling h3 + p { margin-bottom: 30px; }
 #coupling p > em { font-size: .9em; }
 #coupling blockquote strong { cursor: default; }
-#solution-1 .wrap { width: 740px; }
 #solution-1 p { margin: 15px 0; }
-#solution-2.active, #solution-2.past { width: 995px; }
 #solution-2 p > span { font-size: .9em; }
-#awsome .counter, #questions .counter, #thank-you .counter { display: none; }
 
-#awsome     img,
+#splash    .counter,
+#awsome    .counter,
+#thank-you .counter { display: none; }
+
 #splash     img,
+#awsome     img,
 #solution-1 img { position: relative; left: 50%; margin-left: -300px; } /* width: 600px */
 #strategy-1 img { position: relative; left: 50%; margin-left: -430px; } /* width: 860px */
-#questions  img { position: relative; left: 50%; margin-left: -150px; } /* width: 300px */
-#questions .wrap, #thank-you .wrap { width: 460px; }
+
 #thank-you li:first-child { margin-bottom: .6em; list-style: none; padding-left: 0.1em; font-size: 1.4em; font-weight: bold; text-shadow: -1px 0 rgba(0,0,0,.4), 1px 1px 3px rgba(0,0,0,.6); }
 #thank-you ul { margin: 0; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,.4); }
 
@@ -429,7 +433,7 @@ div[id^="dry-eg"] p { margin-bottom: 20px; }
 .impress-not-supported {
     background: #A7B8BD;
     overflow: hidden;
-    padding: 0 20px;
+    padding: 0 40px;
 }
 
 .impress-not-supported .step {
@@ -463,7 +467,8 @@ div[id^="dry-eg"] p { margin-bottom: 20px; }
     box-orient: vertical;
 }
 
-.impress-not-supported .step > * {
+.impress-not-supported .step > *,
+.fallback-wrapper {
     width: 880px;
 }
 

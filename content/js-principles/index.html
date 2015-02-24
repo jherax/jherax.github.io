@@ -37,9 +37,12 @@
 </head>
 
 <body class="impress-not-supported">
-  <div class="fallback-message">
-    <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
-    <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+
+  <div class="fallback-wrapper">
+    <div class="fallback-message">
+      <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
+      <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+    </div>
   </div>
 
   <!-- CONTENEDOR PRINCIPAL -->
@@ -180,7 +183,7 @@ function afterEvent2 (obj, text) {
       <h3>Principio de Abstracción</h3>
       <p>Está relacionado con el principio DRY.</p>
       <blockquote>Cada pieza funcional en un programa debería ser implementada en un único lugar del código fuente</blockquote>
-      <h3>KISS (Keep it simple, stupid!)</h3>
+      <h3>KIS* (Keep it simple, stupid!)</h3>
       <p>El diseño de un programa debe ser sencillo. Hay que evitar la complejidad innecesaria. Un código sencillo es más fácil de escribir y mantener.</p>
     </div>
 
@@ -234,7 +237,7 @@ class Progress {
 
     <!-- 14 -->
     <div id="remarks" class="step">
-      <p>Aunque el código anterior parece correcto, está violando el principio <strong>Open/Closed</strong>, ya que si se desea agregar una nueva característica (como <em>streaming</em> de música/video) tendríamos que modificar la clase <code>Progress</code> ya que tiene una dependencia directa con la&nbsp;implementación de <code>File</code> <nobr>(alto acoplamiento)</nobr></p>
+      <p>Aunque el código anterior parece correcto, está violando el principio <strong>Open/Closed</strong>, ya que si se desea agregar una nueva característica (como <em>streaming</em> de música/video) tendríamos que modificar la clase <code>Progress</code> porque tiene una dependencia directa con la&nbsp;implementación de <code>File</code> <nobr>(alto acoplamiento)</nobr></p>
     </div>
 
     <!-- 15 -->
@@ -301,12 +304,6 @@ class Progress {
     </div>
 
     <!-- 21 -->
-    <div id="questions" class="step">
-      <h2>¿Preguntas?</h2>
-      <img src="img/any-question.jpg" alt="¿preguntas?" width="300" />
-    </div>
-
-    <!-- 22 -->
     <div id="thank-you" class="step">
       <ul>
         <li>David Rivera</li>

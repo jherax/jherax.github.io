@@ -163,32 +163,5 @@
 
     }); //end document.ready
   </script>
-<!--
-  <script type="text/javascript">
-    (function() {
-      // http://peter.michaux.ca/articles/lazy-function-definition-pattern
-      //---------------------------------
-      // Lazy Function Definition Pattern
-      // via self-invoking function
-      var writeInit = function() {
-        var t = new Date(); //{t} is created only at first call
-        //redefine function to return {t} in subsequent calls
-        writeInit = function() {
-          return "First execution: " + t.toString();
-        };
-        //this call is executed only the first time
-        //to create the objects
-        return writeInit();
-      }
-      //---------------------------------
-      // Another approach
-      writeInit = function() {
-        return arguments.callee.t || (function(fn) {
-          fn.t = "First execution: " + new Date();
-          return fn.t;
-        }(arguments.callee));
-      }
-  </script>
--->
 </body>
 </html>
