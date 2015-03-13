@@ -21,7 +21,7 @@
   <a href="http://stackoverflow.com/users/2247494/jherax" target="_blank" class="icon-link"><div class="stackoverflow"></div>Stack Overflow</a>
   <a href="http://careers.stackoverflow.com/jherax" target="_blank" class="icon-link"><div class="stackcareers"></div>Stack Careers</a>
 </div><br/>
-<p>Soy desarrollador de software en Bogota-Colombia, geek de jQuery, JavaScript y C#. Entusiasta de JavaScript y el mundo del front-end, he trabajado bastante en el back/front, y también he desempeñado el rol de administrador de bases de datos (SQL Server). Me apasiona crear aplicaciones web y en general, desarrollar software de calidad siguiendo las buenas prácticas de programación y los atributos de funcionalidad, reusabilidad y mantenibilidad.</p>
+<p>Soy desarrollador de software en Bogota-Colombia, geek de jQuery, JavaScript y C#. Entusiasta de JavaScript y el mundo del front-end, he trabajado bastante en el back-end / front-end, y también he desempeñado el rol de administrador de bases de datos (SQL Server). Me apasiona crear aplicaciones web y en general, desarrollar software de calidad siguiendo las buenas prácticas de programación y los atributos de funcionalidad, reusabilidad y mantenibilidad.</p>
 <p>Hablando de desarrollo web, vale la pena mencionar tres importantes patrones arquitectónicos, <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvc" target="_blank">MVC</a> (Model-View-Controller),
   <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvp" target="_blank">MVP</a> (Model-View-Presenter) y
   <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvvm" target="_blank">MVVM</a> (Model-View-viewModel), con los cuales será mucho más fácil desarrollar aplicaciones web estructuradas.
@@ -30,13 +30,15 @@
   Este patrón hace uso de&#160;<em>"data-bindings"</em> declarativos, los cuales permiten la interacción entre la <em>"Vista"</em> y el <em>"Modelo"</em> mediante el&#160;objeto <em>"ViewModel"</em>.
   El viewModel es un objeto "observable" que hace uso del patrón <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#observerpatternjavascript" target="_blank">Observer</a> para notificar cambios y automáticamente actualizar las dependencias detectadas.
   En JavaScript podemos encontrar algunos frameworks MVVM como <a href="http://knockoutjs.com/" target="_blank">KnockoutJS</a> y <a href="http://docs.telerik.com/kendo-ui/getting-started/framework/mvvm/overview" target="_blank">Kendo MVVM</a> (<a href="http://demos.telerik.com/kendo-ui/web/mvvm/index.html#mainWrap" target="_blank">demo</a>)</p>
-<p>Existe un viejo refrán que dice: <strong><cite>La práctica hace al maestro</cite>;</strong> leer, documentarse, y hacer pruebas son buenos hábitos que debemos adquirir, el tiempo y la perseverancia pulirán nuestras habilidades y pasaremos de ser desarrolladores que "implementan componentes" a ser aquellos que crean soluciones.</p>
+<p>Existe un viejo refrán que dice: <strong><cite>La práctica hace al maestro</cite>;</strong> leer, documentarse, y hacer pruebas son buenos hábitos que debemos adquirir, el tiempo, la práctica y la perseverancia pulirán nuestras habilidades y ya no seremos los desarrolladores que "implementan otras soluciones" sino los que crean soluciones.</p>
 
-<h1 id="jsu-library"><a href="https://github.com/jherax/js-utils.git" target="jherax-utilities">Jsu library</a></h1>
+<hr/>
+<h1 id="jsu-library"><a href="https://github.com/jherax/js-utils.git" target="jherax-utilities">JSU library</a></h1>
+
 <p style="width:96%">Es una librería de utilidades JavaScript / jQuery, que incluye herramientas para validación de datos y formato de texto,
   plugins para tooltips, ventanas modales y posicionamiento de elementos, inyección de recursos, manipulación de string y JSON, clonación de objetos,
   ordenamiento de arrays, entre otros. <a href="#list-of-methods"><strong>Ir a la referencia del API</strong></a>.</p>
-      
+
 <!-- Getting Started -->
 <h2 id="getting-started"><a href="#getting-started">A tener en cuenta</a></h2>
 <p>Este componente tiene una dependencia en <a href="http://code.jquery.com/" target="_blank">jQuery 1.8+</a> el cual debe ser cargado antes de <a href="https://github.com/jherax/js-utils/tree/master/assets/js/jherax.js" target="jherax-utilities">jsu-library</a>.<br/>
@@ -51,8 +53,9 @@ Pero si no desea usar <em>jQuery.ui,</em> como su implementación predeterminada
       <li><code>author:</code> yo :^)</li>
       <li><code>version:</code> número de versión de despliegue</li>
       <li><code>dependencies:</code> array con los nombres de las dependencias</li>
-      <li><code>createNS:</code> utilidad para crear namespaces seguros</li>
+      <li><code>siteOrigin:</code> obtiene la parte del host en la <strong>url</strong> actual</li>
       <li><code>wrapper:</code> selector que alberga el <span class="tip" title="HTML generado por: fnShowTooltip, fnShowDialog, fnLoading">HTML dinámico</span></li>
+      <li><code>createNS:</code> método para crear namespaces seguros</li>
       <li style="list-style:disc"><code>regional:</code> namespace para la configuración de idioma</li>
       <li style="list-style:disc"><code>settings:</code> namespace para configuraciones globales</li>
     </ul>
@@ -87,7 +90,9 @@ Pero si no desea usar <em>jQuery.ui,</em> como su implementación predeterminada
 <h2 id="namespacing" class="add-top-link"><a href="#namespacing">Namespacing</a></h2>
 <p>En muchos lenguajes de programación, el <em>"namespacing"</em> o espacio de nombres, es una técnica empleada para evitar colisiones con otros objetos o variables en el ámbito global. Además de eso, esta técnica es de gran ayuda cuando necesitamos organizar bloques de funcionalidad en grupos fácilmente manejables e identificables.</p>
 <p>Las variables globales deberían estar reservadas únicamente para objetos con una relevancia a nivel de sistema y deberían estar dentro de un espacio de nombres para evitar ambigüedades y minimizar el riesgo de colisión de nombres. En pocas palabras, esto significa que debería evitar en lo posible crear objetos globales a menos que sea absolutamente necesario.</p>
-<p>Es tan importante como crítico salvaguardar nuestro código de fallas en el caso de que otro script en la página esté usando los mismos nombres de variables o funciones que hemos definido. Para solucionar éste y otros problemas, sugiero que hagamos uso del patrón <a href="http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html" target="_blank">Module</a> utilizando la inyección del espacio de nombres (namespacing). De este modo, nuestro código es protegido del ámbito global mediante una función que encapsula la lógica (usualmente IIFE) y expone un objeto que representa la interface pública del módulo.</p>
+<p>Es crítico e importante salvaguardar nuestro código de fallas en el caso de que otro script en la página esté usando los mismos nombres de variables o funciones que hemos definido.
+  Para solucionar éste y otros problemas, sugiero que hagamos uso del <a href="http://toddmotto.com/mastering-the-module-pattern/" target="_blank">Patrón Module</a> utilizando la inyección del espacio de nombres (namespacing).
+  De este modo, nuestro código es protegido del ámbito global mediante una función que encapsula la lógica (usualmente un <a target="_blank" href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">IIFE</a>) y expone un objeto que representa la interface pública del módulo.</p>
 <div class="highlight highlight-javascript">
 <pre>
   <span class="c1">//Esta función encapsulada se llama IIFE</span>
@@ -109,10 +114,13 @@ Pero si no desea usar <em>jQuery.ui,</em> como su implementación predeterminada
   <li><a target="_blank" href="http://msdn.microsoft.com/en-us/magazine/gg578608.aspx">Namespacing in JavaScript</a></li>
   <li><a target="_blank" href="http://addyosmani.com/blog/essential-js-namespacing/">Essential JavaScript Namespacing Patterns</a></li>
   <li><a target="_blank" href="http://michaux.ca/articles/javascript-namespacing">JavaScript Namespacing Common Practices</a></li>
-  <li><a target="_blank" href="http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html">JavaScript Module Pattern: In-Depth</a></li>
   <li><a target="_blank" href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">Immediately-Invoked Function Expression (IIFE)</a></li>
-  <li><a target="_blank" href="http://github.com/stevekwan/best-practices/blob/master/javascript/best-practices.md">JavaScript Coding Standards and Best Practices</a></li>
+  <li><a target="_blank" href="http://toddmotto.com/mastering-the-module-pattern/">Mastering the Module Pattern</a></li>
+  <li><a target="_blank" href="http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html">JavaScript Module Pattern: In-Depth</a></li>
 </ul>
+
+<hr/>
+<h1 id="api-reference"><a href="#api-reference">Referencia del API</a></h1>
 
 <!-- jsu.createNS -->
 <h3 id="jscreatens" class="add-top-link"><a href="#jscreatens">jsu.createNS</a></h3>
@@ -182,6 +190,7 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
     <span class="nx">dateFormatError</span><span class="o">:</span> <span class="s2">"Il formato della data non è corretta"</span><span class="p">,</span> <span class="c1">//texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando el formato de la fecha es incorrecto</span>
     <span class="nx">dateIsGreater</span><span class="o">:</span> <span class="s2">"La data non può essere maggiore di oggi"</span><span class="p">,</span> <span class="c1">//texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando la fecha no debe ser mayor a...</span>
     <span class="nx">dateIsLesser</span><span class="o">:</span> <span class="s2">"La data non può essere minore di oggi"</span><span class="p">,</span> <span class="c1">//texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando la fecha no puede ser menor a...</span>
+    <span class="nx">validateForm</span><span class="o">:</span> <span class="s2">"Il pulsante deve essere all'interno di un &lt;form&gt;"</span><span class="p">,</span> <span class="c1">//texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se valida el botón</span>
     <span class="nx">validateRequired</span><span class="o">:</span> <span class="s2">"Questo campo è obbligatorio"</span><span class="p">,</span> <span class="c1">//texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se validan campos requeridos</span>
     <span class="nx">validateFormat</span><span class="o">:</span> <span class="s2">"Il formato non è corretto"</span><span class="p">,</span> <span class="c1">//texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se valida un formato incorrecto</span>
     <span class="nx">dialogTitle</span><span class="o">:</span> <span class="s2">"Informazioni"</span><span class="p">,</span> <span class="c1">//título predeterminado para las ventanas de <a href="#fnshowdialog-options">fnShowDialog</a></span>
@@ -194,7 +203,7 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
 </pre>
 </div>
 <p>Si usted desea configurar el idioma para otros plugins, entonces puede enviar una función como segundo parámetro en el método <code>set();</code> Tenga en cuenta que muchos plugins sólo pueden ser configurados antes de su inicialización.
-  Si está usando <a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" target="_blank">jQuery.ui</a>, 
+  Si está usando <a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" target="_blank">jQuery.ui</a>,
   podemos proporcionar un <a href="http://github.com/jquery/jquery-ui/tree/master/ui/i18n" target="_blank">idioma</a> que configure el plugin <a href="http://api.jqueryui.com/datepicker/" target="_blank">datepicker</a>.
 </p>
 <div class="highlight highlight-javascript">
@@ -230,16 +239,45 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
 
 <!-- jsu.settings -->
 <h3 id="jsusettings" class="add-top-link"><a href="#jsusettings">jsu.settings</a></h3>
-<p>Este namespace define configuraciones globales que son usadas por algunas funciones.</p>
+<p>Este namespace define configuraciones globales que son usadas por algunos métodos.</p>
 <ul class="no-title">
-  <li class="tab"><strong>position:</strong> <code>Object</code>. Establece la posición predefinida del tooltip en aquellas funciones que hagan uso de <a href="#jqueryposition-options">.position()</a>, <em style="font-size:0.9em">por ejemplo <a href="#fnisvaliddate-dom-options">fnIsValidDate</a>, <a href="#fnshowtooltip-dom-message-position">fnShowTooltip</a>, <a href="#jqueryfnmaxlength-length-position">$.fnMaxLength</a>, <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a></em>.
+  <li class="tab"><strong>release:</strong> <code>Boolean</code> <code class="highlight italic">default: <span class="kd">false</span></code> Determina el ambiente de la aplicación. Éste <em>flag</em> se utiliza en conjunto con <code>urlprefix</code> para determinar la URL, por ejemplo, al hacer peticiones AJAX, solicitar recursos en el dominio, etc. Para entorno de producción, establezca la propiedad en <code>true</code>, para entorno de desarrollo, establezca la propiedad en <code>false</code></li>
+  <li class="tab"><p><strong>urlprefix:</strong> <code>String</code> <code class="highlight italic">default: <span class="s1">""</span></code> Especifica el directorio virtual de la aplicación. Si <code>release</code> es <code>true</code>, y en el entorno de producción la aplicación esta hospedada en un directorio virtual, entonces puede utilizar esta propiedad para asignar dicho direcotrio en la URL.</p>
+<div class="highlight highlight-javascript">
+<pre><span class="c1">//determinamos el entorno de la aplicación</span>
+<span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">release</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">urlprefix</span> <span class="o">=</span> <span class="s2">"/v2.0/"</span><span class="p">;</span>
+
+<span class="c1">//podemos asignar el directorio virtual dinámicamente</span>
+<span class="c1">//jsu.settings.urlprefix = location.pathname.match(/^\/\w+\//)[0];</span>
+
+<span class="c1">//creamos una fachada para $.ajax</span>
+<span class="kd">function</span> <span class="nx">fnAjax</span> <span class="p">(</span><span class="nx">options</span><span class="p">) {</span>
+  <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+    <span class="nx">dataType</span><span class="o">:</span> <span class="s2">"json"</span><span class="p">,</span>
+    <span class="nx">contentType</span><span class="o">:</span> <span class="s2">"application/json; charset=utf-8"</span><span class="p">,</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s2">""</span>
+    <span class="c1">//, otras configuraciones predefinidas...</span>
+  <span class="p">},</span> options<span class="p">);</span>
+
+  <span class="c1">//evitamos crear el prefijo del directorio virtual si no se requiere</span>
+  <span class="kd">var</span> <span class="nx">prefix</span> <span class="o">=</span>
+    <span class="p">(</span><span class="sr">/^(?:\/|http)/</span><span class="p">).</span><span class="nx">test</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span> <span class="o">||</span> <span class="nx">d</span><span class="p">.</span><span class="nx">crossDomain</span> <span class="o">?</span> <span class="s2">""</span> <span class="o">:</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">urlprefix</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">release</span><span class="p">)</span> <span class="nx">d</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="nx">prefix</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+</div>
+  </li>
+
+  <li class="tab"><strong>position:</strong> <code>Object</code> <code class="highlight italic">default: <span class="kd">null</span></code> Sobrescribe la posición predefinida del tooltip en los métodos que hagan uso de <a href="#jqueryposition-options">.position()</a>, <em style="font-size:0.9em">p. ej. <a href="#fnisvaliddate-dom-options">fnIsValidDate</a>, <a href="#fnshowtooltip-dom-message-position">fnShowTooltip</a>, <a href="#jqueryfnmaxlength-length-position">$.fnMaxLength</a>, <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a></em>.
     <ul>
-      <li><strong>at:</strong> <code>String</code>. Define la posición en el elemento contra el cual se alineará: La regla es <em>"horizontal vertical"</em>. Los valores aceptables para la alineación horizontal son: <code>"left"</code>, <code>"center"</code>, <code>"right"</code> Los valores aceptables para la alineación vertical son: <code>"top"</code>, <code>"center"</code>, <code>"bottom"</code><br/>Cada dimensión puede contener <em>offsets</em> en pixeles, por ejemplo: <code>"right+10 top-25"</code></li>
-      <li><strong>my:</strong> <code>String</code>. Define la posición del elemento actual relativo al elemento contra el cual será posicionado: La regla es <em>"horizontal vertical"</em>. (Mire los detalles en la propiedad <strong><em>at</em></strong>)</li>
+      <li><strong>at:</strong> <code>String</code>. Define la posición en el elemento contra el cual se alineará: La regla es <em>"horizontal vertical"</em>. Los valores aceptables para la alineación horizontal son: <code>"left"</code>, <code>"center"</code>, <code>"right"</code> Los valores aceptables para la alineación vertical son: <code>"top"</code>, <code>"center"</code>, <code>"bottom"</code><br/>Cada dimensión puede contener <strong><em>offsets</em></strong> en pixeles, por ejemplo: <code>"right+10 top-25"</code></li>
+      <li><strong>my:</strong> <code>String</code>. Define la posición del elemento actual relativo al elemento contra el cual será posicionado: La regla es <em>"horizontal vertical"</em>. (Vea <strong>position.at</strong> para los posibles valores)</li>
       <li><strong>collision:</strong> <code>String</code>. Cuando el elemento posicionado se desborda en alguna dirección, es movido a una posición alternativa. (Sólo funciona si <a href="http://api.jqueryui.com/position/" target="_blank">jQuery.ui.position</a> está disponible)</li>
     </ul>
-  </li>
-</ul>
 <div class="highlight highlight-javascript">
 <pre>
   <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -252,14 +290,9 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
   <span class="p">}());</span>
 </pre>
 </div>
+  </li>
+</ul>
 <hr/>
-
-<!-- Prototypes -->
-<!--<h2 id="prototypes" class="add-top-link"><a href="#prototypes">Prototypes</a></h2>
-<ul>
-  <li><a href="#objectcreate-proto">Object.create</a></li>
-  <li><a href="#arraysortby-options">Array.sortBy</a></li>
-</ul>-->
 
 <!-- List of methods -->
 <h2 id="list-of-methods" class="add-top-link"><a href="#list-of-methods">Lista de métodos</a></h2>
@@ -269,6 +302,7 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
   <li><a href="#isdom-object">isDOM</a></li>
   <li><a href="#isfunction-object">isFunction</a></li>
   <li><a href="#fnstringify-json">fnStringify</a></li>
+  <!--<li><a href="#sortby-array-options">sortBy</a></li>-->
   <li><a href="#inputtype">inputType</a></li>
   <li><a href="#handlerexist-dom-eventname-namespace">handlerExist</a></li>
   <li><a href="#nsevents-eventname-namespace">nsEvents</a></li>
@@ -276,8 +310,8 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
   <li><a href="#fnaddcss-path-before">fnAddCSS</a></li>
   <li><a href="#fnescaperegexp-text">fnEscapeRegExp</a></li>
   <li><a href="#fngetquerytostring-key">fnGetQueryToString</a></li>
-  <li><a href="#fngetquerytojson-key">fnGetQueryToJSON</a></li>
-  <!--<li><a href="#fngetdatatojson-data">fnGetDataToJSON</a></li>-->
+  <li><a href="#fngetquerytoobject-key">fnGetQueryToObject</a></li>
+  <!--<li><a href="#fngetdatatoobject-data">fnGetDataToObject</a></li>-->
   <li><a href="#fnfreezeobject-object">fnFreezeObject</a></li>
   <!--<li><a href="#fnextend-from-to">fnExtend</a></li>-->
   <li><a href="#fngetdate-options">fnGetDate</a></li>
@@ -664,8 +698,8 @@ Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/
 </pre>
 </div>
 
-<!-- fnGetQueryToJSON -->
-<h3 id="fngetquerytojson-key" class="add-methods-link"><a href="#fngetquerytojson-key">fnGetQueryToJSON (key)</a></h3>
+<!-- fnGetQueryToObject -->
+<h3 id="fngetquerytoobject-key" class="add-methods-link"><a href="#fngetquerytoobject-key">fnGetQueryToObject (key)</a></h3>
 <p>Obtiene los valores del <em>querystring</em> en la url y los guarda como un <strong>Object literal</strong>.<br/>
 <strong>Nota:</strong> El parámetro <strong><em>key</em></strong> no es obligatorio, y si no se especifica, todas las variables encontradas en el <em>querystring</em> serán retornadas en un <code>Object</code> literal.<br/>
 <strong>Retorna</strong> <code>Object</code></p>
@@ -678,11 +712,11 @@ Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/
   <span class="c1">//http://www.youtube.com/watch?v=hrZl_EQUbRQ&amp;hd=1</span>
 
   <span class="c1">//queremos recuperar todas las variables del querystring</span>
-  <span class="kd">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetQueryToJSON</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetQueryToObject</span><span class="p">();</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">q</span><span class="p">);</span> <span class="c1">//imprime: {v: "hrZl_EQUbRQ", hd: "1"}</span>
 
   <span class="c1">//queremos recuperar el valor de la variable [v]</span>
-  <span class="kd">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetQueryToJSON</span><span class="p">(</span><span class="s2">"v"</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetQueryToObject</span><span class="p">(</span><span class="s2">"v"</span><span class="p">);</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span> <span class="c1">//imprime: {v: "hrZl_EQUbRQ"}</span>
 </pre>
 </div>
@@ -731,7 +765,7 @@ y para ello podemos usar esta función, la cual clona el objeto y sella los atri
 <h3 id="fngetdate-options" class="add-methods-link"><a href="#fngetdate-options">fnGetDate (options)</a></h3>
 <p style="margin-bottom: 10px;">
   Muestra la fecha de acuerdo al formato especificado por <code>dateFormat</code> y <code>timeFormat</code> en <a href="#jsuregional"><code>jsu.regional</code></a><br/>
-  <strong>Nota:</strong> Este método provee soporte para el formato <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15" target="_blank">ISO 8601</a>, que es el formato usado por los elementos <code>input</code> del tipo <em>date, datetime, datetime-local.</em> 
+  <strong>Nota:</strong> Este método provee soporte para el formato <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15" target="_blank">ISO 8601</a>, que es el formato usado por los elementos <code>input</code> del tipo <em>date, datetime, datetime-local.</em>
   Conforme a la <a href="http://www.w3.org/TR/html-markup/input.datetime.html#input.datetime.attrs.value" target="_blank">w3.org</a> el atributo <code>value</code> debe ser un texto date-time válido según lo definido en el estándar <a href="http://tools.ietf.org/html/rfc3339#section-5.6" target="_blank">RFC 3339</a>.<br/>
   <strong>Retorna</strong> <code>Object</code> con las siguientes propiedades:
 </p>
@@ -1300,7 +1334,7 @@ It has the following <code>DOM</code> structure: <code class="highlight italic">
     <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnShowDialog</span><span class="p">({</span>
       <span class="nx">title</span><span class="o">:</span> <span class="s2">"System Message"</span><span class="p">,</span>
       <span class="nx">content</span><span class="o">:</span>
-        <span class="s1">'&lt;div class="wnd-icon alert"&gt;&lt;/div&gt;'</span> <span class="o">+</span> 
+        <span class="s1">'&lt;div class="wnd-icon alert"&gt;&lt;/div&gt;'</span> <span class="o">+</span>
         <span class="s1">'&lt;p&gt;Open console to view results » &lt;em&gt;F12&lt;/em&gt; or &lt;em&gt;shift + ctrl + i&lt;/em&gt;&lt;/p&gt;'</span>
     <span class="p">});</span>
   <span class="p">});</span>
@@ -1402,7 +1436,7 @@ If you want to learn more about jQuery, here is a full guide: <a href="http://le
 
 <!-- jQuery.position -->
 <h3 id="jqueryposition-options" class="add-jquery-link"><a href="#jqueryposition-options">jQuery.position (options)</a></h3>
-<p>Position an element relative to another. This plugin extends jQuery's built-in <a href="http://api.jquery.com/position/" target="_blank">.position()</a> method. If <em>jQuery.ui</em> is not loaded, calling the <code>.position()</code> method will cause the internal implementation of the method to be used instead. 
+<p>Position an element relative to another. This plugin extends jQuery's built-in <a href="http://api.jquery.com/position/" target="_blank">.position()</a> method. If <em>jQuery.ui</em> is not loaded, calling the <code>.position()</code> method will cause the internal implementation of the method to be used instead.
 If no arguments or the <code>of</code> property is not set, the default <a href="http://api.jquery.com/position/" target="_blank">.position()</a> method is called.<br/>
 <strong>Returns</strong> <code>jQuery</code></p>
 <ul>
@@ -1435,7 +1469,7 @@ If no arguments or the <code>of</code> property is not set, the default <a href=
   <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
 </pre>
 </div>
- 
+
 <!-- jQuery.fnCenter -->
 <h3 id="jqueryfncenter-options" class="add-jquery-link"><a href="#jqueryfncenter-options">jQuery.fnCenter (options)</a></h3>
 <p>Centers an element relative to another. If no arguments or the <code>of</code> property is not set, matching elements are placed at the center of screen <em>(with position: fixed)</em><br/>
@@ -1631,9 +1665,9 @@ To allow a set of characters, better to use <a href="#jqueryfncustominput-mask">
 
 <!-- jQuery.fnIsValidFormat -->
 <h3 id="jqueryfnisvalidformat-type" class="add-jquery-link"><a href="#jqueryfnisvalidformat-type">jQuery.fnIsValidFormat (type)</a></h3>
-<p>This is the jQuery extension for the <a href="#fnisvalidformat">fnIsValidFormat</a> validators and performs the validation by passing the validator name as the <strong><em>type</em></strong> argument. 
+<p>This is the jQuery extension for the <a href="#fnisvalidformat">fnIsValidFormat</a> validators and performs the validation by passing the validator name as the <strong><em>type</em></strong> argument.
 The <code>value</code> property of the first matching element is used as the text to validate.<br/>
-<strong>Note:</strong> You can create or redefine validators through <a href="#fnisvalidformat"><code>jsu.fnIsValidFormat.set()</code></a> method. 
+<strong>Note:</strong> You can create or redefine validators through <a href="#fnisvalidformat"><code>jsu.fnIsValidFormat.set()</code></a> method.
 Once defined the validator, it can be used inmediately by providing the validator name as the <strong><em>type</em></strong> argument.<br/>
 <strong>Returns</strong> <code>Boolean</code></p>
 <ul>
@@ -1785,8 +1819,8 @@ It has the following <code>DOM</code> structure: <code class="highlight italic">
 
 <!-- jQuery.fnEasyValidate -->
 <h3 id="jqueryfneasyvalidate-options" class="add-jquery-link"><a href="#jqueryfneasyvalidate-options">jQuery.fnEasyValidate (options)</a></h3>
-<p>Validates the specified elements in the document. Validations can be performed automatically (depending on the css class provided by the element to validate), or customized (by providing the <strong><em>fnValidator</em></strong> option). 
-If you want automatic validations, then set the css class to the elements to validate, by adding the prefix <code>vld-</code> plus the name of the validator (e.g. <code>"vld-datetime"</code>). 
+<p>Validates the specified elements in the document. Validations can be performed automatically (depending on the css class provided by the element to validate), or customized (by providing the <strong><em>fnValidator</em></strong> option).
+If you want automatic validations, then set the css class to the elements to validate, by adding the prefix <code>vld-</code> plus the name of the validator (e.g. <code>"vld-datetime"</code>).
 As the default validations are performed by <a href="#fnisvalidformat">fnIsValidFormat()</a>, you can also create new validators or redefine the existing ones through <a href="#fnisvalidformat"><code>jsu.fnIsValidFormat.set()</code></a> method, so you can customize the validators as you want.<br/>
 These are the default css classes:</p>
 <ul class="no-title">
