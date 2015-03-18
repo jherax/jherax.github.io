@@ -1,2 +1,4 @@
 *.db
 dev/*
+javascripts/jherax-dev.js
+javascripts/jherax.js

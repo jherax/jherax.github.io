@@ -1,8 +1,8 @@
 var MODULE = (function() {
-	var date = new Date();
-	console.log(">> MODULE loaded > " + date.toISOString());
+	var date = new Date().toISOString();
+  	console.log("%c>> MODULE loaded > " + date, "color: orangered");
 	return {
-	    name: "jherax",
-	    date: date
+	    "name": "module.js",
+	    "date": date
 	};
 }());

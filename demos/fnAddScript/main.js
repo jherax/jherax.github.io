@@ -1,73 +1,85 @@
-var load = (function (undefined) {
+var setHandler = (function (context, $, jsu, undefined) {
 
-    //carga el script asíncronamente,
-    //crea el elemento <script> y
-    //es insertado antes de jherax.js
-    function tagAsync(e) {
+    //elemento DOM al cual se le agregará el
+    //handler del evento click
+    var _button;
+
+    //crea el elemento <script> para cargar
+    //el archivo, lo inserta antes de main.js
+    //y ejecuta el callback "onload" cuando
+    //el script ha sido cargado y ejecutado
+    //https://www.igvita.com/2014/05/20/script-injected-async-scripts-considered-harmful/
+    function scriptTag (e) {
       setTimeout(function() {
         printBegin("1.");
-        if(!window.MODULE) jsu.fnAddScript("module.js");
-        console.log("1. Main stack > MODULE:", window.MODULE);
-      }, 100);
-    }
-
-    //carga el script asíncronamente,
-    //es cargado silenciosamente por $.ajax y
-    //reacciona cuando el script ha terminado de cargar
-    //mediante el callback "onload"
-    function inMemoryAsync(e) {
-      setTimeout(function() {
-        if(window.MODULE) window.MODULE = undefined;
-        printBegin("2.");
+        //asegura que MODULE no exista
+        if(context.MODULE) MODULE = undefined;
         jsu.fnAddScript({
           src: "module.js",
-          silent: true,
+          before: "main.js",
+          createTag: true,
           onload: function() {
-            console.log("2. Async callback > MODULE:", window.MODULE);
+            console.log("1. onload callback > MODULE:", MODULE);
           }
         });
-        console.log("2. Main stack > MODULE:", window.MODULE);
+        console.log("1. Main stack > MODULE:", context.MODULE);
       }, 100);
     }
 
-    //carga el script síncronamente,
-    //es cargado silenciosamente por $.ajax y
-    //reacciona cuando el script ha terminado de cargar,
-    //mediante el método diferido .done() del objeto jqXHR.
-    function inMemorySync(e) {
+    //carga el archivo asíncronamente mediante $.ajax,
+    //y ejecuta el método ".done()" del objeto jqXHR retornado
+    function ajaxAsync (e) {
       setTimeout(function() {
-        if(window.MODULE) window.MODULE = undefined;
+        //asegura que MODULE no exista
+        if(context.MODULE) MODULE = undefined;
+        printBegin("2.");
+        jsu.fnAddScript("module.js").done(function() {
+          console.log("2. Async promise > MODULE:", MODULE);
+        });
+        console.log("2. Main stack > MODULE:", context.MODULE);
+      }, 100);
+    }
+
+    //carga el archivo de forma sincrónica mediante $.ajax,
+    //y ejecuta el método ".done()" del objeto jqXHR retornado
+    function ajaxSync (e) {
+      setTimeout(function() {
+        //asegura que MODULE no exista
+        if(context.MODULE) MODULE = undefined;
         printBegin("3.");
         jsu.fnAddScript({
           src: "module.js",
           async: false
         }).done(function() {
-            console.log("3. Sync callback > MODULE:", window.MODULE);
+            console.log("3. Sync promise > MODULE:", MODULE);
         });
-        console.log("3. Main stack > MODULE:", window.MODULE);
+        console.log("3. Main stack > MODULE:", context.MODULE);
       }, 100);
     }
 
-    //imprime el comienzo de la operación
-    function printBegin(step) {
-      console.log(step + " Main stack > start: " + new Date().toISOString());
+    //imprime el mensaje en la consola
+    function printBegin (step) {
+      console.log("%c" + step + " Main stack > start: " +
+        new Date().toISOString(), "color: green");
     }
-
-    //elemento DOM del botón
-    var button = document.getElementById("load");
 
     //asigna el event handler del evento click
     function handler (fnCallback) {
-      button.onclick = fnCallback;
-      return button;
+      _button.onclick = fnCallback;
+      return _button;
     }
 
-    return {
-      tagAsync: function() { return handler(tagAsync); },
-      inMemoryAsync: function() { return handler(inMemoryAsync); },
-      inMemorySync: function() { return handler(inMemorySync); }
+    //retorna currying function
+    return function (selector) {
+      _button = $(selector).get(0);
+      return {
+        "scriptTag": function() { return handler(scriptTag); },
+        "ajaxAsync": function() { return handler(ajaxAsync); },
+        "ajaxSync": function() { return handler(ajaxSync); }
+      };
     };
 
-  }());
+  }(window, jQuery, jsu));
 
-load.tagAsync();
+var buttonHandler = setHandler("#load");
+buttonHandler.scriptTag();

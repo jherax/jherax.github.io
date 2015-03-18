@@ -306,7 +306,7 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
   <li><a href="#inputtype">inputType</a></li>
   <li><a href="#handlerexist-dom-eventname-namespace">handlerExist</a></li>
   <li><a href="#nsevents-eventname-namespace">nsEvents</a></li>
-  <li><a href="#fnaddscript-script">fnAddScript</a></li>
+  <li><a href="#fnaddscript-options">fnAddScript</a></li>
   <li><a href="#fnaddcss-path-before">fnAddCSS</a></li>
   <li><a href="#fnescaperegexp-text">fnEscapeRegExp</a></li>
   <li><a href="#fngetquerytostring-key">fnGetQueryToString</a></li>
@@ -540,123 +540,142 @@ Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/
 </div>
 
 <!-- fnAddScript -->
-<h3 id="fnaddscript-script" class="add-methods-link"><a href="#fnaddscript-script">fnAddScript (script)</a></h3>
-<p>Agrega dinámicamente un script de un archivo (en el mismo dominio).
-  Éste método es útil para inyectar dependencias desde un archivo externo, en caso de que el código pueda fallar si no se ha cargado alguna dependencia.
-  Así por ejemplo, si usted usa una función que dependa del componente <em>kendo.ui.window</em>, puede verificar si dicha dependencia se ha cargado antes de tratar de acceder al componente.<br/>
-  <strong>Nota:</strong> Por defecto el script es cargado asíncronamente, y el elemento <code>&lt;script&gt;</code> es creado e insertado conforme a la opción <strong><em>before</em></strong>.
-  Si establece <code class="highlight italic">async: <span class="kd">false</span></code> o <code class="highlight italic">before: <span class="kd">null</span></code> entonces el script es cargado silenciosamente a través de <a href="http://api.jquery.com/jquery.ajax/" target="_blank">jQuery.ajax</a> y el objeto <a href="http://api.jquery.com/Types/#jqXHR" target="_blank"><code>jqXHR</code></a> es retornado (provee los <a href="http://api.jquery.com/jQuery.ajax/#jqXHR" target="_blank">métodos diferidos</a>)<br/>
-  <strong>Nota:</strong> Tenga en cuenta que <a href="http://api.jquery.com/jquery.ajax/" target="_blank">jQuery.ajax</a> no funciona con el protocolo <code>file:///</code> (al menos en chrome).<br/>
-  <strong>Retorna</strong> <code>undefined</code> o <a href="http://api.jquery.com/Types/#jqXHR" target="_blank"><code>jqXHR</code></a>
-</p>
+<h3 id="fnaddscript-options" class="add-methods-link"><a href="#fnaddscript-options">fnAddScript (options)</a></h3>
+<p>Agrega dinámicamente un script. Éste método es útil para insertar código JavaScript desde un archivo externo.</p>
+<p><strong>Nota:</strong> Por defecto el recurso es cargado asíncronamente a través de <a href="http://api.jquery.com/jquery.ajax/" target="_blank">jQuery.ajax</a>,
+  en cuyo caso, el método retorna un objeto <a href="http://api.jquery.com/Types/#jqXHR" target="_blank"><code>jqXHR</code></a> que implementa la interface <strong>Promise</strong> proporcionando los métodos del objeto <a href="http://api.jquery.com/category/deferred-object/" target="_blank">Deferred</a>.
+  Tenga en cuenta que al utilizar <a href="http://api.jquery.com/jquery.ajax/" target="_blank">jQuery.ajax</a> no podrá solicitar recursos alojados en otro dominio, o utilizar el protocolo <code>file:///</code>,
+  a menos que configure el método <code>.ajax()</code> para tal caso (vea <a href="http://api.jquery.com/jquery.ajaxprefilter/" target="_blank">jQuery.ajaxPrefilter</a>)</p>
+<p>Si configura <code class="highlight italic">createTag: <span class="kd">true</span></code> entonces se crea el elemento <code>&lt;script&gt;</code>,
+  en cuyo caso el método retorna el elemento <code>DOM</code> del <code>&lt;script&gt;</code> creado.
+  El <code>&lt;script&gt;</code> es insertado antes del último script ejecutado ó antes del script especificado por <strong><em><span>@</span>options.before</em></strong></p>
+<p><strong>Retorna</strong> <a href="http://www.w3schools.com/jsref/dom_obj_all.asp" target="_blank"><code>Element</code></a> o <a href="http://api.jquery.com/Types/#jqXHR" target="_blank"><code>jqXHR</code></a></p>
 <ul>
-  <li class="tab"><strong>script:</strong> <code>String</code> <code>Object</code> El origen del script a ser cargado.<br/>
-    Si es un string, contiene la ruta del script a cargar.<br/>
-    De otro modo, es un objeto con las siguientes <a href="http://www.quackit.com/html_5/tags/html_script_tag.cfm" target="_blank">propiedades</a>:
+  <li class="tab"><strong>options:</strong> <code>String</code>, <code>Object</code>: especifica el archivo a cargar.<br/>
+    Si es <code>String</code>, entonces contiene la ruta del archivo JavaScript a cargar.<br/>
+    Si es <code>Object</code>, entonces permite configurar las siguientes <a href="http://www.quackit.com/html_5/tags/html_script_tag.cfm" target="_blank">propiedades</a>:
     <ul style="margin-bottom:2px">
-      <li><strong>src:</strong> <code>String</code> <code class="highlight italic">default: <span class="kd">null</span></code> Especifica la URL del archivo externo.</li>
+      <li><strong>src:</strong> <code>String</code> <code class="highlight italic">default: <span class="kd">null</span></code> Especifica la URL del archivo a cargar.</li>
       <li><strong>async:</strong> <code>Boolean</code> <code class="highlight italic">default: <span class="kd">true</span></code> Determina si el script será ejecutado asíncronamente.</li>
+      <li><strong>createTag:</strong> <code>Boolean</code> <code class="highlight italic">default: <span class="kd">false</span></code> Determina si se debe crear el elemento <code>&lt;script&gt;</code></li>
       <li><strong>charset:</strong> <code>String</code> <code class="highlight italic">default: <span class="kd">null</span></code> Define la codificación de caracteres que utiliza el script.</li>
-      <li><strong>onload:</strong> <code>Function</code> <code class="highlight italic">default: <span class="kd">null</span></code> Callback que se ejecuta después que el script es cargado.</li>
-      <li><strong>before:</strong> <code>String</code> <code class="highlight italic">default: <span class="s1">"jherax.js"</span></code> Indica en donde insertar el script. Parte del atributo <code>src</code> de un elemento <code>&lt;script&gt;</code> en donde el nuevo script es insertado. Si establece la propiedad en <code>null</code> el script será cargado silenciosamente.</li>
+      <li><strong>onload:</strong> <code>Function</code> <code class="highlight italic">default: <span class="kd">null</span></code> Callback que se ejecuta después que el script ha sido cargado y ejecutado.</li>
+      <li><strong>before:</strong> <code>String</code> <code class="highlight italic">default: <span class="kd">null</span></code> Indica en donde insertar el elemento <code>&lt;script&gt;</code>. Puede especificar parte de la ruta del archivo en el atributo <code>src</code> de alguno de los <code>&lt;script&gt;</code> en el documento.</li>
     </ul>
   </li>
 </ul>
 <p><strong>► module.js</strong> <em>(este es el archivo a cargar)</em></p>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">MODULE</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Loaded &gt; module.js"</span><span class="p">,</span> <span class="nx">date</span><span class="p">.</span><span class="nx">toISOString</span><span class="p">());</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s2">"jherax"</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="nx">date</span>
-    <span class="p">}</span>
-  <span class="p">})();</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+var MODULE = (function() {
+  var date = new Date().toISOString();
+  console.log(">> MODULE loaded > " + date);
+  return {
+      "name": "module.js",
+      "date": date
+  };
+}());
+</code></pre>
 <p><strong>► main.js</strong> <em>(este es el archivo principal)</em></p>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+<pre class="code-example"><code class="javascript">
+var demo = (function (context, $, jsu, undefined) {
 
-    <span class="c1">//carga el script asíncronamente,</span>
-    <span class="c1">//crea el elemento &lt;script&gt; y</span>
-    <span class="c1">//es insertado antes de jherax.js</span>
-    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">printBegin</span><span class="p">(</span><span class="s2">"1."</span><span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span><span class="p">)</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnAddScript</span><span class="p">(</span><span class="s2">"module.js"</span><span class="p">);</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"1. Sync MODULE"</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span><span class="p">);</span>
-    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+  //crea el elemento &lt;script&gt; para cargar
+  //el archivo, lo inserta antes de main.js
+  //y ejecuta el callback "onload" cuando
+  //el script ha sido cargado y ejecutado.
+  //vea: <a href="//https://www.igvita.com/2014/05/20/script-injected-async-scripts-considered-harmful/" target="_blank">Script-injected</a>
+  function scriptTag() {
+    setTimeout(function() {
+      printBegin("1.");
+      //asegura que MODULE no exista
+      if(context.MODULE) MODULE = undefined;
+      jsu.fnAddScript({
+        src: "demos/fnAddScript/module.js",
+        before: "main.js",
+        createTag: true,
+        onload: function() {
+          console.log("1. onload callback > MODULE:", MODULE);
+        }
+      });
+      console.log("1. Main stack > MODULE:", context.MODULE);
+    }, 100);
+  }
 
-    <span class="c1">//carga el script asíncronamente,</span>
-    <span class="c1">//es cargado silenciosamente por $.ajax y</span>
-    <span class="c1">//reacciona cuando el script ha terminado de cargar</span>
-    <span class="c1">//mediante el callback "onload"</span>
-    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span><span class="p">)</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-      <span class="nx">printBegin</span><span class="p">(</span><span class="s2">"2."</span><span class="p">);</span>
-      <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnAddScript</span><span class="p">({</span>
-        <span class="nx">src</span><span class="o">:</span> <span class="s2">"module.js"</span><span class="p">,</span>
-        <span class="nx">before</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
-        <span class="nx">onload</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"2. Async load"</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span><span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">});</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"2. Sync MODULE"</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span><span class="p">);</span>
-    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+  //carga el archivo asíncronamente mediante $.ajax,
+  //y ejecuta el método ".done()" del objeto jqXHR retornado
+  function ajaxAsync() {
+    setTimeout(function() {
+      //asegura que MODULE no exista
+      if(context.MODULE) MODULE = undefined;
+      printBegin("2.");
+      jsu.fnAddScript("demos/fnAddScript/module.js")
+        .done(function() {
+          console.log("2. Async promise > MODULE:", MODULE);
+        });
+      console.log("2. Main stack > MODULE:", context.MODULE);
+    }, 200);
+  }
 
-    <span class="c1">//carga el script síncronamente,</span>
-    <span class="c1">//es cargado silenciosamente por $.ajax y</span>
-    <span class="c1">//reacciona cuando el script ha terminado de cargar,</span>
-    <span class="c1">//mediante el método diferido .done() del objeto jqXHR.</span>
-    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span><span class="p">)</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-      <span class="nx">printBegin</span><span class="p">(</span><span class="s2">"3."</span><span class="p">);</span>
-      <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnAddScript</span><span class="p">({</span>
-        <span class="nx">src</span><span class="o">:</span> <span class="s2">"module.js"</span><span class="p">,</span>
-        <span class="nx">async</span><span class="o">:</span> <span class="kc">false</span>
-      <span class="p">}).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"3. Sync load"</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span><span class="p">);</span>
-      <span class="p">});</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"3. Sync MODULE"</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MODULE</span><span class="p">);</span>
-    <span class="p">},</span> <span class="mi">900</span><span class="p">);</span>
+  //carga el archivo de forma sincrónica mediante $.ajax,
+  //y ejecuta el método ".done()" del objeto jqXHR retornado
+  function ajaxSync() {
+    setTimeout(function() {
+      //asegura que MODULE no exista
+      if(context.MODULE) MODULE = undefined;
+      printBegin("3.");
+      jsu.fnAddScript({
+        src: "demos/fnAddScript/module.js",
+        async: false
+      }).done(function() {
+          console.log("3. Sync promise > MODULE:", MODULE);
+      });
+      console.log("3. Main stack > MODULE:", context.MODULE);
+    }, 300);
+  }
 
-    <span class="c1">//imprime el comienzo de la operación</span>
-    <span class="kd">function</span> <span class="nx">printBegin</span><span class="p">(</span><span class="nx">step</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">step</span> <span class="o">+</span> <span class="s2">" Sync start"</span><span class="p">,</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toISOString</span><span class="p">());</span>
-    <span class="p">}</span>
-  <span class="p">}());</span>
-</pre>
-</div>
+  //escribe el mensaje en la consola
+  function printBegin (step) {
+    console.log("%c" + step + " Main stack > start: " +
+      new Date().toISOString(), "color: green");
+  }
+
+  return {
+    "scriptTag": scriptTag,
+    "ajaxAsync": ajaxAsync,
+    "ajaxSync": ajaxSync
+  };
+
+}(window, jQuery, jsu));
+
+  demo.scriptTag();
+//demo.ajaxAsync();
+//demo.ajaxSync();
+</code></pre>
 
 <!-- fnAddCSS -->
 <h3 id="fnaddcss-path-before" class="add-methods-link"><a href="#fnaddcss-path-before">fnAddCSS (path, before)</a></h3>
 <p>Agrega dinámicamente un archivo de hoja de estilos (CSS).<br/>
   Este método es útil para agregar un archivo css al documento.<br/>
-  <strong>Retorna</strong> <code>undefined</code></p>
+  <strong>Retorna</strong> <a href="http://www.w3schools.com/jsref/dom_obj_all.asp" target="_blank"><code>Element</code></a></p>
 <ul>
   <li class="tab"><strong>path:</strong> <code>String</code> URL del archivo css a ser añadido.</li>
   <li class="tab"><strong>before:</strong> <code>String</code> Parte del atributo <code>href</code> del elemento <code>&lt;link&gt;</code> que identifica en dónde agregar el archivo css. Éste parámetro es opcional y si no se especifica, el nuevo archivo será añadido al final del elemento <code>&lt;head&gt;</code></li>
 </ul>
 <p><strong>► demo.css</strong> <em>(este es el archivo css a cargar)</em></p>
-<div class="highlight highlight-stylesheet">
-<pre>
-  <span class="nt">body</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="nb">red</span> <span class="cp">!important</span><span class="p">;</span> <span class="p">}</span>
-</pre>
-</div>
+<pre class="code-example"><code class="css">
+  body { color: red !important; }
+</code></pre>
 <p><strong>► main.js</strong> <em>(este es el script principal)</em></p>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">//agrega el archivo css antes del &lt;link&gt; main.css</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnAddCSS</span><span class="p">(</span><span class="s2">"demo.css"</span><span class="p">,</span> <span class="s2">"main.css"</span><span class="p">);</span>
+<pre class="code-example"><code class="javascript">
+  setTimeout(function() {
+    //agrega el archivo css antes del &lt;link&gt; jherax.min.css
+    var lnk = jsu.fnAddCSS("demos/fnAddCSS/demo.css", "jherax.min.css");
+    lnk.id = "lnk-jherax";
 
-    <span class="c1">//añade el archivo css al final del elemento &lt;head&gt;</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnAddCSS</span><span class="p">(</span><span class="s2">"demo.css"</span><span class="p">);</span>
-  <span class="p">},</span> <span class="mi">900</span><span class="p">);</span>
-</pre>
-</div>
+    //añade el archivo css al final del elemento &lt;head&gt;
+    //jsu.fnAddCSS("demos/fnAddCSS/demo.css");
+  }, 900);
+</code></pre>
 
 <!-- fnEscapeRegExp -->
 <h3 id="fnescaperegexp-text" class="add-methods-link"><a href="#fnescaperegexp-text">fnEscapeRegExp (text)</a></h3>
