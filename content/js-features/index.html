@@ -57,16 +57,21 @@
     <!-- 2 -->
     <div id="definition" class="step">
       <h2>JavaScript</h2>
-      <p>Es un lenguaje de programación <a title="Está diseñado para ser ejecutado por medio de un intérprete,
-en contraste con los lenguajes compilados." href="http://es.wikipedia.org/wiki/Lenguaje_de_programaci%C3%B3n_interpretado" target="_blank">interpretado</a>,<br/>definido como <strong>orientado a objetos</strong> basado en <a title="Programación basada en prototipos" href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_basada_en_prototipos" target="_blank">prototipos</a> <i>(claseless)</i>,
-<a title="Está basada en órdenes (enunciados imperativos) que se ejecutan de forma secuencial
-y actualizan el estado del programa mediante variables almacenadas en memoria." href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_imperativa" target="_blank">imperativo</a>, débilmente<br/>tipado y <strong>dinámico</strong>.</p>
+      <p>Es un lenguaje de programación <a title="No traduce directamente el código escrito a instrucciones de máquina. Está diseñado
+para ser ejecutado por un intérprete, en contraste con los lenguajes compilados."
+        href="http://es.wikipedia.org/wiki/Lenguaje_de_programaci%C3%B3n_interpretado" target="_blank">interpretado</a>,<br/>
+        definido como <strong>orientado a objetos</strong> basado en <a title="Los objetos existentes pueden servir de plantilla para crear nuevos objetos"
+        href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_basada_en_prototipos" target="_blank">prototipos</a>
+        <i>(classless)</i>, <a title="Está basada en órdenes (enunciados imperativos) que se ejecutan de forma secuencial
+y actualizan el estado del programa mediante variables almacenadas en memoria." href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_imperativa"
+        target="_blank">imperativo</a>, débilmente<br/>tipado y <strong>dinámico</strong>.</p>
     </div>
 
     <!-- 3 -->
     <div id="duck-typing-1" class="step">
       <h2>Duck Typing</h2>
-      <p>Es el estilo de tipificación <a title="Tipado dinámico" href="http://es.wikipedia.org/wiki/Sistema_de_tipos#Tipado_din.C3.A1mico" target="_blank">dinámica</a> de datos en donde el conjunto actual de métodos y propiedades determinan la validez semántica, en lugar de hacerlo por herencia o mediante una interfaz específica.</p>
+      <p>Es el estilo de tipificación <a title="Tipado dinámico" href="http://es.wikipedia.org/wiki/Sistema_de_tipos#Tipado_din.C3.A1mico" target="_blank">dinámica</a>
+        de datos en donde el conjunto actual de métodos y propiedades determinan la validez semántica, en lugar de hacerlo por herencia o mediante una interfaz específica.</p>
       <p><em>Solo nos preocupamos de los aspectos que van a usarse, y no del tipo de objeto que se trata.</em></p>
     </div>
 
@@ -92,7 +97,7 @@ class Pato {
 }
 
 class Main {
-    void walk(Pato pato) {
+    void takeFlight(Pato pato) {
         pato.volar();
     }
 }</pre>
@@ -118,7 +123,7 @@ class Main {
     //C# permite la tipificación dinámica
     //en tiempo de ejecución, mediante
     //el tipo de datos "dynamic"
-    void walk(dynamic pato) {
+    void takeFlight(dynamic pato) {
         pato.volar();
     }
 }
@@ -130,7 +135,7 @@ class Main {
       <h3>Tipificado dinámico <b>(JS)</b></h3>
       <p>Con <strong>duck typing</strong>, la función toma un objeto de cualquier tipo e invoca el método <code>volar()</code>. Si el objeto no contiene el método esperado, se arrojará un error</p>
 <pre class="prettyprint lang-js linenums">
-function walk(pato) {
+function takeFlight(pato) {
     pato.volar();
 }
 </pre>
@@ -140,22 +145,28 @@ function walk(pato) {
     <div id="data-types-1" class="step">
       <h2>Tipos de datos</h2>
       <p>JavaScript es un lenguaje de tipado dinámico basado en&nbsp;<strong>prototipos</strong> en el cual encontramos separados los tipos de datos en dos&nbsp;grupos: <em><strong>primitivos</strong> y <strong>objetos</strong></em>.</p>
-      <blockquote>Un valor primitivo es miembro de uno de los siguientes tipos integrados: <strong>Undefined</strong>, <strong>Null</strong>, <strong>Boolean</strong>, <strong>Number</strong> y <strong>String</strong>; un objeto es miembro del tipo integrado restante: <strong>Object</strong>; y un método es una función asociada a un objeto a&nbsp;través de una propiedad — <a title="ECMAScript specification" href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf" target="_blank">ECMAScript</a></blockquote>
+      <blockquote>Un valor primitivo es miembro de uno de los siguientes tipos integrados: <strong>Undefined</strong>, <strong>Null</strong>, <strong>Boolean</strong>, <strong>Number</strong> y <strong>String</strong>;
+        un objeto es miembro del tipo integrado restante: <strong>Object</strong>; y un método es una función asociada a un objeto a&nbsp;través de una propiedad —
+        <a title="ECMAScript specification" href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf" target="_blank">ECMAScript</a></blockquote>
     </div>
 
     <!-- 8 -->
     <div id="data-types-2" class="step">
       <h3 class="center">Tipos de datos</h3>
-      <p>Para comprobar el tipo de datos de un objeto, podemos utilizar el operador <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof" target="_blank">typeof</a>, o bien, podemos usar el método <a title="Using toString to detect object type" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString#Example:_Using_toString_to_detect_object_type" target="_blank">toString()</a> para detectar el&nbsp;tipo/clase al cual pertenece.</p>
+      <p>Para comprobar el tipo de datos de un objeto, podemos utilizar el operador
+        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof" target="_blank">typeof</a>, o bien,podemos usar el método
+        <a title="Using toString to detect object type" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString#Example:_Using_toString_to_detect_object_type" target="_blank">toString()</a>
+        para detectar el&nbsp;tipo/clase al cual pertenece.</p>
 <pre class="prettyprint lang-js linenums tight">
 var str = "hola",
     bool = true,
     num = 6572,
     nan = +"10m",
-    obj = { value: 1 },
     func = function(){},
-    undef = void(0),
-    nulo = null;
+    obj = { value: 1 },
+    date = new Date(),
+    nulo = null,
+    undef = void(0);
 
 var proto = Object.prototype.toString;
 
@@ -167,13 +178,15 @@ console.log("proto: ", proto.call(nulo));
     <!-- 9 -->
     <div id="data-types-3" class="step">
       <h3 class="center">Tipos de datos</h3>
-      <p>Cuando asignamos un valor <a href="https://jherax.wordpress.com/2014/07/20/js-clonando-objetos/#primitive-values-and-objects" target="_blank">primitivo</a> a una variable <code>(string, number, boolean)</code>, se crea una copia con el valor asignado (<strong>by value</strong>).</p>
-      <p>Sin embargo cuando trabajamos con objetos <code>(Object, Array, RegExp, Date...)</code>, ya sea que lo pasemos como argumento de una función o que lo asignemos a una variable, estamos pasando su referencia (<strong>by&nbsp;reference</strong>). Esto significa que cualquier cambio que hagamos sobre la referencia del objeto, se verá reflejado en el objeto original.</p>
+      <p>Cuando asignamos un valor <a href="https://jherax.wordpress.com/2014/07/20/js-clonando-objetos/#primitive-values-and-objects" target="_blank">primitivo</a>
+        a una variable <code>(string, number, boolean)</code>, se crea una copia con el valor asignado (<strong>by value</strong>).</p>
+      <p>Sin embargo cuando trabajamos con objetos <code>(Object, Array, RegExp, Date...)</code>, ya sea que lo pasemos como argumento de una función o que lo asignemos a una variable,
+        estamos pasando su referencia (<strong>by&nbsp;reference</strong>). Esto significa que cualquier cambio que hagamos sobre la referencia del objeto, se verá reflejado en el objeto original.</p>
     </div>
 
     <!-- 10 -->
     <div id="data-types-4" class="step">
-      <h3 class="center">By Value and Reference</h3>
+      <h3 class="center"><a href="https://jherax.wordpress.com/2014/07/20/js-clonando-objetos/#primitive-values-and-objects" title="Valores primitivos y Objetos" target="_jherax">By Value and Reference</a></h3>
 <pre class="prettyprint lang-js linenums">
 //by value (primitive)
 var msg1 = "JavaScript rules!",
@@ -187,7 +200,7 @@ console.log("msg2 = ", msg2);
 msg1 = { to: "all", from: "david" };
 msg2 = msg1;
 
-msg2.from = "jherax"; //msg1 is modified!
+msg2.from = "jherax"; //msg1 was modified!
 console.log("msg1 = ", msg1);
 console.log("msg2 = ", msg2);
 </pre>
@@ -196,9 +209,10 @@ console.log("msg2 = ", msg2);
     <!-- 11 -->
     <div id="object-literal-1" class="step">
       <h2>Object Literal</h2>
-      <p>Un <a title="Object literals" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Values,_variables,_and_literals#Object_literals" target="_blank">object literal</a> es una lista de cero o más pares de <strong>clave : valor</strong> encerrados entre llaves <code>{ }</code></p>
+      <p>Un <a title="Object literals" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Values,_variables,_and_literals#Object_literals" target="_blank">object literal</a>
+        es una lista de cero o más pares de <strong>clave : valor</strong> encerrados entre llaves <code>{ }</code></p>
 <pre class="prettyprint lang-js linenums" style="width:97%">
-{ clave1: valor1, clave2: valor2 }
+{ clave1: valor1, "clave2": valor2 }
 </pre>
       <p>Una de sus principales ventajas es que podemos encapsular datos y reducir el uso de variables globales.</p>
     </div>
@@ -209,10 +223,10 @@ console.log("msg2 = ", msg2);
 <pre class="prettyprint lang-js linenums">
 var myObject = {
     images: ["bg-menu.png", "bg-body.jpg"],
-    pattern, /^bg-.+\.(?:png|jpe?g)$/i,
+    pattern: /^bg-.+\.(?:png|jpe?g)$/i,
     position: { //nested object literal
-        x: 40,
-        y: 300
+        "x": 40,
+        "y": 300
     },
     onChange: function() { //function
     }
@@ -224,26 +238,30 @@ var myObject = {
     <div id="object-literal-3" class="step">
       <h3 class="center">¿Por qué usarlos?</h3>
       <p>Los <strong>object literal</strong> son idóneos para crear objetos de configuración y proveen una forma limpia y segura de enviar argumentos a una función (no importa el orden)</p>
-      <p>También es un excelente objeto para transportar datos, ya que se puede serializar a <a title="siempre y cuando el Object Literal almacene valores de tipo primitivo" href="http://json.org/" target="_blank">JSON</a><sup>**</sup></p>
-      <p>No se debe crear un <strong>object literal</strong> al inicio de una sentencia ya que será interpretado como un bloque de&nbsp;código, para tal fin se debe encerrar entre paréntesis de modo que se resuelva primero lo que hay dentro de los paréntesis.</p>
+      <p>También es un excelente objeto para transportar datos, ya que se puede serializar a
+        <a title="siempre y cuando el Object Literal almacene valores de tipo primitivo" href="http://json.org/" target="_blank">JSON</a><sup>**</sup></p>
+      <p>No se debe crear un <strong>object literal</strong> al inicio de una sentencia ya que será interpretado como un bloque de&nbsp;código,
+        para tal fin se debe encerrar entre paréntesis de modo que se resuelva primero lo que hay dentro de los paréntesis.</p>
     </div>
 
     <!-- 14 -->
     <div id="object-literal-4" class="step">
-      <h4 class="center">Lista de parametros vs Object Literal</h4>
+      <h4 class="center">Lista de parametros vs Object Literal
+        <a href="http://stackoverflow.com/a/19714427/2247494" title="stackoverflow" target="_blank">&#10155;</a>
+      </h4>
 <pre class="prettyprint lang-js linenums">
-function Person(name, surname, gender, birth) {
+function Person (name, surname, gender, birth) {
     this.name = name;
     this.surname = surname;
     this.gender = gender;
     this.birth = birth;
 }
 
-function Person(options) {
+function Person (options) {
     var defaults = {
         name: "unnamed",
         surname: "",
-        gender: "m",
+        gender: "male",
         birth: new Date(1900, 0, 1)
     };
     //extends new features
@@ -263,14 +281,17 @@ var arr = [0, 1, 1, 2], //new Array(0, 1, 1, 2)
     num = 6572,         //new Number(6572)
     obj = { value: 1 }; //new Object()
 </pre>
-    <p>Se recomienda el uso de literales, en vez de crear objetos con el operador <code>new</code>, primero porque el código es más legible, ocupa menos caracteres, pero más importante aún, es que si asignamos valores primitivos mediante <em>instanciación</em>, ya no será primitivo sino un objeto.</p>
+    <p>Se recomienda el uso de literales, en vez de crear objetos con el operador <code>new</code>, primero porque el código es más legible,
+      ocupa menos caracteres, pero más importante aún, es que si asignamos valores primitivos mediante <em>instanciación</em>, ya no será primitivo sino un objeto.</p>
     </div>
 
     <!-- 16 -->
     <div id="json-1" class="step">
       <h2>¿Que es JSON?</h2>
-      <p><a href="http://json.org/" target="_blank">JSON</a> <em>(JavaScript Object Notation)</em> es un formato ligero de intercambio de datos. Un objeto JSON posee una estructura muy similar a un <strong>Object Literal</strong>.</p>
-      <p>Se compone de pares <strong>"clave" : valor</strong> encerrados entre llaves <code>{ }</code>, con la diferencia que la <strong>"clave"</strong> debe ser un <code>string</code> entre comillas dobles. También está limitado por los tipos de datos que puede contener.</p>
+      <p><a href="http://json.org/" target="_blank">JSON</a> <em>(JavaScript Object Notation)</em> es un formato ligero de intercambio de datos.
+        Un objeto JSON posee una estructura muy similar a un <strong>Object Literal</strong>.</p>
+      <p>Se compone de pares <strong>"clave" : valor</strong> encerrados entre llaves <code>{ }</code>, con la diferencia que la <strong>"clave"</strong>
+        debe ser un <code>string</code> entre comillas dobles. También está limitado por los tipos de datos que puede contener.</p>
 <pre class="prettyprint lang-js linenums">
 { "clave1": valor1, "clave2": valor2 }
 </pre>
@@ -287,7 +308,8 @@ var arr = [0, 1, 1, 2], //new Array(0, 1, 1, 2)
     <!-- 18 -->
     <div id="json-3" class="step">
       <h3>A tener en cuenta</h3>
-      <p>Es importante aclarar que el término <a href="http://json.org/" target="_blank">JSON</a> sólo es válido cuando el objeto es <strong>serializado</strong> en un <code>string</code>,<br/>de otro modo será un <code>Object</code></p>
+      <p>Es importante aclarar que el término <a href="http://json.org/" target="_blank">JSON</a> sólo es válido cuando el objeto es
+        <strong>serializado</strong> en un <code>string</code>,<br/>de otro modo será un <code>Object</code></p>
 <pre class="prettyprint lang-js linenums">
 //Object literal
 var obj = { id: 5032, paid: true };
@@ -316,28 +338,33 @@ toObj = $.parseJSON(json); //des-serializa
 
     <!-- 20 -->
     <div id="json-5" class="step">
-      <h3 class="center">JSON.stringify Polyfill</h3>
-<pre class="prettyprint lang-js linenums tight">
-(function ($) {
-    $.fnStringify =
-        typeof JSON !== "undefined" ?
-        JSON.stringify :
-        function (json) {
-            var arr = [], prop;
-            $.each(json, function (key, val) {
-                prop = "\"" + key + "\":";
-                if ($.isPlainObject(val)) {
-                    prop += fnStringify(val);
-                } else {
-                    //primitive values
-                    prop += (typeof val === "string" ?
-                        "\"" + val + "\"" : val);
-                }
-                arr.push(prop);
-            });
-            return "{" + arr.join(",") + "}";
-        };
-})(jQuery);
+      <h4 class="center">JSON.stringify Polyfill con jQuery
+        <a href="http://stackoverflow.com/a/29574586/2247494" title="stackoverflow" target="_blank">&#10155;</a>
+      </h4>
+<pre class="prettyprint lang-js linenums" style="line-height: 1.15em;">
+(function (global, $) {
+  var iterator;
+  if (global.JSON &amp;&amp; typeof JSON.stringify == "function")
+      return $.stringify = JSON.stringify;
+
+  //iterator closure
+  iterator = function (arr) {
+    //iterator definition
+    return function (key, val) {
+      var prop = "\"" + key + "\":";
+      prop += ($.isPlainObject(val) ? $.stringify(val) : 
+        typeof val != "string" ? val : "\"" + val + "\"");
+      arr.push(prop);
+    }
+  };
+
+  $.stringify = function (obj) {
+      var arr = [];
+      //let the iterator closure take place
+      $.each(obj, iterator(arr));
+      return "{" + arr.join(",") + "}";
+  };
+})(window, jQuery);
 </pre>
     </div>
 

@@ -374,7 +374,8 @@ pre + .counter { color: white; }
 #data-types-1.active, #data-types-1.past,
 #data-types-3.active, #data-types-3.past,
 #object-literal-3.active, #object-literal-3.past,
-#object-literal-5.active, #object-literal-5.past { width: 922px; }
+#object-literal-5.active, #object-literal-5.past,
+#json-5.active, #json-5.past { width: 922px; }
 
 #duck-typing-2    .counter,
 #data-types-1     .counter,
@@ -384,6 +385,7 @@ pre + .counter { color: white; }
 #thank-you .counter { display: none; }
 
 #data-types-2 h3 { margin-top: 0; }
+#data-types-4 h3 a:not(:hover) { background: inherit; }
 #object-literal-3 a { font-size: .8em; }
 #object-literal-4 h4 { margin-top: 0; }
 #json-2 p { display: flex; margin: 1em auto; }

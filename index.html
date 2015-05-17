@@ -1,29 +1,30 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head profile="http://www.w3.org/2005/10/profile">
   <meta charset='utf-8'/>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <title>jherax.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="robots" content="index, follow"/>
-  <meta name="keywords" content="jherax, javascript, jquery, formatting, positioning, tooltip, utilities, validation, david rivera"/>
-  <meta name="description" content="jherax's javascript programming"/>
+  <meta name="keywords" content="jherax, david rivera, javascript, json, jquery, jquery-plugin, format, validation, capitalization, capitalize, tooltip, modal, popup, positioning, injection, sorting, cloning"/>
+  <meta name="description" content="This is a library of JavaScript/jQuery utilities, which includes tools for data validation and text formatting, plugins for tooltip, modal-windows and positioning elements, resources injection, string and JSON manipulation, object cloning, sorting arrays, and other features"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
-  
+
   <link rel="icon" type="image/png" href="https://dl.dropboxusercontent.com/u/91579606/js-icon32.png" />
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Architects+Daughter"/>
-  <link rel="stylesheet" type="text/css" href="stylesheets/jherax.css" media="screen"/>
-  <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="stylesheets/jherax.min.css" media="screen"/>
   <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
-  <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+  <link rel="stylesheet" type="text/css" href="highlightjs/themes/obsidian.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+
   <!--[if lte IE 9]>
     <script src="javascripts/polyfills/html5shiv.min.js"></script>
   <![endif]-->
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="javascripts/jquery-2.1.1.min.js"><\/script>')</script>
   <!--[if lt IE 9]>
     <script src="javascripts/polyfills/selectivizr.js"></script>
   <![endif]-->
@@ -33,12 +34,12 @@
   <header>
     <div class="inner">
       <h1>jherax.github.io</h1>
-      <h2 id="mainTitle">This site shows examples for the plugins developed by jherax</h2>
+      <h2 id="mainTitle">JSU Library API Reference and examples</h2>
       <a href="https://github.com/jherax" class="button" target="_blank"><small>Follow me on</small>GitHub</a>
       <div class="wrapper-language">
         <select id="select-language">
           <option value="english">english</option>
-          <option value="spanish">español...</option>
+          <option value="spanish">español</option>
         </select>
       </div>
       <div class="clearfix"></div>
@@ -61,18 +62,21 @@
           <li><a target="_blank" href="http://michaux.ca">Peter Michaux</a>, <a target="_blank" href="http://twitter.com/petermichaux">@petermichaux</a></li>
           <li><a target="_blank" href="http://andreehansson.se/">Andrée Hansson</a>, <a target="_blank" href="http://twitter.com/peolanha">@peolanha</a></li>
           <li><a target="_blank" href="http://nczonline.net/">Nicholas Zakas</a>, <a target="_blank" href="http://twitter.com/slicknet">@slicknet</a></li>
-          <li><a target="_blank" href="https://jherax.wordpress.com/">David Rivera</a>, <a target="_blank" href="#"></a></li>
+          <li><a target="_blank" href="https://jherax.wordpress.com/">David Rivera</a>, <a target="_blank" href="https://twitter.com/jherax_co">@jherax_co</a></li>
         </ul>
         <hr>
         <p id="asideArticles">Recomended articles:</p>
         <ul class="no-title">
           <li><a target="_blank" href="https://jherax.wordpress.com/2014/07/14/javascript-features/">¿Sabías esto de JavaScript?</a></li>
+          <li><a target="_blank" href="https://jherax.wordpress.com/2015/02/13/javascript-closures/">Closures en JavaScript</a></li>
           <li><a target="_blank" href="https://developer.mozilla.org/docs/Web/JavaScript/Guide/Details_of_the_Object_Model">Details of the object model</a></li>
-          <li><a target="_blank" href="http://addyosmani.com/blog/essential-js-namespacing/">JavaScript Namespacing Patterns</a></li>
-          <li><a target="_blank" href="http://michaux.ca/articles/javascript-namespacing">JavaScript Namespacing Common Practices</a></li>
-          <li><a target="_blank" href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">Immediately-Invoked Function Expression (IIFE)</a></li>
-          <li><a target="_blank" href="http://peter.michaux.ca/articles/lazy-function-definition-pattern">Lazy Function Definition Pattern</a></li>
-          <li><a target="_blank" href="http://blog.osteele.com/posts/2006/04/javascript-memoization">One-Line JavaScript Memoization</a></li>
+          <li><a target="_blank" href="http://www.devbattles.com/en/sand/post-533-">10 Most Common JS Mistakes</a></li>
+          <li><a target="_blank" href="http://appendto.com/2010/10/how-good-c-habits-can-encourage-bad-javascript-habits-part-1/">Encourage Bad JS Habits</a></li>
+          <li><a target="_blank" href="http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them">Understand Callback Functions</a></li>
+          <li><a target="_blank" href="http://es.slideshare.net/santhotech/introduction-to-design-patterns-in-javascript">Introduction to Design Patterns</a></li>
+          <li><a target="_blank" href="http://es.slideshare.net/stoyan/javascript-patterns">JavaScript Patterns</a></li>
+          <li><a target="_blank" href="http://toddmotto.com/mastering-the-module-pattern/">Mastering the Module Pattern</a></li>
+          <li><a target="_blank" href="https://jherax.wordpress.com/2015/02/24/js-lazy-function-definition/">Lazy Function Definition Pattern</a></li>
         </ul>
         <hr>
         <p id="asidePractices">Collection of best articles:</p>
@@ -88,10 +92,11 @@
       <div class="bg-fixed bg-opacity hide"></div>
       <section id="inputTypeText" class="hide">
         <div class="category-wrapper">
-          <h3><a href="javascript:void(0)">inputType:text</a></h3>
+          <h3><a href="#inputtype">jsu.inputType.isText()</a></h3>
           <p class="inputTypeText"></p>
           <div class="highlight highlight-html">
-<pre>  <span class="nt">&lt;textarea&gt;&lt;/textarea&gt;</span>
+<pre>
+  <span class="nt">&lt;textarea&gt;&lt;/textarea&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"password"</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"number"</span> <span class="nt">/&gt;</span>
@@ -115,7 +120,8 @@
   </div><!--#content-wrapper-->
 
   <script src="javascripts/jquery.colorbox-min.js"></script>
-  <script src="javascripts/jherax.js"></script>
+  <script src="javascripts/jherax.min.js"></script>
+  <script src="highlightjs/highlight.pack.js"></script>
   <script src="javascripts/language.js"></script>
   <script src="javascripts/main.js"></script>
 </body>

@@ -2,7 +2,7 @@
  *  JSU Library
  *  Author: David Rivera
  *  Created: 2013/06/26
- *  Version: 3.7.0
+ *  Version: 3.7.3
  -------------------------------------
  *  Source:
  *  http://github.com/jherax/js-utils
@@ -25,16 +25,16 @@
  */
 ;
 // Avoid console errors in browsers that lack a console.
-(function() {
-    var noop = function() {},
+(function (window) {
+    var noop = function () {},
         method,
         methods = [
-        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
-        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
-        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
-        'timeStamp', 'trace', 'warn'
-    ];
-    var length = methods.length,
+            'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+            'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+            'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+            'timeStamp', 'trace', 'warn'
+        ],
+        length = methods.length,
         console = (window.console = window.console || {});
 
     while (length -= 1) {
@@ -45,7 +45,7 @@
             console[method] = noop;
         }
     }
-}());
+}(window));
 
 // Creates the global namespace
 if (window["jsu"] && jsu.author !== 'jherax')
@@ -56,22 +56,25 @@ var jsu = window.jsu || Object.defineProperties({}, {
     "author": {
         enumerable: false,
         configurable: false,
+        writable: false,
         value: "jherax"
     },
     "version": {
         enumerable: false,
         configurable: false,
-        value: "3.7.0"
+        writable: false,
+        value: "3.7.3"
     },
     "dependencies": {
         enumerable: false,
         configurable: false,
-        value: ["jQuery", "jherax.css"]
+        writable: false,
+        value: ["jQuery"]
     },
     //selector where dynamic HTML is placed
     "wrapper": {
         enumerable: true,
-        configurable: true,
+        configurable: false,
         writable: true,
         value: "body"
     },
@@ -79,14 +82,18 @@ var jsu = window.jsu || Object.defineProperties({}, {
     "siteOrigin": {
         enumerable: true,
         configurable: false,
-        value: (window.location.origin ||
-            (window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : ''))
-        )
+        writable: false,
+        value:
+            (function (loc) {
+                var port = loc.port ? ':' + loc.port : '';
+                return (loc.origin || (loc.protocol + '//' + loc.hostname + port));
+            }(window.location))
     },
     //utility to create safe namespaces
     "createNS": {
         enumerable: true,
         configurable: false,
+        writable: false,
         value: function (namespace) {
             var nsparts = namespace.toString().split("."),
                 cparent = window,
@@ -114,80 +121,87 @@ var jsu = window.jsu || Object.defineProperties({}, {
 });
 // Polyfill for Object.create() method on IE
 if (typeof Object.create !== 'function') {
-    Object.create = (function() {
+    Object.create = (function (undefined) {
         function F() {}
         return function (proto) {
+            if (proto === null)
+                return {};
+            if (typeof proto != 'object')
+                throw TypeError('First argument must be an object');
+            if (arguments.length > 1)
+                throw Error('Second argument is not supported');
             F.prototype = proto;
             var newObj = new F();
-            F.prototype = null;
+            F.prototype = undefined;
             return newObj;
         };
     }());
 }
 // Polyfill for Array.prototype.some
 if (typeof Array.prototype.some !== 'function') {
-    Array.prototype.some = function (fn /*, thisArg */) {
-        'use strict';
-        if (this === void 0 || this === null)
-            throw new TypeError();
+    Object.defineProperty(Array.prototype, "some", {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: function (fn /*, thisArg */) {
+            'use strict';
+            if (this === void 0 || this === null)
+                throw new TypeError();
+            if (typeof fn !== 'function')
+                throw new TypeError();
+            var thisArg, index,
+                array = Object(this),
+                //let @len be ToUint32(value)
+                len = array.length >>> 0;
 
-        if (typeof fn !== 'function')
-            throw new TypeError();
-
-        var thisArg, index,
-            array = Object(this),
-            //let @len be ToUint32(value)
-            len = array.length >>> 0;
-
-        thisArg = arguments.length >= 2 ? arguments[1] : void 0;
-        for (index = 0; index < len; index += 1) {
-            if (index in array && fn.call(thisArg, array[index], index, array))
-                return true;
+            thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+            for (index = 0; index < len; index += 1) {
+                if (index in array && fn.call(thisArg, array[index], index, array))
+                    return true;
+            }
+            return false;
         }
-        return false;
-    };
+    });
 }
 // Polyfill for Array.prototype.filter
 if (typeof Array.prototype.filter !== 'function') {
-    Array.prototype.filter = function (fn /*, thisArg*/) {
-        'use strict';
-        if (this === void 0 || this === null) {
-            throw new TypeError();
-        }
+    Object.defineProperty(Array.prototype, "filter", {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: function (fn /*, thisArg */) {
+            'use strict';
+            if (this === void 0 || this === null) {
+                throw new TypeError();
+            }
+            if (typeof fn !== 'function') {
+                throw new TypeError();
+            }
+            var filtered, thisArg,
+                index, element,
+                array = Object(this),
+                len = array.length >>> 0;
 
-        if (typeof fn !== 'function') {
-            throw new TypeError();
-        }
-
-        var filtered, thisArg,
-            index, element,
-            array = Object(this),
-            len = array.length >>> 0;
-
-        filtered = [];
-        thisArg = arguments.length >= 2 ? arguments[1] : void 0;
-        for (index = 0; index < len; index += 1) {
-            if (index in array) {
-                element = array[index];
-                // NOTE: Technically this should Object.defineProperty at
-                //       the next index, as push can be affected by
-                //       properties on Object.prototype and Array.prototype.
-                //       But that method's new, and collisions should be
-                //       rare, so use the more-compatible alternative.
-                if (fn.call(thisArg, element, index, array)) {
-                    filtered.push(element);
+            filtered = [];
+            thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+            for (index = 0; index < len; index += 1) {
+                if (index in array) {
+                    element = array[index];
+                    if (fn.call(thisArg, element, index, array)) {
+                        filtered.push(element);
+                    }
                 }
             }
+            return filtered;
         }
-        return filtered;
-    };
+    });
 }
 
 //-----------------------------------
 // Immediately-invoked Function Expressions (IIFE)
 // We pass the namespace as an argument to a self-invoking function.
 // "regional" is the context of the local namespace, and "$" is the jQuery object.
-(function(regional, $, undefined) {
+(function (regional, $) {
 
     // Creates the messages for specific culture
     regional.spanish = {
@@ -229,7 +243,7 @@ if (typeof Array.prototype.filter !== 'function') {
     //-----------------------------------
     // You can add more languages using $.extend
     regional.current = $.extend({}, regional.spanish);
-    
+
     //-----------------------------------
     // Creates culture for jquery.ui datepicker
     if ($.datepicker) {
@@ -271,8 +285,9 @@ if (typeof Array.prototype.filter !== 'function') {
     //-----------------------------------
     // Sets the default language configuration
     Object.defineProperty(regional, "set", {
-        enumerable: true,
         configurable: false,
+        enumerable: true,
+        writable: false,
         value: function (obj, fnSetCustom) {
             $.extend(regional.current, obj);
             // This code segment must be called before the plugin initialization
@@ -282,14 +297,14 @@ if (typeof Array.prototype.filter !== 'function') {
             if ($.isFunction(fnSetCustom)) fnSetCustom();
         }
     });
-    
-})(jsu.createNS("jsu.regional"), jQuery);
+
+}(jsu.createNS("jsu.regional"), jQuery));
 // Create the namespace for languages
 
 //-----------------------------------
 // We provide an object to override default settings.
 // "settings" is the context of the local namespace, and "$" is the jQuery object.
-(function(settings, $) {
+(function (settings, $) {
     settings.position = null; //{ at:null, my:null };
     settings.release = false;
     settings.urlprefix = "";
@@ -300,7 +315,7 @@ if (typeof Array.prototype.filter !== 'function') {
 // Immediately-invoked Function Expressions (IIFE)
 // We pass the namespace as an argument to a self-invoking function.
 // "jherax" is the context of the local namespace, and "$" is the jQuery object.
-(function(jherax, $, undefined) {
+(function (window, $, jherax, undefined) {
 
     //===================================
     /* PRIVATE MEMBERS */
@@ -315,14 +330,14 @@ if (typeof Array.prototype.filter !== 'function') {
     // Create a custom exception notifier
     // Constructor Pattern
     // @@Private
-    var CustomError = (function() {
+    var CustomError = (function () {
         'use strict';
         function CustomError (message) {
+            var i, argsLength, error;
             //enforces new
             if (!(this instanceof CustomError)) {
                 return new CustomError(message);
             }
-            var i, argsLength, error;
             message = message || "An exception occurred";
             for (i = 1, argsLength = arguments.length; i < argsLength; i+=1)
                 message = message.replace(new RegExp("\\{" + (i - 1) + "}"), arguments[i]);
@@ -332,7 +347,7 @@ if (typeof Array.prototype.filter !== 'function') {
             Object.defineProperties(this, {
                 "stack": {
                     enumerable: false,
-                    get: function() { return error.stack; }
+                    get: function () { return error.stack; }
                 },
                 "message": {
                     enumerable: false,
@@ -344,11 +359,15 @@ if (typeof Array.prototype.filter !== 'function') {
         CustomError.prototype = Object.create(Error.prototype);
         Object.defineProperties(CustomError.prototype, {
             "constructor": {
+                configurable: false,
                 enumerable: false,
+                writable: false,
                 value: CustomError
             },
             "name": {
+                configurable: false,
                 enumerable: false,
+                writable: false,
                 value: "JSU Error"
             }
         });
@@ -365,7 +384,7 @@ if (typeof Array.prototype.filter !== 'function') {
     //-----------------------------------
     // Seals the writable attribute in all object's properties
     // @@Private
-    function sealWritable (obj) {
+    function sealWritables (obj) {
         for (var p in obj) {
             Object.defineProperty(obj, p, {
                 __proto__: null,
@@ -379,7 +398,7 @@ if (typeof Array.prototype.filter !== 'function') {
     // Sets the @value of specific @property in the @obj,
     // keeping the writable attribute to false
     // @@Private
-    function setWritable (obj, property, value, enumerable) {
+    function setNotWritable (obj, property, value, enumerable) {
         Object.defineProperty(obj, property, {
             "configurable": true,
             "enumerable": !!enumerable,
@@ -389,15 +408,15 @@ if (typeof Array.prototype.filter !== 'function') {
     }
     //-----------------------------------
     // Fix: failed to read the 'selectionStart' property from 'HTMLInputElement'
-    // The @fn parameter provides a callback to execute additional instructions
+    // The @fn parameter provides a callback to execute additional code
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
     // @@Private
     function fixSelection (dom, fn) {
-        var ok = (/text|password|search|tel|url/).test(dom.type);
-        var selection = { 
-            start: ok ? dom.selectionStart : 0,
-            end: ok ? dom.selectionEnd : 0
-        };
+        var ok = (/text|password|search|tel|url/).test(dom.type),
+            selection = {
+                start: ok ? dom.selectionStart : 0,
+                end: ok ? dom.selectionEnd : 0
+            };
         if (ok && isFunction(fn)) fn(dom);
         return selection;
     }
@@ -407,27 +426,27 @@ if (typeof Array.prototype.filter !== 'function') {
         return (/^true$/i).test(obj);
     };
     //-----------------------------------
-    // Adds support for browser detection, since
-    // jQuery 1.9+ deprecated the browser property
-    var browser = (function() {
-        var ua = navigator.userAgent.toLowerCase();
-        var match =
-            /(msie) ([\w.]+)/.exec(ua) ||
-            /(chrome)[ \/]([\w.]+)/.exec(ua) ||
-            /(webkit)[ \/]([\w.]+)/.exec(ua) ||
-            /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
-            ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) ||
-            [];
+    // Detects the browser via userAgent, since
+    // jQuery 1.9+ deprecated the browser property.
+    var browser = (function () {
+        var ua = navigator.userAgent.toLowerCase(),
+            match =
+                /(msie) ([\w.]+)/.exec(ua) ||
+                /(chrome)[ \/]([\w.]+)/.exec(ua) ||
+                /(webkit)[ \/]([\w.]+)/.exec(ua) ||
+                /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
+                ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) ||
+                [];
         var b = {}, o = {
             browser: match[1] || "unknown",
             version: match[2] || "0"
         };
         b[o.browser] = true;
         b.version = o.version;
-        return b;
-    })();
+        return Object.freeze(b);
+    }());
     //-----------------------------------
-    // Determines if the @obj parameter is a DOM element
+    // Determines if the @obj parameter is a DOM Element
     function isDOM (obj) {
         if ("HTMLElement" in window) return (!!obj && obj instanceof HTMLElement);
         return (!!obj && typeof obj === "object" && obj.nodeType === 1 && !!obj.nodeName);
@@ -438,17 +457,59 @@ if (typeof Array.prototype.filter !== 'function') {
         return (!!obj && _toString.call(obj) == '[object Function]');
     }
     //-----------------------------------
-    // This is a reference to JSON.stringify and provides a polyfill for old browsers
-    var fnStringify = typeof JSON !== "undefined" ? JSON.stringify : function (json) {
-        var arr = [], prop;
-        $.each(json, function (key, val) {
-            prop = "\"" + key + "\":";
-            prop += ($.isPlainObject(val) ? fnStringify(val) : 
-                (typeof val === "string" ? "\"" + val + "\"" : val));
-            arr.push(prop);
-        });
-        return "{" + arr.join(",") + "}";
-    };
+    // This is a reference to JSON.stringify and provides a polyfill for old browsers.
+    // fnStringify serializes an object, array or primitive value and return it as JSON.
+    var fnStringify = (function () {
+        var _iterator, _stringify, _primitive, _object;
+        if (window.JSON && typeof JSON.stringify === "function")
+            return JSON.stringify;
+
+        _primitive = /string|number|boolean|null/;
+        _object = "[object Object]";
+
+        //creates the closure
+        _iterator = function (items) {
+            return function iterator (key, value) {
+                var prop = "\"" + key + "\":",
+                    type = $.type(value);
+
+                //key is the index on an array
+                if (typeof key === "number") prop = "";
+                if (type === "string") {
+                    prop += "\"" + value + "\"";
+                }
+                else if (_primitive.test(type)) {
+                    prop += value;
+                }
+                else if (type === "array") {
+                    prop += _stringify(value, true);
+                }
+                else if (_toString.call(value) === _object) {
+                    prop += _stringify(value);
+                }
+                else return;
+                items.push(prop);
+            }
+        };
+        //internal implementation
+        _stringify = function (obj, isArray) {
+            var items = [], brackets = ["{", "}"];
+            if (isArray) brackets = ["[", "]"];
+            //let the _iterator closure take place
+            $.each(obj, _iterator(items));
+            return brackets[0] + items.join(",") + brackets[1];
+        };
+        return function () {
+            if (!arguments.length) return "";
+            var dummy, obj = arguments[0];
+            //if obj is a primitive value 
+            if (_primitive.test($.type(obj))) {
+                _iterator(dummy = [])(0, obj);
+                return dummy.join("");
+            }
+            return _stringify.call(null, obj, obj instanceof Array);
+        }
+    }());
     //-----------------------------------
     // Sorts the elements of an array
     var sortBy = (function () {
@@ -458,43 +519,23 @@ if (typeof Array.prototype.filter !== 'function') {
             _getItem = function (x) {
                 return this.parser((_toString.call(x) == "[object Object]" && x[this.prop]) || x);
             };
+
         // Creates a sort method in the Array prototype
-        Object.defineProperty(Array.prototype, "sortBy", {
-            configurable: false,
-            enumerable: false,
-            // @o.prop: property name (if it is an Array of objects)
-            // @o.desc: determines whether the sort is descending
-            // @o.parser: function to parse the items to expected type
-            value: function (o) {
-                if (_toString.call(o) != "[object Object]")
-                    o = {};
-                if (_toString.call(o.parser) != "[object Function]")
-                    o.parser = _parser;
-                o.desc = !!o.desc;
-                //if @o.desc is true: set -1, else 1
-                o.desc = [1, -1][+!!o.desc];
-                return this.sort(function (a, b) {
-                    a = _getItem.call(o, a);
-                    b = _getItem.call(o, b);
-                    return ((a > b) - (b > a)) * o.desc;
-                    //return a = getItem(a), b = getItem(b), o.desc * (a < b ? -1 : +(a > b));
-                });
-            }
-        });
+        /* http://jsbin.com/pavina/5/edit?js,output */
+
         // Creates a method for sorting the Array
         // @array: the Array of elements
         // @o.prop: property name (if it is an Array of objects)
         // @o.desc: determines whether the sort is descending
         // @o.parser: function to parse the items to expected type
-        return function (array, o) { 
+        return function (array, o) {
             if (_toString.call(array) != "[object Array]" || !array.length)
                 return [];
             if (_toString.call(o) != "[object Object]")
                 o = {};
             if (_toString.call(o.parser) != "[object Function]")
                 o.parser = _parser;
-            o.desc = !!o.desc;
-            //if @o.desc is true: set -1, else 1
+            //if @o.desc is false: set 1, else -1
             o.desc = [1, -1][+!!o.desc];
             return array.sort(function (a, b) {
                 a = _getItem.call(o, a);
@@ -504,23 +545,28 @@ if (typeof Array.prototype.filter !== 'function') {
         };
     }());
     //-----------------------------------
-    // Determines whether the @dom parameter is a writable or checkable <input>
+    // Determines whether the @dom parameter is a text or checkable <input>
     // http://www.quackit.com/html_5/tags/html_input_tag.cfm
-    var input = {
-        isText: function (dom) {
-            if (!isDOM(dom)) return false;
-            if ((/textarea/i).test(dom.nodeName)) return true;
-            var regx = /text|password|file|number|search|tel|url|email|datetime|datetime-local|date|time|month|week/i;
-            return regx.test(dom.type) && (/input/i).test(dom.nodeName);
-        },
-        isCheck: function (dom) {
-            if (!isDOM(dom)) return false;
-            var regx = /checkbox|radio/i;
-            return regx.test(dom.type) && (/input/i).test(dom.nodeName);
-        }
-    };
+    // http://github.com/jherax/js-utils#inputtypetext
+    var input = (function () {
+        var _textarea = /textarea/i,
+            _text = /text|password|file|number|search|tel|url|email|datetime|datetime-local|date|time|month|week/i,
+            _radio = /checkbox|radio/i,
+            _input = /input/i;
+        return {
+            isText: function (dom) {
+                if (!isDOM(dom)) return false;
+                if (_textarea.test(dom.nodeName)) return true;
+                return _text.test(dom.type) && _input.test(dom.nodeName);
+            },
+            isCheck: function (dom) {
+                if (!isDOM(dom)) return false;
+                return _radio.test(dom.type) && _input.test(dom.nodeName);
+            }
+        };
+    }());
     //-----------------------------------
-    // Determines if an event handler was created previously by specifying a namespace
+    // Determines if an event handler (defined by @eventName + @namespace) was created previously
     function handlerExist (dom, eventName, namespace) {
         var h,
             handler = ($._data(dom, 'events') || {})[eventName] || [],
@@ -532,56 +578,60 @@ if (typeof Array.prototype.filter !== 'function') {
         return false;
     }
     //-----------------------------------
-    // Utility to create namespaced events
+    // Builds the event name, by appending "." + @namespace at the end of @eventName
     function nsEvents (eventName, namespace) {
         namespace = "." + namespace;
         eventName = $.trim(eventName).replace(".", "") + namespace;
         return eventName.replace(/\s+|\t+/g, namespace + " ");
     }
     //-----------------------------------
-    // Dynamically adds an external script
+    // Dynamically adds a script.
+    // This method is useful to insert JavaScript code from an external file.
     function fnAddScript (path) {
         var o = $.extend({
-            src: null,
-            async: true,
-            silent: false,
-            charset: null,
-            onload: null,
-            before: null
-        }, $.isPlainObject(path) ? path : { src: path });
+                src: null,
+                async: true,
+                createTag: false,
+                charset: null,
+                onload: null,
+                before: null
+            }, $.isPlainObject(path) ? path : { src: path });
         if (!o.src) throw new CustomError("The url of file is required");
-        if (!o.async || o.silent) {
-            return $.ajax({
-                url: o.src,
-                async: o.async,
-                dataType: "script"
-            }).done(function (script) {
-                if (isFunction(o.onload)) o.onload();
-            }).fail(function (jqXHR, result) {
-                console.log("fnAddScript:", jqXHR);
-                throw new CustomError(result);
-            });
-        }
-        var tags, tagsLength, i,
-            file = document.createElement('script'),
-            before = fnEscapeRegExp(o.before);
-        file.type = 'text/javascript';
-        file.src = o.src;
-        if (o.async) file.async = true;
-        if (o.charset) file.charset = o.charset;
-        if (isFunction(o.onload)) file.onload = o.onload;
-        tags = document.getElementsByTagName('script');
-        if (!before) return !!$(tags).last().before(file);
-        before = new RegExp(before);
-        for (i = 0, tagsLength = tags.length; i < tagsLength; i+=1) {
-            if (before.test(tags[i].src)) {
-                tags[i].parentNode.insertBefore(file, tags[i]);
-                break;
+        //creates the <script> element
+        if (o.createTag === true) {
+            var tags, tagsLength, i,
+                file = document.createElement('script'),
+                before = fnEscapeRegExp(o.before);
+            file.type = 'text/javascript';
+            file.src = o.src;
+            if (o.charset) file.charset = o.charset;
+            if (isFunction(o.onload)) file.onload = o.onload;
+            tags = document.getElementsByTagName('script');
+            if (!before) return !!$(tags).last().before(file);
+            before = new RegExp(before);
+            for (i = 0, tagsLength = tags.length; i < tagsLength; i+=1) {
+                if (before.test(tags[i].src)) {
+                    tags[i].parentNode.insertBefore(file, tags[i]);
+                    break;
+                }
             }
+            return file;
         }
+        //returns jqXHR object
+        return $.ajax({
+            url: o.src,
+            async: o.async,
+            dataType: "script"
+        }).done(function (script) {
+            if (isFunction(o.onload)) o.onload();
+        }).fail(function (jqXHR, result) {
+            console.log("fnAddScript:", jqXHR);
+            throw new CustomError(result);
+        });
     }
     //-----------------------------------
-    // Dynamically adds an external stylesheet
+    // Dynamically adds an external stylesheet file (CSS).
+    // This method is useful to inject a css file to the document.
     function fnAddCSS (path, before) {
         if (!path) throw new CustomError("The url of file is required");
         before = fnEscapeRegExp(before);
@@ -593,7 +643,7 @@ if (typeof Array.prototype.filter !== 'function') {
         if (!before) {
             tags = document.getElementsByTagName('head');
             tags && tags[0].appendChild(file);
-            return;
+            return file;
         }
         before = new RegExp(before);
         tags = document.getElementsByTagName('link');
@@ -603,30 +653,35 @@ if (typeof Array.prototype.filter !== 'function') {
                 break;
             }
         }
+        return file;
     }
     //-----------------------------------
-    // Escapes the input text to a literal pattern in the constructor of a regular expression
-    function fnEscapeRegExp (txt) {
-        if (typeof txt !== "string") return null;
-        return txt.replace(/([.*+?=!:${}()|\-\^\[\]\/\\])/g, "\\$1");
-    }
+    // Escapes the special characters in @text so that it can serve as a literal pattern in a regular expression
+    var fnEscapeRegExp = (function () {
+        var _pattern = /([.*+?=!:${}()|\-\^\[\]\/\\])/g;
+        return function (text) {
+            if (typeof text !== "string") return null;
+            return text.replace(_pattern, "\\$1");
+        }
+    }());
     //-----------------------------------
-    // Gets the value of a specific parameter in the querystring
-    function fnGetQueryToString (q) {
-        if (!q || q === "") return "";
-        var m = window.location.search.match(new RegExp("(" + q.toString() + ")=([^&]+)"));
+    // Gets the value of a specific @key read from the querystring in the current url
+    function fnGetQueryToString (key) {
+        if (!key || key === "") return "";
+        var m = window.location.search.match(new RegExp("(" + key.toString() + ")=([^&]+)"));
         return m && m[2] || "";
     }
     //-----------------------------------
-    // Gets the querystring values from address bar and it is returned as an Object literal
-    function fnGetQueryToObject (q) {
-        var m, params = {};
-        q = !q ? "" : q.toString();
+    // Gets the values from the querystring in the url and saves them as an Object literal
+    function fnGetQueryToObject (key) {
+        var m, params = {},
+            pair = /(\w+)=([^&]+)/;
+        key = key ? key.toString() : "";
         $.each(window.location.search.split(/[\?&]/g),
             function (i, item) {
-                m = item.match(/(\w+)=([^&]+)/);
+                m = item.match(pair);
                 if (!m) return true;
-                if (q === "" || q.indexOf(m[1]) > -1) {
+                if (key === "" || key.indexOf(m[1]) > -1) {
                     params[$.trim(m[1])] = m[2];
                 }
             });
@@ -634,24 +689,24 @@ if (typeof Array.prototype.filter !== 'function') {
         return params;
     }
     //-----------------------------------
-    // Converts an inconsistent JSON string to the correct Object Literal notation
-    var fnGetDataToObject = (function() {
-        var parser = function (value) {
+    // Deserialize an inconsistent JSON string to its correct Object Literal notation
+    var fnGetDataToObject = (function () {
+        function parser (value) {
             if ((/true/i).test(value)) return true;
             if ((/false/i).test(value)) return false;
             if ((/null/i).test(value)) return null;
             if ((/undefined/i).test(value)) return undefined;
             if ((/^[0-9]+$/).test(value)) return +value;
             return value;
-        };
-        //Object sample:
-        //"{id:0,nombre:'',casado:true,hijos:false,salario:undefined,cesantias:null}"
+        }
+        var _pattern = /['"]?(\w+)['"]?\s*:\s*['"]?([^'"]+|(?:.*(?='|")))/;
+        //"{id:0,edad:32,nombre:'',casado:true,hijos:false,salario:undefined,cesantias:null}"
         return function (data) {
             var m, params = {};
-            data = !data ? "" : data.toString();
+            data = data ? data.toString() : "";
             $.each(data.split(/[\{\},]/g),
                 function (i, item) {
-                    m = item.match(/['"]?(\w+)['"]?\s*:\s*['"]?([^'"]+|(?:.*(?='|")))/);
+                    m = item.match(_pattern);
                     if (!m) return true;
                     params[$.trim(m[1])] = parser(m[2]);
                 });
@@ -659,7 +714,7 @@ if (typeof Array.prototype.filter !== 'function') {
         };
     }());
     //-----------------------------------
-    // Clones and freezes an object (set all navigable properties to read-only)
+    // Copies an object and freezes all navigable properties in the object (set them to read-only)
     function fnFreezeObject (obj) {
         //Object.freeze(obj)
         var n = {}, p;
@@ -672,58 +727,60 @@ if (typeof Array.prototype.filter !== 'function') {
                 value: $.isPlainObject(obj[p]) ? fnFreezeObject(obj[p]) : obj[p]
             });
         }
-        return n;
+        return Object.preventExtensions(n);
     }
     //-----------------------------------
-    // Extends the properties of @from object to the @to object.
+    // Extends the properties of the object @from to the object @to.
     // If @to is not provided, then a deep copy of @from is returned.
-    function fnExtend (from, to) {
+    function fnExtend (source, dest) {
         var _objects = [];
-        var _fnExtend = function (_from, _to) {
+        var _fnExtend = function (from, to) {
             var prop;
             // checks if @from refers to an object already defined
-            if (_toString.call(_from) == "[object Object]") {
+            if (_toString.call(from) == "[object Object]") {
                 if (_objects.filter(function (item) {
-                    return item === _from;
-                }).length) return _from;
+                    return item === from;
+                }).length) return from;
                 // keeps the reference to objects to check if it was created
-                _objects.push(_from);
+                _objects.push(from);
             }
             // determines whether @from is a primitive object or a function
-            if (_from == null || typeof _from != "object") return _from;
+            if (from == null || typeof from != "object") return from;
             // determines whether @from is an instance of any of these prototypes
-            if (_from.constructor == Date || _from.constructor == RegExp || _from.constructor == Function ||
-                _from.constructor == String || _from.constructor == Number || _from.constructor == Boolean) {
-                return new _from.constructor(_from);
+            if (from.constructor == Date || from.constructor == RegExp || from.constructor == Function ||
+                from.constructor == String || from.constructor == Number || from.constructor == Boolean) {
+                return new from.constructor(from);
             }
-            if (_from.constructor != Object && _from.constructor != Array) return _from;
+            if (from.constructor != Object && from.constructor != Array) return from;
             // iterates recursively the object properties
-            _to = _to || new _from.constructor();
-            for (prop in _from) {
-                _to[prop] = typeof _to[prop] == "undefined" ? _fnExtend(_from[prop], null) : _to[prop];
+            to = to || new from.constructor();
+            for (prop in from) {
+                to[prop] = typeof to[prop] == "undefined" ? _fnExtend(from[prop], null) : to[prop];
             }
-            return _to;
+            return to;
         };
         // Lazy Function Definition Pattern
-        fnExtend = function (_from, _to) {
-            var cloned = _fnExtend(_from, _to);
+        jherax.fnExtend = function (from, to) {
+            var cloned = _fnExtend(from, to);
             _objects = [];
             return cloned;
         };
-        return fnExtend(from, to);
+        //invokes the function to create the closure
+        //and allow "Lazy Function" takes place
+        //to reasign in memory the new fnExtend
+        return jherax.fnExtend(source, dest);
     }
-    //invokes the function to create the closure 
-    //and allow "Lazy Function" takes place
-    //to reasign in memory the new fnExtend
-    fnExtend();
-    
+
     //-----------------------------------
-    // Gets the string representation of the specified date according to regional setting.
+    // Displays the date according to the format specified by .dateFormat and .timeFormat in jsu.regional
     // The supported formats for ISO 8601 are: [YYYY-MM-DD] and [YYYY-MM-DDThh:mm]
-    var fnGetDate = (function() {
+    var fnGetDate = (function () {
+        var _pattern = /\[object (?:String|Number|Date)\]/,
+            _date = /[dMy]+/g,
+            _hour = /[Hhms]+/g;
         function fillZero (n) { return ("0" + n.toString()).slice(-2); }
         function fnDate (o) {
-            return (o.ISO8601 ? "yyyy-MM-dd" : _language.dateFormat).replace(/[dMy]+/g, function (m) {
+            return (o.ISO8601 ? "yyyy-MM-dd" : _language.dateFormat).replace(_date, function (m) {
                 switch (m.toString()) {
                     case "dd": return fillZero(o.date.getDate());
                     case "MM": return fillZero(o.date.getMonth() + 1);
@@ -732,7 +789,7 @@ if (typeof Array.prototype.filter !== 'function') {
             });
         }
         function fnTime (o) {
-            return (o.ISO8601 ? "HH:mm" : _language.timeFormat).replace(/[Hhms]+/g, function (m) {
+            return (o.ISO8601 ? "HH:mm" : _language.timeFormat).replace(_hour, function (m) {
                 var h = o.date.getHours();
                 switch (m.toString()) {
                     case "HH": return fillZero(o.date.getHours());
@@ -747,7 +804,7 @@ if (typeof Array.prototype.filter !== 'function') {
         }
         // Return Module
         return function (o) {
-            if (typeof o === "string") o = { date: o };
+            if (_pattern.test(_toString.call(o))) o = { date: o };
             o = $.extend({ date: new Date(), ISO8601: false }, o);
             if (typeof o.date === "string" && /Date/.test(o.date))
                 o.date = +o.date.replace(/\D+/g, "");
@@ -762,11 +819,11 @@ if (typeof Array.prototype.filter !== 'function') {
         };
     }());
     //-----------------------------------
-    // Gets the date object from a string in ISO 8601 format
+    // Gets the Date object from a string that meets the ISO 8601 format
     function fnDateFromISO8601 (date) {
-        if (typeof date !== "string") { console.log("js-utils: Date format must be ISO 8601 » " + date); return null; }
+        if (typeof date !== "string") { console.log("%c js-utils: Date format must be ISO 8601 » ", "color:red", date); return null; }
         var r = date.match(/(?:(\d{4})-(\d{2})-(\d{2}))(?:T(?:(\d{2})(?:\:(\d{2}))?(?:\:(\d{2}))?)?(?:([+-]\d{2})(?:\:?(\d{2}))?)?)?/);
-        if (!r) { console.log("js-utils: Date format must be ISO 8601 » " + date); return null; }
+        if (!r) { console.log("%c js-utils: Date format must be ISO 8601 » " + date, "color:red"); return null; }
         var gmt = new Date(),
             th = +r[7] || (gmt.getTimezoneOffset() / -60), //normalize the hours offset
             tm = +r[8] || (gmt.getTimezoneOffset() % -60), //normalize the minutes offset
@@ -781,21 +838,22 @@ if (typeof Array.prototype.filter !== 'function') {
         return new Date(gmt);
     }
     //-----------------------------------
-    // Converts all applicable characters to their corresponding HTML entities.
-    // This also is a delegate for $.val() and $.text()
+    // Encodes a string, by converting special characters like <, >, &... to its corresponding HTML entity.
+    // This method also can be used as a delegate for the jQuery methods: $.val() and $.text()
     function fnGetHtmlText (i, value) {
         if (!value && typeof i === "string") value = i;
         var html = $("<div>").text(value).html();
         return $.trim(html);
     }
     //-----------------------------------
-    // Gets the selected text in the document
+    // Gets the selected text in the document and inside the text boxes.
     function fnGetSelectedText() {
         var _dom = document.activeElement,
             _sel = { text: "", slice: "", start: -1, end: -1 },
+            _getSelection = window.getSelection || document.getSelection,
             _selection;
-        if (window.getSelection) {
-            // Get selected text from input fields
+        if (_getSelection) {
+            // Get selected text from an input field
             if (input.isText(_dom)) {
                 _selection = fixSelection(_dom);
                 _sel.start = _selection.start;
@@ -805,62 +863,99 @@ if (typeof Array.prototype.filter !== 'function') {
                     _sel.slice = _dom.value.slice(0, _sel.start) + _dom.value.slice(_sel.end);
                 }
             }
-            // Gets the selected text from document
-            else _sel.text = window.getSelection().toString();
-        } else if (document.selection.createRange)
-            _sel.text = document.selection.createRange().text;
+            // Gets the selected text in the document
+            else _sel.text = _getSelection().toString();
+        } else {
+            _selection = document.selection;
+            if (_selection && _selection.type != "Control")
+                _sel.text = _selection.createRange().text;
+        }
         if (_sel.text !== "") _sel.text = $.trim(_sel.text);
         return _sel;
     }
     //-----------------------------------
-    // Gets the cursor position in the @dom element
+    // Gets the current position of the cursor in the @dom element
     function fnGetCaretPosition (dom) {
+        var _selection, _sel;
         if ('selectionStart' in dom) {
             return fixSelection(dom).start;
         } else { // IE below version 9
-            var _sel = document.selection.createRange();
-            _sel.moveStart('character', -dom.value.length);
-            return (_sel.text.length);
+            _selection = document.selection;
+            if (_selection) {
+                _sel = _selection.createRange();
+                _sel.moveStart('character', -dom.value.length);
+                return _sel.text.length;
+            }
         }
+        return -1;
     }
     //-----------------------------------
     // Sets the @position of the cursor in the @dom element
     function fnSetCaretPosition (dom, pos) {
+        var _createTextRange, range;
+        pos = +pos || 0;
         if ('selectionStart' in dom) {
-            fixSelection(dom, function (_input) {
-                _input.setSelectionRange(pos, pos);
+            fixSelection(dom, function (_dom) {
+                _dom.setSelectionRange(pos, pos);
             });
         } else { // IE below version 9
-            var range = dom.createTextRange();
-            range.collapse(true);
-            range.moveEnd('character', pos);
-            range.moveStart('character', pos);
-            range.select();
+            _createTextRange = dom.createTextRange;
+            if (_createTextRange) {
+                range = _createTextRange();
+                if (!range) return;
+                range.collapse(true);
+                range.moveEnd('character', pos);
+                range.moveStart('character', pos);
+                range.select();
+            }
         }
     }
     //-----------------------------------
     // Applies a transformation to the text,
     // also it removes all consecutive spaces
-    function fnCapitalize (obj, _type) {
-        var _isDOM = input.isText(obj),
-            _text = _isDOM ? obj.value : obj.toString();
-        if (!_text || _text.length === 0) return "";
-        if ((/textarea/i).test(obj.nodeName)) {
-            _text = _text.replace(/\r|\n/g, "¶").replace(/\s{2,}/g, " ");
-            while ((/^[¶\s]|[¶\s]$/g).test(_text))
-                _text = _text.replace(/^[¶\s]+|[¶\s]+$/g, "");
-            _text = _text.replace(/\s*¶+\s*/g, "\n");
+    var fnCapitalize = (function () {
+        var _textarea = /textarea/i,
+            _linebreak = (/\r|\n/g),
+            _paragraph = (/^[¶\s]+|[¶\s]+$/g),
+            _section = (/\s*¶+\s*/g),
+            _spaces = (/\s{2,}/g),
+            _word = (/(?:^|-|:|;|\s|\.|\(|\/)[a-záéíóúüñ]/g),
+            _first = (/^\w/);
+        return function (obj, type) {
+            var isText = input.isText(obj),
+                text = isText ? obj.value : obj && obj.toString();
+            if (!text || !text.length) return "";
+            if (_textarea.test(obj.nodeName)) {
+                text = text.replace(_linebreak, "¶").replace(_spaces, " ");
+                while (_paragraph.test(text)) text = text.replace(_paragraph, "");
+                text = text.replace(_section, "\n");
+            }
+            else text = $.trim(text.replace(_spaces, " "));
+            if (+text === 0) text = "0";
+            switch (type) {
+                case "word":
+                    text = text.toLowerCase().replace(_word, function (m) { return m.toUpperCase(); });
+                    text = _language.wordPattern instanceof RegExp
+                         ? text.replace(_language.wordPattern, function (m) { return m.toLowerCase(); })
+                         : text;
+                    break;
+                case "title":
+                    text = text.replace(_word, function (m) { return m.toUpperCase(); });
+                    break;
+                case "first":
+                    text = text.replace(_first, function (m) { return m.toUpperCase(); });
+                    break;
+                case "upper":
+                    text = text.toUpperCase();
+                    break;
+                case "lower":
+                    text = text.toLowerCase();
+                    break;
+            }
+            if (isText) obj.value = text;
+            return text;
         }
-        else _text = $.trim(_text.replace(/\s{2,}/g, " "));
-        if (parseFloat(_text) === 0) _text = "0";
-        if (_type == "word" || _type == "lower") _text = _text.toLowerCase();
-        if (_type == "word" || _type == "title") _text = _text.replace(/(?:^|-|:|;|\s|\.|\(|\/)[a-záéíóúüñ]/g, function (m) { return m.toUpperCase(); });
-        if (_type == "word" && _language.wordPattern instanceof RegExp) _text = _text.replace(_language.wordPattern, function (m) { return m.toLowerCase(); });
-        if (_type == "first") _text = _text.replace(/^\w/, _text.charAt(0).toUpperCase());
-        if (_type == "upper") _text = _text.toUpperCase();
-        if (_isDOM) obj.value = _text;
-        return _text;
-    }
+    }());
     //-----------------------------------
     // Sets the numeric format according to current culture.
     // Places the decimal and thousand separators specified in _language
@@ -871,20 +966,22 @@ if (typeof Array.prototype.filter !== 'function') {
             outDecimalMark: _language.decimalMark,
             outThousandsMark: _language.thousandsMark
         }, o);
-        var _isDOM = input.isText(obj),
-            _text = _isDOM ? obj.value : obj.toString(),
-            _thousands = new RegExp(fnEscapeRegExp(o.inThousandsMark), "g"),
-            number = _text.replace(_thousands, "").split(o.inDecimalMark) || [""],
+        var isText = input.isText(obj),
+            text = isText ? obj.value : obj && obj.toString();
+            if (!text || !text.length) return "";
+        var thousands = new RegExp(fnEscapeRegExp(o.inThousandsMark), "g"),
+            number = text.replace(thousands, "").split(o.inDecimalMark) || [""],
             integer = number[0].replace(/\B(?=(\d{3})+(?!\d))/g, o.outThousandsMark),
             decimal = number.length > 1 ? o.outDecimalMark + number[1] : "";
-        if (_isDOM) obj.value = integer + decimal;
-        return (integer + decimal);
+        text = integer + decimal;
+        if (isText) obj.value = text;
+        return text;
     }
     //-----------------------------------
     // Validates the text format, depending on the type supplied.
     // Date validations are run according to regional setting.
-    var fnIsValidFormat = (function() {
-        var _formatter = function (format) {
+    var fnIsValidFormat = (function () {
+        function _formatter (format) {
             return "^" +
             fnEscapeRegExp(format).replace(/[dMyHhms]+/g, function (m) {
                 switch (m.toString()) {
@@ -897,11 +994,11 @@ if (typeof Array.prototype.filter !== 'function') {
                     case "ss": return "([0-5][0-9])";
                 }
             }) + "$";
-        };
-        var _validate = function (obj, pattern) {
+        }
+        function _validate (obj, pattern) {
             obj = input.isText(obj) ? obj.value : obj.toString();
             return pattern.test(obj);
-        };
+        }
         var validator = {
             date: function (text) {
                 //Validates the date format according to regional setting
@@ -918,6 +1015,9 @@ if (typeof Array.prototype.filter !== 'function') {
             email: function (text) {
                 //Validates an email address
                 return _validate(text, /^([0-9a-zñÑ](?:[\-.\w]*[0-9a-zñÑ])*@(?:[0-9a-zñÑ][\-\wñÑ]*[0-9a-zñÑ]\.)+[a-z]{2,9})$/i);
+            },
+            url: function (text) {
+                return _validate(text, /((?:http|ftp|https):\/\/[\w\-_]+(?:\.[\w\-_]+)+(?:[\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?)/gi);
             },
             ipv4: function (text) {
                 //Validates an IP address v4
@@ -937,15 +1037,14 @@ if (typeof Array.prototype.filter !== 'function') {
             }
         };
         //Set properties as not writable
-        sealWritable(validator);
+        sealWritables(validator);
         Object.defineProperty(validator, "set", {
-            __proto__: null,
             configurable: false,
             enumerable: false,
             writable: false,
             value: function (property, value) {
                 if (!isFunction(value)) return;
-                setWritable(this, property, value, true);
+                setNotWritable(this, property, value, true);
             }
         });
         return validator;
@@ -953,7 +1052,7 @@ if (typeof Array.prototype.filter !== 'function') {
     //-----------------------------------
     // Evaluates whether the @dom element contains a value with a date.
     // The result of the validation will be shown in a tooltip
-    var fnIsValidDate = (function() {
+    var fnIsValidDate = (function () {
         var error = false;
         function parser (date) {
             var type, d, part, partLength, x;
@@ -975,7 +1074,7 @@ if (typeof Array.prototype.filter !== 'function') {
             }
             d.splice(0, 3);
             return new Date(date + " " + d.join(":"));
-        };
+        }
         return function (dom, o) {
             if (!input.isText(dom)) return false;
             o = $.extend({
@@ -994,7 +1093,7 @@ if (typeof Array.prototype.filter !== 'function') {
     }());
     //-----------------------------------
     // Delegates the blur event to removing the tooltips
-    $(document).off("blur.tooltip").on(nsEvents("blur", "tooltip"), "[data-role=tooltip]", function() {
+    $(document).off("blur.tooltip").on(nsEvents("blur", "tooltip"), "[data-role=tooltip]", function () {
         $(".vld-tooltip").remove();
     });
     //-----------------------------------
@@ -1065,11 +1164,12 @@ if (typeof Array.prototype.filter !== 'function') {
     function fnUpdateCache() {
         if (handlerExist(window, "load", "fnUpdateCache")) return;
         $(window).on(nsEvents("load", "fnUpdateCache"), function (event) {
-            $(window.applicationCache).on("updateready", function (e) {
-                if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+            var appCache = window.applicationCache;
+            $(appCache).on("updateready", function (e) {
+                if (appCache.status == appCache.UPDATEREADY) {
                     //the browser downloads a new version of the cache manifest,
                     //and must reload the page in order to access to the new resources
-                    window.applicationCache.swapCache();
+                    appCache.swapCache();
                     window.location.reload(true);
                 }
             });
@@ -1084,30 +1184,30 @@ if (typeof Array.prototype.filter !== 'function') {
     $.fn.reverse = [].reverse;
     //-----------------------------------
     // Detects if the element has vertical scrollbar
-    $.fn.hasVScroll = function() {
+    $.fn.hasVScroll = function () {
         if (!this.length) return false;
         return this.get(0).scrollHeight > this.get(0).clientHeight;
     };
     //-----------------------------------
     // Detects if the element has horizontal scrollbar
-    $.fn.hasHScroll = function() {
+    $.fn.hasHScroll = function () {
         if (!this.length) return false;
         return this.get(0).scrollWidth > this.get(0).clientWidth;
     };
     //-----------------------------------
     // Position an element relative to another element
-    (function() {
+    (function () {
         // http://api.jqueryui.com/position/
         if (jQuery.ui && jQuery.ui.position) return;
         var _position,
-            rhorizontal = /left|center|right/,
-            rvertical = /top|center|bottom/,
-            roffset = /([a-z]+)([+-]\d+)?\s?([a-z]+)?([+-]\d+)?/; //brings 4 groups: (horizontal)(offset) (vertical)(offset)
+            _rhorizontal = /left|center|right/,
+            _rvertical = /top|center|bottom/,
+            _roffset = /([a-z]+)([+-]\d+)?\s?([a-z]+)?([+-]\d+)?/; //brings 4 groups: (horizontal)(offset) (vertical)(offset)
         //normalizes "horizontal vertical" alignment
-        var setAlignment = function (pos) {
+        function setAlignment (pos) {
             pos = $.trim(pos);
-            var horizontal = rhorizontal.test(pos),
-                vertical = rvertical.test(pos);
+            var horizontal = _rhorizontal.test(pos),
+                vertical = _rvertical.test(pos);
             if (!horizontal && !vertical)
                 return "center center";
             if (!(/\s/).test(pos)) {
@@ -1115,7 +1215,7 @@ if (typeof Array.prototype.filter !== 'function') {
                 if (!vertical) return pos + " center";
             }
             return (pos === "center" ? "center center" : pos);
-        };
+        }
         //monkey-patching
         _position = $.fn.position;
         $.fn.position = function (o) {
@@ -1133,10 +1233,10 @@ if (typeof Array.prototype.filter !== 'function') {
             var targetOffset = target.offset(),
                 targetWidth = target.outerWidth(),
                 targetHeight = target.outerHeight(),
-                atOffset = (o.at).match(roffset),
-                myOffset = (o.my).match(roffset);
+                atOffset = (o.at).match(_roffset),
+                myOffset = (o.my).match(_roffset);
             //sets the coordinates relative to target element
-            var atPosition = (function() {
+            var atPosition = (function () {
                 var left = 0, top = 0;
                 switch (atOffset[1]) {
                     case "left":
@@ -1266,7 +1366,7 @@ if (typeof Array.prototype.filter !== 'function') {
     // Apply the capitalized format to text when the blur event is raised
     $.fn.fnCapitalize = function (type) {
         return this.each(function (i, dom) {
-            $(dom).off(".fnCapitalize").on(nsEvents("blur", "fnCapitalize"), function() {
+            $(dom).off(".fnCapitalize").on(nsEvents("blur", "fnCapitalize"), function () {
                 fnCapitalize(this, type);
             });
         });
@@ -1299,14 +1399,14 @@ if (typeof Array.prototype.filter !== 'function') {
     // Places the decimal and thousand separators specified in _language
     $.fn.fnNumericFormat = function (o) {
         return this.each(function (i, dom) {
-            $(dom).off(".fnNumericFormat").on(nsEvents("keyup blur", "fnNumericFormat"), function() {
+            $(dom).off(".fnNumericFormat").on(nsEvents("keyup blur", "fnNumericFormat"), function () {
                 fnNumericFormat(this, o);
             });
         });
     };
     //-----------------------------------
     // The matched elements accept only numeric characters
-    $.fn.fnNumericInput = function() {
+    $.fn.fnNumericInput = function () {
         return this.each(function (i, dom) {
             var len = dom.maxLength;
             dom.maxLength = 524000;
@@ -1382,7 +1482,7 @@ if (typeof Array.prototype.filter !== 'function') {
         if (!key) return this;
         var keys = key.toString().split("");
         keys = keys.filter(function (n){ return (n && n.length); });
-        return this.each(function() {
+        return this.each(function () {
             $(this).off(".fnDisableKey").on(nsEvents("keypress", "fnDisableKey"), function (e) {
                 var _key = (e.which || e.keyCode);
                 _key = String.fromCharCode(_key);
@@ -1392,11 +1492,11 @@ if (typeof Array.prototype.filter !== 'function') {
     };
     //-----------------------------------
     // Validates the elements marked or performs a custom validation
-    (function() {
+    (function () {
         // Creates the filters based on those properties defined in fnIsValidFormat
         var allFilters = $.map(fnIsValidFormat, function (value, key) { return ".vld-" + key; }).join(",");
         // Shows a tooltip for the validation message
-        var fnTooltip = function (dom, event, messageType, pos) {
+        function fnTooltip (dom, event, messageType, pos) {
             var beforeTooltip,
                 button = $(event.currentTarget),
                 args = { "target": dom, "position": pos };
@@ -1419,16 +1519,16 @@ if (typeof Array.prototype.filter !== 'function') {
                 my: args.position.my,
                 collision: args.position.collision
             }).hide().fadeIn(400);
-        };
+        }
         // Sets the focus on the input elements inside the @container
-        var fnSetFocus = function (container, group) {
+        function fnSetFocus (container, group) {
             var elements = $(container)
                 .find('input:not([type=button]):not([type=submit]), textarea')
                 .filter(':not(:disabled):not(.no-auto-focus)').get().reverse();
-            $(elements).each(function() { 
+            $(elements).each(function () {
                 if (input.isText(this) && this.getAttribute('data-group') == group) $(this).focus();
             });
-        };
+        }
         $.fn.fnEasyValidate = function (o) {
             var position = $.extend({
                         at: "right center",
@@ -1471,7 +1571,7 @@ if (typeof Array.prototype.filter !== 'function') {
                 $(btn).off(".fnEasyValidate").on(nsEvents("click", "fnEasyValidate"), { handler: "fnEasyValidate" }, function (event) {
                     fnSetFocus(d.container, btn.getAttribute('data-group')); $(btn).focus().blur();
                     $(".vld-tooltip").remove();
-                    var _submit = true; 
+                    var _submit = true;
 
                     // Validates each element according to specific rules
                     $(".vld-required," + allFilters).each(function (i, _dom) {
@@ -1479,7 +1579,7 @@ if (typeof Array.prototype.filter !== 'function') {
                         // Gets the html5 data- attribute; modern browsers admit: dom.dataset[attribute]
                         if (btn.getAttribute('data-group') !== _dom.getAttribute('data-group')) return true; //continue
                         if (input.isText(_dom)) _dom.value = $.trim(_dom.value);
-                        
+
                         // Validates the elements marked with the css class "vld-required"
                         // Looks for empty <input> elements, <select> elements and those having the [value] attribute equal to "0"
                         if ($(_dom).hasClass("vld-required") && ((_tag == "select" && (fnValidateFirstItem(_dom) || _dom.value === "0")) ||
@@ -1511,12 +1611,12 @@ if (typeof Array.prototype.filter !== 'function') {
                     if (_submit && isFunction(d.fnValidator) && !d.fnValidator(btn)) {
                         _submit = false;
                     }
-                    setWritable($.fn.fnEasyValidate, "canSubmit", _submit);
+                    setNotWritable($.fn.fnEasyValidate, "canSubmit", _submit);
                     if (!_submit) event.stopImmediatePropagation();
                     return _submit;
-                    
+
                 }); //end btn.click
-                
+
                 handlers = ($._data(btn, 'events') || {})["click"];
                 // Move at the beginning the click.fnEasyValidate handler
                 handlers.unshift(handlers.pop());
@@ -1524,17 +1624,17 @@ if (typeof Array.prototype.filter !== 'function') {
             }); //end $.each
         }; //end fnEasyValidate
     })();
-    
+
     //-----------------------------------
     // Displays a confirm window on click event
-    (function() {
+    (function () {
         var type = "click",
             pattern = (/(?:^\w+:\/\/[^\s\n]+)[^#]$/);
         function hasValidUrl (href) {
             return !!(href && href.length && pattern.test(href));
         }
         $.fn.fnConfirm = function (o) {
-            setWritable($.fn.fnConfirm, "canSubmit", false);
+            setNotWritable($.fn.fnConfirm, "canSubmit", false);
             // Returns the collection of matching elements
             return this.each(function (i, target) {
                 var current = {};
@@ -1542,7 +1642,7 @@ if (typeof Array.prototype.filter !== 'function') {
                     current = this;
                     // Allows to the fnEasyValidate function pass through
                     if (handlerExist(current, type, "fnEasyValidate"))
-                        setWritable ($.fn.fnConfirm, "canSubmit", !$.fn.fnEasyValidate.canSubmit);
+                        setNotWritable ($.fn.fnConfirm, "canSubmit", !$.fn.fnEasyValidate.canSubmit);
                     if (!$.fn.fnConfirm.canSubmit) {
                         e.stopImmediatePropagation();
                         e.preventDefault();
@@ -1568,10 +1668,10 @@ if (typeof Array.prototype.filter !== 'function') {
                 o.buttons = [
                     {
                         text: _language.dialogOK,
-                        click: function() {
+                        click: function () {
                             if (hasValidUrl(current.href)) document.location = current.href;
                             $("#" + o.id).on("dialogclose", function (ev, ui) {
-                                setWritable($.fn.fnConfirm, "canSubmit", true);
+                                setNotWritable($.fn.fnConfirm, "canSubmit", true);
                                 // Unbinds  the event handler and triggers the previous actions
                                 $(current).off(".fnConfirm").trigger(type);
                                 // Triggers the awful asp.net postback
@@ -1582,8 +1682,8 @@ if (typeof Array.prototype.filter !== 'function') {
                     },
                     {
                         text: _language.dialogCancel,
-                        click: function() {
-                            setWritable($.fn.fnConfirm, "canSubmit", false);
+                        click: function () {
+                            setNotWritable($.fn.fnConfirm, "canSubmit", false);
                             $("#" + o.id).dialog("close");
                         }
                     }
@@ -1603,7 +1703,7 @@ if (typeof Array.prototype.filter !== 'function') {
         return fnShowDialog.source(options);
     }
 
-    setWritable(fnShowDialog, "source", function() {
+    setNotWritable(fnShowDialog, "source", function () {
         return _fnShowDialog.apply(jherax, arguments);
     });
 
@@ -1613,7 +1713,7 @@ if (typeof Array.prototype.filter !== 'function') {
         writable: false,
         value: function (property, value) {
             if (!isFunction(value)) return;
-            setWritable(this, property, value);
+            setNotWritable(this, property, value);
         }
     });
 
@@ -1624,23 +1724,27 @@ if (typeof Array.prototype.filter !== 'function') {
         if (!jQuery.ui || !jQuery.ui.dialog)
             throw new CustomError("jQuery.ui.dialog is required");
         var d = $.extend(true, {
-            appendTo: jherax.wrapper,
-            title: _language.dialogTitle,
-            content: null,
-            icon: null,
-            buttons: {},
-            modal: true,
-            closeOnPageUnload: false
-        }, o);
-        var cnt = $(), body = $('body'),
-            id = d.id || 'jsu-dialog';
+                appendTo: jherax.wrapper,
+                title: _language.dialogTitle,
+                content: null,
+                icon: null,
+                buttons: {},
+                modal: true,
+                closeOnPageUnload: false
+            }, o),
+            cnt = $(),
+            body = $('body'),
+            id = d.id || 'jsu-dialog',
+            icon, cbClose;
         // Set the Id for dialog element
         Object.defineProperty(d, "id", {
+            configurable: false,
             enumerable: false,
             writable: false,
             value: '#' + id
         });
-        ($(d.id).dialog('option')['close'] || function() {})();
+        cbClose = $(d.id).dialog('option')['close'];
+        if (isFunction(cbClose)) cbClose();
         //$(d.id + ',.ui-widget-overlay').remove();
         if (!d.content) return;
         if (!$.isPlainObject(d.buttons) && !$.isArray(d.buttons)) d.buttons = {};
@@ -1652,7 +1756,7 @@ if (typeof Array.prototype.filter !== 'function') {
         cnt.next().addClass(id + '-place-next');
         if (typeof d.content === "string") {
             // Displays an icon to the left of text
-            var icon = d.icon ? '<div class="wnd-icon ' + d.icon.toLowerCase() + '"></div>' : "";
+            icon = d.icon ? '<div class="wnd-icon ' + d.icon.toLowerCase() + '"></div>' : "";
             cnt = $(icon + '<div class="wnd-text">' + d.content + '</div>').appendTo("body").data("del", true);
             cnt.css({ display: "table-cell", "vertical-align": "middle", cursor: "default" });
         }
@@ -1666,7 +1770,7 @@ if (typeof Array.prototype.filter !== 'function') {
         if (d.closeOnPageUnload === true) wnd.attr("data-dialog-unload", true);
         if (!handlerExist(window, "beforeunload", "fnShowDialog")) {
             $(window).on(nsEvents("beforeunload", "fnShowDialog"), function () {
-                $("[data-dialog-unload]").each(function() {
+                $("[data-dialog-unload]").each(function () {
                     $(this).dialog("close");
                 });
             });
@@ -1730,7 +1834,7 @@ if (typeof Array.prototype.filter !== 'function') {
                     else {
                         cnt.unwrap().unwrap();
                         // Restores the DOM element to its original location
-                        $("[class*=" + id + "]").reverse().each(function() {
+                        $("[class*=" + id + "]").reverse().each(function () {
                             var dom = $(this),
                                 css = new RegExp("^" + id + "-place-"),
                                 place = this.className.split(/\s+/).filter(function (item) {
@@ -1785,31 +1889,17 @@ if (typeof Array.prototype.filter !== 'function') {
     jherax.fnUpdateCache = fnUpdateCache; //undocumented
 
     //Provide compatibility with older versions
-    jherax.fnGetQueryToJSON = function() {
+    jherax.fnGetQueryToJSON = function () {
         deprecated("fnGetQueryToJSON", "fnGetQueryToObject");
         return fnGetQueryToObject.apply(this, arguments);
     };
-    jherax.fnGetDataToJSON = function() {
+    jherax.fnGetDataToJSON = function () {
         deprecated("fnGetDataToJSON", "fnGetDataToObject");
         return fnGetDataToObject.apply(this, arguments);
     };
-    jherax.fnCloneObject = function() {
+    jherax.fnCloneObject = function () {
         deprecated("fnCloneObject", "fnFreezeObject");
         return fnFreezeObject.apply(this, arguments);
     };
 
-})(jsu, jQuery);
-/*
-//-----------------------------------
-// Enables Cross Domain Requests
-// http://api.jquery.com/jquery.ajaxprefilter/
-$.ajaxPrefilter(function (options) {
-    if (options.crossDomain && $.support.cors) {
-        var http = (window.location.protocol === 'http:' ? 'http:' : 'https:'),
-            url = options.url; //encodeURIComponent(options.url);
-        options.url = http + '//cors-anywhere.herokuapp.com/' + url;
-        //options.url = "http://cors.corsproxy.io/url=" + url;
-        //options.crossDomain = false;
-    }
-});
-*/
+}(window, jQuery, jsu));

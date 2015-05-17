@@ -1,95 +1,118 @@
-(function ($, jsu, language, undefined) {
+(function ($, hljs, jsu, language, undefined) {
 
-  //Settings for colorbox
-  var settings1, settings2;
-  var settings = {
-    closeButton: false,
-    overlayClose: false,
-    scrolling: false,
-    arrowKey: false,
-    loop: false
-  };
+    //Settings for colorbox
+    var cbConfig1, cbConfig2,
+        cbDefaults = {
+            closeButton: false,
+            overlayClose: false,
+            scrolling: false,
+            arrowKey: false,
+            loop: false
+        },
+        body = $("body");
 
-  //loading animation
-  var circleG = 
-    '<div id="circleG">' +
-      '<div id="circleG_1" class="circleG"></div>' +
-      '<div id="circleG_2" class="circleG"></div>' +
-      '<div id="circleG_3" class="circleG"></div>' +
-    '</div>';
+    //loading animation
+    var circleG = 
+        '<div id="circleG">' +
+          '<div id="circleG_1" class="circleG"></div>' +
+          '<div id="circleG_2" class="circleG"></div>' +
+          '<div id="circleG_3" class="circleG"></div>' +
+        '</div>';
 
-  //Document ready
-  $(function() {
-    var lang = jsu.fnGetQueryToString("lang") || "english";
-    $("#select-language").val(lang).trigger("change");
-  });//end on.ready
 
-  //Creates the handler for the inputType:text window
-  $(document).on("click", ".open-window", function(e) {
-    e.preventDefault();
-    $.colorbox(settings1 = settings1 || $.extend({
-      html: $("#inputTypeText").html(),
-      transition: "fade",
-      open: true,
-      onOpen: function() {
-        var o = $("body").css("overflow");
-        $("body").data("overflow", o).css("overflow", "hidden");
-        $(".bg-fixed").fadeIn();
-      },
-      onCleanup: function() {
-        $(".bg-fixed").fadeOut();
-      },
-      onClosed: function() {
-        var o = $("body").data("overflow");
-        $("body").css("overflow", o);
-      }
-    }, settings));
-  });//end on.click
+    //Document ready
+    $(function() {
+        var lang = jsu.fnGetQueryToString("lang") || "english";
+        $("#select-language").val(lang).trigger("change.language");
+    });//end .ready
 
-  //Sets the language setting
-  $(document).on("change", "#select-language", function() {
-    language.set(this.value);
-    //location.search = "?lang=" + this.value;
-    
-    $("#main-content").load("views/" + this.value + ".html", function (response, status, xhr) {
-        var hash, canOpen = true;
-        if (location.hash != "") {
-          hash = location.hash;
-          location.hash = "";
-          location.hash = hash;
-        }
-        $(".add-top-link").append('<a class="cbox-close" href="#">↑ top</a>');
-        $(".add-methods-link").append('<a class="cbox-close" href="#list-of-methods">↑ list</a>');
-        $(".add-jquery-link").append('<a class="cbox-close" href="#jquery-extensions">↑ list</a>');
 
-        //loads the iframe with the virtual business card
-        $("[data-mcp]").colorbox(settings2 = settings2 || $.extend({
-          href: "https://www.mcpvirtualbusinesscard.com/VBCServer/jherax/card",
-          transition: "elastic",
-          innerWidth: 397,
-          innerHeight: 177,
-          iframe: true,
-          fastIframe: true,
-          onOpen: function() { canOpen = false; },
-          onLoad: function() {
-            $("#cboxContent").addClass("loader");
-            $(circleG).appendTo(jsu.wrapper).fnCenter({of: "#colorbox"});
-          },
-          onComplete: function() {
-            $("#cboxLoadedContent iframe").bind("load", function() {
-              $("#cboxContent").removeClass("loader");
-              $("#circleG").remove();
+    //Creates the handler for the inputType.isText window
+    $(document).on("click.inputType", ".open-window", function (e) {
+        e.preventDefault();
+        $.colorbox(cbConfig1 = cbConfig1 || $.extend({
+            html: $("#inputTypeText").html(),
+            transition: "fade",
+            fixed: true,
+            open: true,
+            onOpen: function() {
+                var o = body.css("overflow");
+                body.data("overflow", o).css("overflow", "hidden");
+                $(".bg-fixed").fadeIn();
+            },
+            onCleanup: function() {
+                $(".bg-fixed").fadeOut();
+            },
+            onClosed: function() {
+                var o = body.data("overflow");
+                body.css("overflow", o);
+            }
+        }, cbDefaults));
+    });//end .click
+
+
+    //Sets the language settings
+    $(document).on("change.language", "#select-language", function() {
+        var lang = this.value;
+        language.set(lang);
+        jsu.regional.set(jsu.regional[lang]);
+        //location.search = "?lang=" + lang;
+      
+        //loads the view according to the selected language
+        $("#main-content").load("views/" + lang + ".html", function() {
+            var hash, canOpen = true;
+
+            //fixes the focus when language changes
+            if (location.hash !== "") {
+                hash = location.hash;
+                location.hash = "";
+                location.hash = hash;
+            }
+
+            //adds the navigation buttons
+            $(".add-top-link").append('<a class="cbox-close" href="#">↑ top</a>');
+            $(".add-methods-link").append('<a class="cbox-close" href="#list-of-methods">↑ list</a>');
+            $(".add-jquery-link").append('<a class="cbox-close" href="#jquery-extensions">↑ list</a>');
+
+            //loads the iframe with the profile virtual business card
+            $("[data-mcp]")
+            .on("click.vcard", function() { return canOpen; })
+            .colorbox(cbConfig2 = cbConfig2 || $.extend({
+                href: "https://www.mcpvirtualbusinesscard.com/VBCServer/jherax/card",
+                transition: "elastic",
+                innerWidth: 397,
+                innerHeight: 177,
+                iframe: true,
+                fastIframe: true,
+                onOpen: function() { canOpen = false; },
+                onClosed: function() { canOpen = true; },
+                onLoad: function() {
+                    $("#cboxContent").addClass("loader");
+                    $(circleG).appendTo(jsu.wrapper).fnCenter({of: "#colorbox"});
+                },
+                onComplete: function() {
+                    var iframe = $("#cboxLoadedContent iframe"),
+                        created = jsu.handlerExist(iframe.get(0), "load", "vcard");
+                    !created && iframe.on("load.vcard", function() {
+                        $("#cboxContent").removeClass("loader");
+                        $("#circleG").remove();
+                    });
+                }
+            }, cbDefaults));
+
+            //prepend the span to the colorbox window (#colorbox is autogenerated)
+            $('<span class="cbox-close">').text("X").prependTo("#colorbox").on("click.cbclose", function() {
+                $.colorbox.close();
             });
-          },
-          onClosed: function() { canOpen = true; }
-        }, settings)).on("click", function() { return canOpen; });
 
-        //Prepend the span to the colorbox window
-        $('<span class="cbox-close">').text("X").prependTo("#colorbox").on("click", function() {
-          $.colorbox.close();
-        });
+            //prettify the code
+            $('pre.code-example code').each(function (i, tag) {
+                var block = $(tag);
+                block.html(block.html().replace(/^\n+|\n+$/, ""));
+                hljs.highlightBlock(tag);
+            });
 
-    });//end $.load
-  });//end on.change
+        });//end .load
+    });//end .change
 
-})(jQuery, jsu, window.language);
+})(jQuery, hljs, jsu, window.language);

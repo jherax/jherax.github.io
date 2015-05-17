@@ -21,11 +21,13 @@
   <a href="http://stackoverflow.com/users/2247494/jherax" target="_blank" class="icon-link"><div class="stackoverflow"></div>Stack Overflow</a>
   <a href="http://careers.stackoverflow.com/jherax" target="_blank" class="icon-link"><div class="stackcareers"></div>Stack Careers</a>
 </div><br/>
-<p>Soy desarrollador de software en Bogota-Colombia, geek de jQuery, JavaScript y C#. Entusiasta de JavaScript y el mundo del front-end, he trabajado bastante en el back-end / front-end, y también he desempeñado el rol de administrador de bases de datos (SQL Server). Me apasiona crear aplicaciones web y en general, desarrollar software de calidad siguiendo las buenas prácticas de programación y los atributos de funcionalidad, reusabilidad y mantenibilidad.</p>
-<p>Hablando de desarrollo web, vale la pena mencionar tres importantes patrones arquitectónicos, <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvc" target="_blank">MVC</a> (Model-View-Controller),
+<p>Soy desarrollador de software en Bogotá-Colombia, geek de JavaScript, jQuery y C#. He trabajado en el back-end (C#, Java, VB.Net) y también he desempeñado el rol de administrador de bases de datos (SQL Server)
+  pero lo que realmente me apasiona es JavaScript y el desarrollo front-end. Me gusta crear aplicaciones web y en general, desarrollar software de calidad siguiendo las buenas prácticas de programación y los atributos de funcionalidad, reusabilidad y mantenibilidad.</p>
+<p>Hablando de desarrollo web, quiero mencionar tres importantes <a href="http://en.wikipedia.org/wiki/Architectural_pattern" target="_blank">patrones arquitectónicos</a>,
+  <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvc" target="_blank">MVC</a> (Model-View-Controller),
   <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvp" target="_blank">MVP</a> (Model-View-Presenter) y
   <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvvm" target="_blank">MVVM</a> (Model-View-viewModel), con los cuales será mucho más fácil desarrollar aplicaciones web estructuradas.
-  Recientemente, comencé a utilizar el patrón MVVM, y me ha gustado la forma en cómo separa limpiamente la parte HTML del JavaScript.</p>
+  Recientemente, comencé a utilizar el patrón MVVM, y me ha gustado la forma como separa y comunica la presentación (HTML) de la lógica en JavaScript.</p>
 <p><a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvvm" target="_blank">MVVM</a> es un patrón arquitectónico basado en MVC y MVP, el cual pretende separar el desarrollo UI <nobr>(user-interfaces)</nobr> de la lógica de negocio y el comportamiento de una aplicación.
   Este patrón hace uso de&#160;<em>"data-bindings"</em> declarativos, los cuales permiten la interacción entre la <em>"Vista"</em> y el <em>"Modelo"</em> mediante el&#160;objeto <em>"ViewModel"</em>.
   El viewModel es un objeto "observable" que hace uso del patrón <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/#observerpatternjavascript" target="_blank">Observer</a> para notificar cambios y automáticamente actualizar las dependencias detectadas.
@@ -37,7 +39,7 @@
 
 <p style="width:96%">Es una librería de utilidades JavaScript / jQuery, que incluye herramientas para validación de datos y formato de texto,
   plugins para tooltips, ventanas modales y posicionamiento de elementos, inyección de recursos, manipulación de string y JSON, clonación de objetos,
-  ordenamiento de arrays, entre otros. <a href="#list-of-methods"><strong>Ir a la referencia del API</strong></a>.</p>
+  ordenamiento de arrays, entre otros. <a href="#api-reference"><strong>Ir a la referencia del API</strong></a>.</p>
 
 <!-- Getting Started -->
 <h2 id="getting-started"><a href="#getting-started">A tener en cuenta</a></h2>
@@ -51,7 +53,7 @@ Pero si no desea usar <em>jQuery.ui,</em> como su implementación predeterminada
   <li><code>jsu:</code> namespace principal
     <ul>
       <li><code>author:</code> yo :^)</li>
-      <li><code>version:</code> número de versión de despliegue</li>
+      <li><code>version:</code> la versión de la librería</li>
       <li><code>dependencies:</code> array con los nombres de las dependencias</li>
       <li><code>siteOrigin:</code> obtiene la parte del host en la <strong>url</strong> actual</li>
       <li><code>wrapper:</code> selector que alberga el <span class="tip" title="HTML generado por: fnShowTooltip, fnShowDialog, fnLoading">HTML dinámico</span></li>
@@ -64,27 +66,25 @@ Pero si no desea usar <em>jQuery.ui,</em> como su implementación predeterminada
 
 <!-- A Glance -->
 <h2 id="glance" class="add-top-link"><a href="#glance">Un vistazo</a></h2>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Ninguna de las siguientes configuraciones es obligatoria.</span>
+<pre class="code-example"><code class="javascript">
+(function () {
+  //Ninguna de las siguientes configuraciones es obligatoria.
 
-    <span class="c1">// Establecemos el contenedor del contenido dinámico</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">wrapper</span> <span class="o">=</span> <span class="s2">"#main-section"</span><span class="p">;</span>
+  //Establecemos el contenedor del contenido dinámico
+  jsu.wrapper = "#main-section";
 
-    <span class="c1">// Establecemos la configuración de idioma</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">);</span>
+  //Establecemos la configuración de idioma
+  jsu.regional.set(jsu.regional.english);
 
-    <span class="c1">// Establecemos la posición predeterminada para todos los tooltips</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">position</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">at</span><span class="o">:</span> <span class="s2">"left bottom"</span><span class="p">,</span>
-      <span class="nx">my</span><span class="o">:</span> <span class="s2">"left+2 top+5"</span>
-    <span class="p">};</span>
+  //Establecemos la posición predeterminada para todos los tooltips
+  jsu.settings.position = {
+    at: "left bottom",
+    my: "left+2 top+5"
+  };
 
-    <span class="c1">// Agregue su código adicional...</span>
-  <span class="p">})();</span>
-</pre>
-</div>
+  //Agregue su código...
+}());
+</code></pre>
 
 <!-- Namespacing -->
 <h2 id="namespacing" class="add-top-link"><a href="#namespacing">Namespacing</a></h2>
@@ -93,21 +93,21 @@ Pero si no desea usar <em>jQuery.ui,</em> como su implementación predeterminada
 <p>Es crítico e importante salvaguardar nuestro código de fallas en el caso de que otro script en la página esté usando los mismos nombres de variables o funciones que hemos definido.
   Para solucionar éste y otros problemas, sugiero que hagamos uso del <a href="http://toddmotto.com/mastering-the-module-pattern/" target="_blank">Patrón Module</a> utilizando la inyección del espacio de nombres (namespacing).
   De este modo, nuestro código es protegido del ámbito global mediante una función que encapsula la lógica (usualmente un <a target="_blank" href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">IIFE</a>) y expone un objeto que representa la interface pública del módulo.</p>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="c1">//Esta función encapsulada se llama IIFE</span>
-  <span class="c1">//Immediately-Invoked Function Expressions</span>
-  <span class="kd">var</span> <span class="nx">MODULE</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">api</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="kd">var</span> <span class="nx">privateVar</span><span class="p">;</span>
-    <span class="kd">function</span> <span class="nx">privateMethod1</span><span class="p">()</span> <span class="p">{}</span>
-    <span class="kd">function</span> <span class="nx">privateMethod2</span><span class="p">()</span> <span class="p">{}</span>
-    <span class="c1">//expone la interface pública</span>
-    <span class="nx">api</span><span class="p">.</span><span class="nx">publicMethod</span> <span class="o">=</span> <span class="nx">privateMethod2</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nx">api</span><span class="p">;</span>
-  <span class="p">}());</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+//Esta función encapsulada se llama IIFE
+//Immediately-Invoked Function Expressions
+var MODULE = (function () {
+  var api = {},
+      privateVar;
+
+  function privateFunction() {}
+  function exposedFunction() {}
+
+  //expone la interface pública
+  api.publicMethod = exposedFunction;
+  return api;
+}());
+</code></pre>
 <p>Recomiendo que lean este excelente libro: <a href="http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/" target="_blank">Learning JavaScript Design Patterns</a>.<br/>
   También vale la pena leer estos artículos:</p>
 <ul class="no-title">
@@ -139,35 +139,33 @@ Por ejemplo, si usted necesita crear un objeto con la siguiente estructura:</p>
     </ul>
   </li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="c1">// forma 1: podemos crear la estructura a través de IIFE</span>
-  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">createNS</span><span class="p">(</span><span class="s2">"animation.tools"</span><span class="p">);</span>
+<pre class="code-example"><code class="javascript">
+// forma 1: podemos crear la estructura a través de IIFE
+(function () {
+  jsu.createNS("animation.tools");
 
-    <span class="c1">// si decide usar referencias locales/cache,</span>
-    <span class="c1">// es recomendado que las declare dentro de una función o módulo</span>
-    <span class="c1">// (esta técnica se llama: dependancy declaration pattern)</span>
-    <span class="kd">var</span> <span class="nx">_2d</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">createNS</span><span class="p">(</span><span class="s2">"animation.g2D"</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">_3d</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">createNS</span><span class="p">(</span><span class="s2">"animation.g3D"</span><span class="p">);</span>
+  // si decide usar referencias locales/cache,
+  // es recomendado que las declare dentro de una función o módulo
+  // (esta técnica se llama: dependancy declaration pattern)
+  var _2d = jsu.createNS("animation.g2D"),
+      _3d = jsu.createNS("animation.g3D");
 
-    <span class="c1">// accede a la referencia del namespace creado</span>
-    <span class="nx">_2d</span><span class="p">.</span><span class="nx">slide</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
-    <span class="nx">_3d</span><span class="p">.</span><span class="nx">cubic</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
-  <span class="p">})();</span>
+  // accede a la referencia del namespace creado
+  _2d.slide = function() {};
+  _3d.cubic = function() {};
+}());
 
-  <span class="c1">// forma 2: pasando la referencia del objeto como un proxy</span>
-  <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">proxy</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">proxy</span><span class="p">.</span><span class="nx">slide</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
-  <span class="p">})(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">createNS</span><span class="p">(</span><span class="s2">"animation.g2D"</span><span class="p">));</span>
+// forma 2: pasando la referencia del objeto como un proxy
+(function (proxy, undefined) {
+  proxy.slide = function() {};
+})(jsu.createNS("animation.g2D"));
 
-  <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">proxy</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">proxy</span><span class="p">.</span><span class="nx">cubic</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
-  <span class="p">})(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">createNS</span><span class="p">(</span><span class="s2">"animation.g3D"</span><span class="p">));</span>
+(function (proxy, undefined) {
+  proxy.cubic = function() {};
+})(jsu.createNS("animation.g3D"));
 
-  <span class="c1">// forma 3...n, puede usar el patrón Modulo: loose augmentation, etc...</span>
-</pre>
-</div>
+// forma 3...n, puede usar el patrón Modulo: loose augmentation, etc...
+</code></pre>
 
 <!-- jsu.regional -->
 <h3 id="jsuregional" class="add-top-link"><a href="#jsuregional">jsu.regional</a></h3>
@@ -176,66 +174,62 @@ Los idiomas disponibles son <code>jsu.regional.english</code> y <code>jsu.region
 El español es el idioma predefinido y puede ser accedido a través de <code>jsu.regional.current</code><br/>
 Usted puede especificar otro idioma llamando el método <code>set()</code>, por ejemplo: <code>jsu.regional.set(jsu.regional.english);</code><br/>
 También puede definir una nueva configuración de idioma, veamos el siguiente ejemplo:</p>
-<div class="highlight highlight-javascript">
-<pre class="next">
-<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// Crea el objeto de idioma (italiano)</span>
-  <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">italian</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">culture</span><span class="o">:</span> <span class="s2">"it"</span><span class="p">,</span> <span class="c1">//códigos de idioma: <a href="http://www.science.co.il/Language/Locale-codes.asp">http://www.science.co.il/Language/Locale-codes.asp</a></span>
-    <span class="nx">wordPattern</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">//expresión regular para transformación de texto a letras capitales en <a href="#fncapitalize-object-type">fnCapitalize</a></span>
-    <span class="nx">decimalMark</span><span class="o">:</span> <span class="s2">","</span><span class="p">,</span> <span class="c1">//el símbolo del separador decimal usado por <a href="#fnnumericformat-object-options">fnNumericFormat</a></span>
-    <span class="nx">thousandsMark</span><span class="o">:</span> <span class="s2">"."</span><span class="p">,</span> <span class="c1">//el símbolo del separador de miles usado por <a href="#fnnumericformat-object-options">fnNumericFormat</a></span>
-    <span class="nx">timeFormat</span><span class="o">:</span> <span class="s2">"HH:mm"</span><span class="p">,</span> <span class="c1">//formato de hora. HH: 00-23 horas, hh: 01-12 horas, mm: minutos, ss: segundos</span>
-    <span class="nx">dateFormat</span><span class="o">:</span> <span class="s2">"MM/dd/yyyy"</span><span class="p">,</span> <span class="c1">//formato de fecha. dd: día 01-31, MM: mes 01-12, yyyy: año 4-dígitos</span>
-    <span class="nx">dateFormatError</span><span class="o">:</span> <span class="s2">"Il formato della data non è corretta"</span><span class="p">,</span> <span class="c1">//texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando el formato de la fecha es incorrecto</span>
-    <span class="nx">dateIsGreater</span><span class="o">:</span> <span class="s2">"La data non può essere maggiore di oggi"</span><span class="p">,</span> <span class="c1">//texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando la fecha no debe ser mayor a...</span>
-    <span class="nx">dateIsLesser</span><span class="o">:</span> <span class="s2">"La data non può essere minore di oggi"</span><span class="p">,</span> <span class="c1">//texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando la fecha no puede ser menor a...</span>
-    <span class="nx">validateForm</span><span class="o">:</span> <span class="s2">"Il pulsante deve essere all'interno di un &lt;form&gt;"</span><span class="p">,</span> <span class="c1">//texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se valida el botón</span>
-    <span class="nx">validateRequired</span><span class="o">:</span> <span class="s2">"Questo campo è obbligatorio"</span><span class="p">,</span> <span class="c1">//texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se validan campos requeridos</span>
-    <span class="nx">validateFormat</span><span class="o">:</span> <span class="s2">"Il formato non è corretto"</span><span class="p">,</span> <span class="c1">//texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se valida un formato incorrecto</span>
-    <span class="nx">dialogTitle</span><span class="o">:</span> <span class="s2">"Informazioni"</span><span class="p">,</span> <span class="c1">//título predeterminado para las ventanas de <a href="#fnshowdialog-options">fnShowDialog</a></span>
-    <span class="nx">dialogCancel</span><span class="o">:</span> <span class="s2">"Cancellare"</span><span class="p">,</span> <span class="c1">//texto predeterminado para el botón "cancelar" de <a href="#jqueryfnconfirm-options">$.fnConfirm</a></span>
-    <span class="nx">dialogOK</span><span class="o">:</span> <span class="s2">"Concordare"</span> <span class="c1">//texto predeterminado para el botón "aceptar" de <a href="#jqueryfnconfirm-options">$.fnConfirm</a></span>
-  <span class="p">};</span>
-  <span class="c1">// Establece la nueva configuración de idioma</span>
-  <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">italian</span><span class="p">);</span>
-<span class="p">})();</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+(function () {
+  // Crea el objeto de idioma (italiano)
+  jsu.regional.italian = {
+    culture: "it", //códigos de idioma: <a href="http://www.science.co.il/Language/Locale-codes.asp" target="_blank">http://www.science.co.il/Language/Locale-codes.asp</a>
+    wordPattern: null, //expresión regular para transformación de texto a letras capitales en <a href="#fncapitalize-object-type">fnCapitalize</a>
+    decimalMark: ",", //el símbolo del separador decimal usado por <a href="#fnnumericformat-object-options">fnNumericFormat</a>
+    thousandsMark: ".", //el símbolo del separador de miles usado por <a href="#fnnumericformat-object-options">fnNumericFormat</a>
+    timeFormat: "HH:mm", //formato de hora. HH: 00-23 horas, hh: 01-12 horas, mm: minutos, ss: segundos
+    dateFormat: "MM/dd/yyyy", //formato de fecha. dd: día 01-31, MM: mes 01-12, yyyy: año 4-dígitos
+    dateFormatError: "Il formato della data non è corretta", //texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando el formato de la fecha es incorrecto
+    dateIsGreater: "La data non può essere maggiore di oggi", //texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando la fecha no debe ser mayor a...
+    dateIsLesser: "La data non può essere minore di oggi", //texto para <a href="#fnisvaliddate-dom-options">fnIsValidDate</a> cuando la fecha no puede ser menor a...
+    validateForm: "Il pulsante deve essere all'interno di &lt;form&gt;", //texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se valida el botón
+    validateRequired: "Questo campo è obbligatorio", //texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se validan campos requeridos
+    validateFormat: "Il formato non è corretto", //texto para <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a> cuando se valida un formato incorrecto
+    dialogTitle: "Informazioni", //título predeterminado para las ventanas de <a href="#fnshowdialog-options">fnShowDialog</a>
+    dialogCancel: "Cancellare", //texto predeterminado para el botón "cancelar" de <a href="#jqueryfnconfirm-options">$.fnConfirm</a>
+    dialogOK: "Concordare" //texto predeterminado para el botón "aceptar" de <a href="#jqueryfnconfirm-options">$.fnConfirm</a>
+  };
+  // Establece la nueva configuración de idioma
+  jsu.regional.set(jsu.regional.italian);
+}());
+</code></pre>
 <p>Si usted desea configurar el idioma para otros plugins, entonces puede enviar una función como segundo parámetro en el método <code>set();</code> Tenga en cuenta que muchos plugins sólo pueden ser configurados antes de su inicialización.
   Si está usando <a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" target="_blank">jQuery.ui</a>,
   podemos proporcionar un <a href="http://github.com/jquery/jquery-ui/tree/master/ui/i18n" target="_blank">idioma</a> que configure el plugin <a href="http://api.jqueryui.com/datepicker/" target="_blank">datepicker</a>.
 </p>
-<div class="highlight highlight-javascript">
-<pre>
-<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// Vamos a crear el idioma italiano para el plugin datepicker</span>
-  <span class="c1">// Puede encontrar otros lenguajes para datepicker en:</span>
-  <span class="c1">// <a href="http://github.com/jquery/jquery-ui/tree/master/ui/i18n" target="_blank">github.com/jquery/jquery-ui/tree/master/ui/i18n</a></span>
-  <span class="nx">$</span><span class="p">.</span><span class="nx">datepicker</span><span class="p">.</span><span class="nx">regional</span><span class="p">[</span><span class="s1">'it'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">closeText</span><span class="o">:</span> <span class="s1">'Chiudi'</span><span class="p">,</span>
-    <span class="nx">prevText</span><span class="o">:</span> <span class="s1">'&amp;#x3C;Prec'</span><span class="p">,</span>
-    <span class="nx">nextText</span><span class="o">:</span> <span class="s1">'Succ&amp;#x3E;'</span><span class="p">,</span>
-    <span class="nx">currentText</span><span class="o">:</span> <span class="s1">'Oggi'</span><span class="p">,</span>
-    <span class="nx">monthNames</span><span class="o">:</span> <span class="p">[</span><span class="s1">'Gennaio'</span><span class="p">,</span><span class="s1">'Febbraio'</span><span class="p">,</span><span class="s1">'Marzo'</span><span class="p">,</span><span class="s1">'Aprile'</span><span class="p">,</span><span class="s1">'Maggio'</span><span class="p">,</span><span class="s1">'Giugno'</span><span class="p">,</span><span class="s1">'Luglio'</span><span class="p">,</span><span class="s1">'Agosto'</span><span class="p">,</span><span class="s1">'Settembre'</span><span class="p">,</span><span class="s1">'Ottobre'</span><span class="p">,</span><span class="s1">'Novembre'</span><span class="p">,</span><span class="s1">'Dicembre'</span><span class="p">],</span>
-    <span class="nx">monthNamesShort</span><span class="o">:</span> <span class="p">[</span><span class="s1">'Gen'</span><span class="p">,</span><span class="s1">'Feb'</span><span class="p">,</span><span class="s1">'Mar'</span><span class="p">,</span><span class="s1">'Apr'</span><span class="p">,</span><span class="s1">'Mag'</span><span class="p">,</span><span class="s1">'Giu'</span><span class="p">,</span><span class="s1">'Lug'</span><span class="p">,</span><span class="s1">'Ago'</span><span class="p">,</span><span class="s1">'Set'</span><span class="p">,</span><span class="s1">'Ott'</span><span class="p">,</span><span class="s1">'Nov'</span><span class="p">,</span><span class="s1">'Dic'</span><span class="p">],</span>
-    <span class="nx">dayNames</span><span class="o">:</span> <span class="p">[</span><span class="s1">'Domenica'</span><span class="p">,</span><span class="s1">'Lunedì'</span><span class="p">,</span><span class="s1">'Martedì'</span><span class="p">,</span><span class="s1">'Mercoledì'</span><span class="p">,</span><span class="s1">'Giovedì'</span><span class="p">,</span><span class="s1">'Venerdì'</span><span class="p">,</span><span class="s1">'Sabato'</span><span class="p">],</span>
-    <span class="nx">dayNamesShort</span><span class="o">:</span> <span class="p">[</span><span class="s1">'Dom'</span><span class="p">,</span><span class="s1">'Lun'</span><span class="p">,</span><span class="s1">'Mar'</span><span class="p">,</span><span class="s1">'Mer'</span><span class="p">,</span><span class="s1">'Gio'</span><span class="p">,</span><span class="s1">'Ven'</span><span class="p">,</span><span class="s1">'Sab'</span><span class="p">],</span>
-    <span class="nx">dayNamesMin</span><span class="o">:</span> <span class="p">[</span><span class="s1">'Do'</span><span class="p">,</span><span class="s1">'Lu'</span><span class="p">,</span><span class="s1">'Ma'</span><span class="p">,</span><span class="s1">'Me'</span><span class="p">,</span><span class="s1">'Gi'</span><span class="p">,</span><span class="s1">'Ve'</span><span class="p">,</span><span class="s1">'Sa'</span><span class="p">],</span>
-    <span class="nx">weekHeader</span><span class="o">:</span> <span class="s1">'Sm'</span><span class="p">,</span>
-    <span class="nx">dateFormat</span><span class="o">:</span> <span class="s1">'dd/mm/yy'</span><span class="p">,</span>
-    <span class="nx">firstDay</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="nx">isRTL</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nx">showMonthAfterYear</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nx">yearSuffix</span><span class="o">:</span> <span class="s1">''</span>
-  <span class="p">};</span>
-  <span class="c1">// Establecemos la nueva configuración de idioma</span>
-  <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">italian</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">datepicker</span><span class="p">.</span><span class="nx">setDefaults</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">datepicker</span><span class="p">.</span><span class="nx">regional</span><span class="p">[</span><span class="s1">'it'</span><span class="p">]);</span>
-  <span class="p">});</span>
-<span class="p">})();</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+(function () {
+  // Vamos a crear el idioma italiano para el plugin datepicker
+  // Puede encontrar otros lenguajes para datepicker en:
+  // <a href="https://github.com/jquery/jquery-ui/tree/master/ui/i18n" target="_blank">https://github.com/jquery/jquery-ui/tree/master/ui/i18n</a>
+  $.datepicker.regional['it'] = {
+    closeText: 'Chiudi',
+    prevText: '&#x3C;Prec',
+    nextText: 'Succ&#x3E;',
+    currentText: 'Oggi',
+    monthNames: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+    monthNamesShort: ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'],
+    dayNames: ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'],
+    dayNamesShort: ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'],
+    dayNamesMin: ['Do','Lu','Ma','Me','Gi','Ve','Sa'],
+    weekHeader: 'Sm',
+    dateFormat: 'dd/mm/yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+  };
+  // Establecemos la nueva configuración de idioma
+  jsu.regional.set(jsu.regional.italian, function() {
+    $.datepicker.setDefaults($.datepicker.regional['it']);
+  });
+}());
+</code></pre>
 
 <!-- jsu.settings -->
 <h3 id="jsusettings" class="add-top-link"><a href="#jsusettings">jsu.settings</a></h3>
@@ -243,53 +237,50 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
 <ul class="no-title">
   <li class="tab"><strong>release:</strong> <code>Boolean</code> <code class="highlight italic">default: <span class="kd">false</span></code> Determina el ambiente de la aplicación. Éste <em>flag</em> se utiliza en conjunto con <code>urlprefix</code> para determinar la URL, por ejemplo, al hacer peticiones AJAX, solicitar recursos en el dominio, etc. Para entorno de producción, establezca la propiedad en <code>true</code>, para entorno de desarrollo, establezca la propiedad en <code>false</code></li>
   <li class="tab"><p><strong>urlprefix:</strong> <code>String</code> <code class="highlight italic">default: <span class="s1">""</span></code> Especifica el directorio virtual de la aplicación. Si <code>release</code> es <code>true</code>, y en el entorno de producción la aplicación esta hospedada en un directorio virtual, entonces puede utilizar esta propiedad para asignar dicho direcotrio en la URL.</p>
-<div class="highlight highlight-javascript">
-<pre><span class="c1">//determinamos el entorno de la aplicación</span>
-<span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">release</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-<span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">urlprefix</span> <span class="o">=</span> <span class="s2">"/v2.0/"</span><span class="p">;</span>
+<pre class="code-example"><code class="javascript">
+//determinamos el entorno de la aplicación
+jsu.settings.release = false;
+jsu.settings.urlprefix = "/v2.0/";
 
-<span class="c1">//podemos asignar el directorio virtual dinámicamente</span>
-<span class="c1">//jsu.settings.urlprefix = location.pathname.match(/^\/\w+\//)[0];</span>
+//podemos asignar el directorio virtual dinámicamente
+//jsu.settings.urlprefix = location.pathname.match(/^\/[\w\.-]+\//)[0];
 
-<span class="c1">//creamos una fachada para $.ajax</span>
-<span class="kd">function</span> <span class="nx">fnAjax</span> <span class="p">(</span><span class="nx">options</span><span class="p">) {</span>
-  <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-    <span class="nx">dataType</span><span class="o">:</span> <span class="s2">"json"</span><span class="p">,</span>
-    <span class="nx">contentType</span><span class="o">:</span> <span class="s2">"application/json; charset=utf-8"</span><span class="p">,</span>
-    <span class="nx">url</span><span class="o">:</span> <span class="s2">""</span>
-    <span class="c1">//, otras configuraciones predefinidas...</span>
-  <span class="p">},</span> options<span class="p">);</span>
+//creamos una fachada para $.ajax
+function fnAjax (options) {
+  var d = $.extend({
+      type: "POST",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      url: ""
+      //, otras configuraciones predefinidas...
+    }, options);
 
-  <span class="c1">//evitamos crear el prefijo del directorio virtual si no se requiere</span>
-  <span class="kd">var</span> <span class="nx">prefix</span> <span class="o">=</span>
-    <span class="p">(</span><span class="sr">/^(?:\/|http)/</span><span class="p">).</span><span class="nx">test</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span> <span class="o">||</span> <span class="nx">d</span><span class="p">.</span><span class="nx">crossDomain</span> <span class="o">?</span> <span class="s2">""</span> <span class="o">:</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">urlprefix</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">release</span><span class="p">)</span> <span class="nx">d</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="nx">prefix</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
+  //evitamos crear el prefijo del directorio virtual si no se requiere
+  var prefix =
+    (/^\/|^http/i).test(d.url) || d.crossDomain ? "" : jsu.settings.urlprefix;
+  if (jsu.settings.release) d.url = prefix + d.url;
 
-  <span class="k">return</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
-<span class="p">}</span>
-</pre>
-</div>
+  return $.ajax(d);
+}
+</code></pre>
   </li>
 
   <li class="tab"><strong>position:</strong> <code>Object</code> <code class="highlight italic">default: <span class="kd">null</span></code> Sobrescribe la posición predefinida del tooltip en los métodos que hagan uso de <a href="#jqueryposition-options">.position()</a>, <em style="font-size:0.9em">p. ej. <a href="#fnisvaliddate-dom-options">fnIsValidDate</a>, <a href="#fnshowtooltip-dom-message-position">fnShowTooltip</a>, <a href="#jqueryfnmaxlength-length-position">$.fnMaxLength</a>, <a href="#jqueryfneasyvalidate-options">$.fnEasyValidate</a></em>.
     <ul>
       <li><strong>at:</strong> <code>String</code>. Define la posición en el elemento contra el cual se alineará: La regla es <em>"horizontal vertical"</em>. Los valores aceptables para la alineación horizontal son: <code>"left"</code>, <code>"center"</code>, <code>"right"</code> Los valores aceptables para la alineación vertical son: <code>"top"</code>, <code>"center"</code>, <code>"bottom"</code><br/>Cada dimensión puede contener <strong><em>offsets</em></strong> en pixeles, por ejemplo: <code>"right+10 top-25"</code></li>
       <li><strong>my:</strong> <code>String</code>. Define la posición del elemento actual relativo al elemento contra el cual será posicionado: La regla es <em>"horizontal vertical"</em>. (Vea <strong>position.at</strong> para los posibles valores)</li>
-      <li><strong>collision:</strong> <code>String</code>. Cuando el elemento posicionado se desborda en alguna dirección, es movido a una posición alternativa. (Sólo funciona si <a href="http://api.jqueryui.com/position/" target="_blank">jQuery.ui.position</a> está disponible)</li>
+      <li><strong>collision:</strong> <code>String</code>. Cuando el elemento posicionado se desborda en alguna dirección, es movido a una posición alternativa. (Sólo aplica si <a href="http://api.jqueryui.com/position/" target="_blank">jQuery.ui.position</a> está disponible)</li>
     </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Establece la posición predefinida para los tooltip</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">position</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">at</span><span class="o">:</span> <span class="s2">"left bottom"</span><span class="p">,</span>
-      <span class="nx">my</span><span class="o">:</span> <span class="s2">"left+2 top+5"</span><span class="p">,</span>
-      <span class="nx">collision</span><span class="o">:</span> <span class="s2">"none"</span>
-    <span class="p">};</span>
-  <span class="p">}());</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+(function () {
+  //Establece la posición predefinida para los tooltip
+  jsu.settings.position = {
+    at: "left bottom",
+    my: "left+2 top+5",
+    collision: "none"
+  };
+}());
+</code></pre>
   </li>
 </ul>
 <hr/>
@@ -301,7 +292,7 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
   <li><a href="#browser">browser</a></li>
   <li><a href="#isdom-object">isDOM</a></li>
   <li><a href="#isfunction-object">isFunction</a></li>
-  <li><a href="#fnstringify-json">fnStringify</a></li>
+  <li><a href="#fnstringify-object">fnStringify</a></li>
   <!--<li><a href="#sortby-array-options">sortBy</a></li>-->
   <li><a href="#inputtype">inputType</a></li>
   <li><a href="#handlerexist-dom-eventname-namespace">handlerExist</a></li>
@@ -357,187 +348,202 @@ También puede definir una nueva configuración de idioma, veamos el siguiente e
 
 <!-- browser -->
 <h3 id="browser" class="add-methods-link"><a href="#browser">browser</a></h3>
-<p>Agrega soporte para detectar el navegador, ya que desde jQuery 1.9+ la propiedad <em><a href="http://api.jquery.com/category/deprecated/#post-301" target="_blank">browser</a></em> fue eliminada.<br/>
-Para la detección de capacidades, es mejor utilizar <a href="http://modernizr.com/docs/" target="_blank">Modernizr</a>.<br/>
-<strong>Retorna</strong> <code>Object</code></p>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="c1">// ver el navegador y la version</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">browser</span><span class="p">);</span>
-  <span class="c1">// buscar un navegador específico</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">msie</span><span class="p">) { ... }</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">chrome</span><span class="p">) { ... }</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">mozilla</span><span class="p">) { ... }</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">opera</span><span class="p">) { ... }</span>
-</pre>
-</div>
+<p>Detecta el navegador mediante el <code>userAgent</code>; es una vieja forma de validar el navegador, ya que desde jQuery 1.9+ la propiedad <em><a href="http://api.jquery.com/category/deprecated/#post-301" target="_blank">browser</a></em> fue descartada.
+Éste método no es de fiar para la detección de capacidades, en su lugar utilice el enfoque de detección de característicases, como lo hace <a href="http://modernizr.com/docs/" target="_blank">Modernizr</a>.</p>
+<p><strong>Retorna</strong> <code>Object</code></p>
+<pre class="code-example"><code class="javascript">
+  //ver el navegador y la version.
+  //el objeto browser es inmutable.
+  console.log(jsu.browser);
+
+  //buscar un navegador específico
+  if (jsu.browser.msie) { ... }
+  if (jsu.browser.chrome) { ... }
+  if (jsu.browser.mozilla) { ... }
+  if (jsu.browser.opera) { ... }
+</code></pre>
 
 <!-- isDOM -->
 <h3 id="isdom-object" class="add-methods-link"><a href="#isdom-object">isDOM (object)</a></h3>
-<p>Determina si el parámetro de entrada es un elemento <a href="http://www.w3.org/2002/07/26-dom-article.html" target="_blank">DOM</a>.<br/>
-<strong>Retorna</strong> <code>Boolean</code></p>
+<p>Determina si el parámetro <strong><em><span>@</span>object</em></strong> es un <a href="http://www.w3schools.com/jsref/dom_obj_all.asp" target="_blank">DOM Element</a>.</p>
+<p><strong>Retorna</strong> <code>Boolean</code></p>
 <ul>
   <li><strong>object:</strong> <code>Object</code> el objeto que se evaluará.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">nodeType</span><span class="o">:</span> <span class="s2">"Element"</span> <span class="p">};</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//false : Object</span>
+<pre class="code-example"><code class="javascript">
+  var obj = { nodeType: "Element" };
+  if (jsu.isDOM(obj)) { ... } //false : Object
 
-  <span class="nx">obj</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"txtName"</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//true : DOM Element</span>
+  obj = document.getElementById("txtName");
+  if (jsu.isDOM(obj)) { ... } //true : DOM Element
 
-  <span class="nx">obj</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">":button"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//true : DOM Element</span>
+  obj = $(":button").get(0);
+  if (jsu.isDOM(obj)) { ... } //true : DOM Element
 
-  <span class="nx">obj</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">":button"</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isDOM</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span> <span class="c1">//false : jQuery</span>
-</pre>
-</div>
+  obj = $(":button");
+  if (jsu.isDOM(obj)) { ... } //false : jQuery
+</code></pre>
 
 <!-- isFunction -->
 <h3 id="isfunction-object" class="add-methods-link"><a href="#isfunction-object">isFunction (object)</a></h3>
-<p>Determina si el parámetro de entrada es una función.<br/>
-<strong>Retorna</strong> <code>Boolean</code></p>
+<p>Determina si el parámetro <strong><em><span>@</span>object</em></strong> es una función.</p>
+<p><strong>Retorna</strong> <code>Boolean</code></p>
 <ul>
   <li><strong>object:</strong> <code>Object</code> el objeto que se evaluará.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">fn</span> <span class="o">=</span> <span class="p">{};</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">fn</span><span class="p">))</span> <span class="p">{</span> <span class="nx">fn</span><span class="p">();</span> <span class="p">}</span> <span class="c1">//false : Object</span>
+<pre class="code-example"><code class="javascript">
+  var fn = {};
+  if (jsu.isFunction(fn)) { fn(); } //false : Object
 
-  <span class="nx">fn</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">fn</span><span class="p">))</span> <span class="p">{</span> <span class="nx">fn</span><span class="p">();</span> <span class="p">}</span> <span class="c1">//false : Null</span>
+  fn = null;
+  if (jsu.isFunction(fn)) { fn(); } //false : Null
 
-  <span class="nx">fn</span> <span class="o">=</span> <span class="s2">"function"</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">fn</span><span class="p">))</span> <span class="p">{</span> <span class="nx">fn</span><span class="p">();</span> <span class="p">}</span> <span class="c1">//false : String</span>
+  fn = "function";
+  if (jsu.isFunction(fn)) { fn(); } //false : String
 
-  <span class="nx">fn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">alert</span><span class="p">(</span><span class="s2">"expression"</span><span class="p">);</span> <span class="p">};</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">fn</span><span class="p">))</span> <span class="p">{</span> <span class="nx">fn</span><span class="p">();</span> <span class="p">}</span> <span class="c1">//true : Function</span>
+  fn = function () { alert("expression"); };
+  if (jsu.isFunction(fn)) { fn(); } //true : Function
 
-  <span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span> <span class="nx">alert</span><span class="p">(</span><span class="s2">"declaration"</span><span class="p">);</span> <span class="p">};</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">foo</span><span class="p">))</span> <span class="p">{</span> <span class="nx">foo</span><span class="p">();</span> <span class="p">}</span> <span class="c1">//true : Function</span>
-</pre>
-</div>
+  function foo () { alert("declaration"); };
+  if (jsu.isFunction(foo)) { foo(); } //true : Function
+</code></pre>
 
 <!-- fnStringify -->
-<h3 id="fnstringify-json" class="add-methods-link"><a href="#fnstringify-json">fnStringify (json)</a></h3>
-<p>Ésta función es una referencia a <a href="http://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify" target="_blank"><code>JSON.stringify</code></a> y proporciona un polyfill para los navegadores antiguos.<br/>
-<em>fnStringify</em> serializa un objeto, array o valor primitivo y lo retorna como <em>JSON-String.</em><br/>
-<strong>Retorna</strong> <code>String</code></p>
+<h3 id="fnstringify-object" class="add-methods-link"><a href="#fnstringify-object">fnStringify (object)</a></h3>
+<p>Ésta función es una referencia a <a href="http://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify" target="_blank"><code>JSON.stringify</code></a> y proporciona un polyfill para los navegadores antiguos.
+<code>fnStringify</code> serializa un objeto, array o valor primitivo y lo retorna como <a href="http://json.org/" target="_blank">JSON</a>.</p>
+<p><strong>Retorna</strong> <code>String</code></p>
 <ul>
-  <li><strong>json:</strong> <code>Object</code> El objeto a serializar en string.</li>
+  <li><strong>object:</strong> <code>Object</code> El objeto a serializar como <a href="http://json.org/" target="_blank">JSON</a> (string)</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">jsonPerson</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">name</span><span class="o">:</span> <span class="s2">"David"</span><span class="p">,</span>
-      <span class="nx">sex</span><span class="o">:</span> <span class="s2">"male"</span><span class="p">,</span>
-      <span class="nx">age</span><span class="o">:</span> <span class="mi">30</span>
-  <span class="p">};</span>
-  <span class="c1">// Serializamos el objeto jsonPerson</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">fnStringify</span><span class="p">(</span><span class="nx">jsonPerson</span><span class="p">));</span>
+<pre class="code-example"><code class="javascript">
+  var oPerson = {
+      name: "David",
+      sex: "male",
+      age: 30
+  };
+  // Serializamos el objeto oPerson
+  console.log(jsu.fnStringify(oPerson));
 
-  <span class="c1">// Usamos <a href="http://api.jquery.com/jquery.extend/" target="_blank">jQuery.extend</a> para mezclar dos o más objetos en el primero</span>
-  <span class="kd">var</span> <span class="nx">jsonNew</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span> <span class="nx">alias</span><span class="o">:</span> <span class="s1">'jherax'</span> <span class="p">},</span> <span class="nx">jsonPerson</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">fnStringify</span><span class="p">(</span><span class="nx">jsonNew</span><span class="p">));</span>
-</pre>
-</div>
+  // Usamos <a href="http://api.jquery.com/jquery.extend/" target="_blank">jQuery.extend</a> para combinar dos o más objetos dentro del primero
+  var oNew = $.extend({ alias: 'jherax' }, oPerson);
+  console.log(jsu.fnStringify(oNew));
+</code></pre>
 
 <!-- inputType -->
 <h3 id="inputtype" class="add-methods-link"><a href="#inputtype">inputType</a></h3>
 <p>Este objeto tiene dos métodos para determinar la categoría de un elemento <code>&lt;input&gt;</code></p>
 <ul class="no-title">
-  <li class="tab"><strong><code>isText (dom)</code></strong>: Esta función retorna <code>true</code> cuando el parámetro <strong><em>dom</em></strong> es un elemento <code>&lt;input&gt;</code> de escritura.
-    Los elementos clasificados en esta categoría se describen en <a href="#" class="open-window">inputType:text</a>.</li>
-  <li class="tab"><strong><code>isCheck (dom)</code></strong>: Esta función retorna <code>true</code> cuando el parámetro <strong><em>dom</em></strong> es un elemento <code>&lt;input&gt;</code> de marcar.
-    Los elementos clasificados en esta categoría son: input <strong>checkbox</strong> y input <strong>radio</strong>.</li>
+  <li class="tab"><strong><code>isText (dom)</code></strong>: <code>Function</code> Esta función retorna <code>true</code> cuando el parámetro <strong><em><span>@</span>dom</em></strong> es un elemento <code>&lt;input&gt;</code> de texto.
+    Los elementos de esta categoría se describen en <a href="#" class="open-window"><strong>inputType.isText</strong></a></li>
+  <li class="tab"><strong><code>isCheck (dom)</code></strong>: <code>Function</code> Esta función retorna <code>true</code> cuando el parámetro <strong><em><span>@</span>dom</em></strong> es un elemento <code>&lt;input&gt;</code> de marcar.
+    Los elementos de esta categoría son: <strong>checkbox</strong> y <strong>radio</strong> inputs.</li>
 </ul>
-<div class="highlight highlight-html">
-<pre class="next">
-  <span class="c">&lt;!--Creamos los elementos que vamos a probar--&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"radio"</span> <span class="na">id=</span><span class="s">"radio"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"date"</span> <span class="na">id=</span><span class="s">"date"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;textarea</span> <span class="na">id=</span><span class="s">"area"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
-</pre>
-</div>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">//<a href="http://api.jquery.com/get/" target="_blank">.get(index)</a> obtiene el elemento DOM</span>
-    <span class="kd">var</span> <span class="nx">area</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#area"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-        <span class="nx">date</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#date"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-        <span class="nx">radio</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#radio"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">inputType</span><span class="p">.</span><span class="nx">isText</span><span class="p">(</span><span class="nx">area</span><span class="p">))</span> <span class="nx">area</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">"I am inputType:text"</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">inputType</span><span class="p">.</span><span class="nx">isText</span><span class="p">(</span><span class="nx">date</span><span class="p">))</span> <span class="nx">date</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toISOString</span><span class="p">().</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">inputType</span><span class="p">.</span><span class="nx">isCheck</span><span class="p">(</span><span class="nx">radio</span><span class="p">))</span> <span class="nx">radio</span><span class="p">.</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-  <span class="p">})();</span>
-</pre>
-</div>
+<pre class="code-example"><code class="xml">
+  &lt;!--Creamos los elementos que vamos a probar--&gt;
+  &lt;input type="radio" id="radio" /&gt;
+  &lt;input type="date" id="date" /&gt;
+  &lt;textarea id="area"&gt;&lt;/textarea&gt;
+</code></pre>
+<pre class="code-example"><code class="javascript">
+(function () {
+  //<a href="http://api.jquery.com/get/" target="_blank">.get(index)</a> obtiene el elemento DOM
+  var area = $("#area").get(0),
+      date = $("#date").get(0),
+      radio = $("#radio").get(0);
+  if (jsu.inputType.isText(area)) area.value = "Textarea is inputType.isText";
+  if (jsu.inputType.isText(date)) date.value = new Date().toISOString().substring(0, 10);
+  if (jsu.inputType.isCheck(radio)) radio.checked = true;
+}());
+</code></pre>
 
 <!-- handlerExist -->
 <h3 id="handlerexist-dom-eventname-namespace" class="add-methods-link"><a href="#handlerexist-dom-eventname-namespace">handlerExist (dom, eventname, namespace)</a></h3>
-<p>Determina si un manejador de eventos fue creado previamente especificando un <em>namespace.</em><br/>
-<strong>Note:</strong> <a href="http://css-tricks.com/namespaced-events-jquery/" target="_blank">Event namespacing</a> es una técnica que nos permite manejar tareas de una forma diferente conforme al <em>namespace</em> usado en el evento, y es muy útil cuando se han agregado varios <em>listeners</em> al&#160;mismo evento, y se necesita hacer algo con sólo uno de ellos.<br/>
-<strong>Retorna</strong> <code>Boolean</code></p>
+<p>Determina si un manejador de eventos (definido por <strong><em><span>@</span>eventname</em></strong> + <strong><em><span>@</span>namespace</em></strong>) fue creado previamente.</p>
+<p><a href="http://css-tricks.com/namespaced-events-jquery/" target="_blank">Event namespacing</a> es una técnica que nos permite manejar tareas diferentemente dependiendo del <em>namespace</em> asignado al evento,
+  y es muy útil cuando se han agregado varios <em>listeners</em> al&#160;mismo evento, y se necesita hacer algo con sólo uno de ellos.</p>
+<p><strong>Retorna</strong> <code>Boolean</code></p>
 <ul>
-  <li><strong>dom:</strong> elemento <code>DOM</code> con el evento enlazado.</li>
+  <li><strong>dom:</strong> <code>DOM Element</code> al cual fue enlazado el evento.</li>
   <li><strong>eventname:</strong> <code>String</code> que determina el tipo de evento.</li>
   <li><strong>namespace:</strong> <code>String</code> que especifica el namespace del evento.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">txb</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<pre class="code-example"><code class="javascript">
+var runTest = (function ($) {
+  var c1 = 0, c2 = 0;
 
-    <span class="c1">// creamos un event handler sin namespace</span>
-    <span class="nx">$</span><span class="p">(</span><span class="nx">txb</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx"></span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"> Not namespaced"</span><span class="p">);</span> <span class="p">});</span>
+  return function (selector) {
+    var elem = $(selector);
 
-    <span class="c1">// revisa si el event handler con namespace ya fue definido</span>
-    <span class="kd">var</span> <span class="nx">defined</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">handlerExist</span><span class="p">(</span><span class="nx">txb</span><span class="p">,</span> <span class="s2">"click"</span><span class="p">,</span> <span class="s2">"fnHighlight"</span><span class="p">);</span>
+    //creamos un event handler sin namespace
+    c1 += 1;
+    elem.click(function () {
+      console.log("+ Not namespaced:", c1);
+    });
 
-    <span class="c1">// creamos el event handler asignando un namespace al evento</span>
-    <span class="o">!</span><span class="nx">defined</span> <span class="o">&amp;&amp;</span> <span class="nx">$</span><span class="p">(</span><span class="nx">txb</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">"click.fnHighlight"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Event type:"</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Namespace:"</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">namespace</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">handleObj</span><span class="p">.</span><span class="nx">namespace</span><span class="p">);</span>
-      <span class="c1">// agregar más código...</span>
-    <span class="p">});</span>
+    //revisa si el event handler con el namespace ya fue creado
+    var created = jsu.handlerExist(elem.get(0), "click", "fnHighlight");
 
-    <span class="c1">// disparamos el evento específico por su namespace</span>
-    <span class="nx">$</span><span class="p">(</span><span class="nx">txb</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">"click.fnHighlight"</span><span class="p">);</span>
-  <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
-</pre>
-</div>
+    //creamos el event handler asignando un namespace al evento
+    if (!created) {
+      c2 += 1;
+      elem.on("click.fnHighlight", function (e) {
+        var t = " " + c2 + ":";
+        console.log("* Event type" + t, e.type);
+        console.log("* Namespaced" + t, e.namespace || e.handleObj.namespace);
+      });
+    }
+
+    //disparamos el evento
+    elem.trigger("click");
+
+    //disparamos el evento por su namespace
+    //elem.trigger("click.fnHighlight");
+  };
+}(jQuery));
+</code></pre>
+<pre class="code-example"><code class="javascript">
+  //ejecutaremos algunas pruebas
+  var i = 4, obj = {};
+  //obj = $("#list-of-methods").get(0);
+
+  while (i -= 1) {
+    //creamos los click handlers
+    runTest(obj);
+    console.log("---");
+  }
+
+  //obtenemos los handlers creados (non-public jQuery API)
+  var handlers = (jQuery._data(obj, 'events') || {}).click || [];
+  console.log("click handlers:", handlers);
+</code></pre>
 
 <!-- nsEvents -->
 <h3 id="nsevents-eventname-namespace" class="add-methods-link"><a href="#nsevents-eventname-namespace">nsEvents (eventname, namespace)</a></h3>
-<p>Construye el nombre del evento, añadiendo un punto y el <em>namespace</em> al final del nombre del evento.
-Enlazar&#160;y&#160;desenlazar eventos es un patrón común en la creación de plugins jQuery, de manera que se puedan manejar las acciones ejecutadas por un evento, pero que pasa si tengo más de un <em>event-handler</em> enlazado al mismo evento y quiero hacer algo específicamente con sólo uno de ellos?<br/>
-<a href="http://css-tricks.com/namespaced-events-jquery/" target="_blank">Event namespacing</a> es una técnica que provee una forma de administrar <em>event-handlers</em> específicos.<br/>
-Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/09/namespace-your-events/" target="_blank">Namespace your events</a> y <a href="https://api.jquery.com/on/#event-names" target="_blank">jQuery event names and namespaces</a><br/>
-<strong>Retorna</strong> <code>String</code></p>
+<p>Construye el nombre del evento, añadiendo un punto y el <strong><em><span>@</span>namespace</em></strong> al final de <strong><em><span>@</span>eventname</em></strong>.</p>
+<p>Enlazar&#160;y&#160;desenlazar eventos es un patrón común en la creación de plugins en jQuery, de manera que se pueda manejar las acciones ejecutadas por un evento, ¿pero que pasa si tengo más de un <em>event-handler</em> enlazado al mismo evento y quiero hacer algo específicamente con sólo uno de ellos?</p>
+<p><a href="http://css-tricks.com/namespaced-events-jquery/" target="_blank">Event namespacing</a> es una técnica que provee una forma de administrar <em>event-handlers</em> específicos.<br/>
+  Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/09/namespace-your-events/" target="_blank">Namespace your events</a> y <a href="https://api.jquery.com/on/#event-names" target="_blank">jQuery event names and namespaces</a></p>
+<p><strong>Retorna</strong> <code>String</code></p>
 <ul>
-  <li><strong>eventname:</strong> <code>String</code> Lista de eventos separados por espacio.</li>
-  <li><strong>namespace:</strong> <code>String</code> Especifica el namespace de los eventos.</li>
+  <li><strong>eventname:</strong> <code>String</code> Nombre del evento. Puede ser una lista separada por espacios.</li>
+  <li><strong>namespace:</strong> <code>String</code> Namespace del evento / lista de eventos.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="c1">//delega el evento click en el documento</span>
-  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">)
-    .</span><span class="nx">off</span><span class="p">(</span><span class="s2">"click.highlight"</span><span class="p">) <span class="c1">//quita el event-handler específico por su namespace</span>
-    .</span><span class="nx">on</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">nsEvents</span><span class="p">(</span><span class="s2">"click"</span><span class="p">,</span> <span class="s2">"highlight"</span><span class="p">),</span> <span class="s2">"[data-role=highlight]"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">"jsu-highlight"</span><span class="p">);</span>
-    <span class="p">});</span>
+<pre class="code-example"><code class="javascript">
+//delega el evento click en el documento
+$(document)
+  .off("click.highlight") //quita el event-handler por su namespace
+  .on(jsu.nsEvents("click", "highlight"), "[data-role=highlight]", function (e) {
+      $(this).addClass("jsu-highlight");
+  });
 
-  <span class="c1">//agrega el mismo event-handler a diferentes eventos</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">".jsu-maxlength"</span><span class="p">)
-    .</span><span class="nx">off</span><span class="p">(</span><span class="s2">".maxLength"</span><span class="p">) <span class="c1">//quita todos los event-handlers por su namespace</span>
-    .</span><span class="nx">on</span><span class="p">(</span><span class="nx">nsEvents</span><span class="p">(</span><span class="s2">"keypress input paste"</span><span class="p">,</span> <span class="s2">"maxLength"</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">//implementación</span>
-    <span class="p">});</span>
-</pre>
-</div>
+//agrega el mismo event-handler a diferentes eventos
+$(".jsu-maxlength")
+  .off(".maxLength") //quita todos los event-handlers por su namespace
+  .on(jsu.nsEvents("keypress input paste", "maxLength"), function (e) {
+      //implementación
+  });
+</code></pre>
 
 <!-- fnAddScript -->
 <h3 id="fnaddscript-options" class="add-methods-link"><a href="#fnaddscript-options">fnAddScript (options)</a></h3>
@@ -547,7 +553,7 @@ Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/
   Tenga en cuenta que al utilizar <a href="http://api.jquery.com/jquery.ajax/" target="_blank">jQuery.ajax</a> no podrá solicitar recursos alojados en otro dominio, o utilizar el protocolo <code>file:///</code>,
   a menos que configure el método <code>.ajax()</code> para tal caso (vea <a href="http://api.jquery.com/jquery.ajaxprefilter/" target="_blank">jQuery.ajaxPrefilter</a>)</p>
 <p>Si configura <code class="highlight italic">createTag: <span class="kd">true</span></code> entonces se crea el elemento <code>&lt;script&gt;</code>,
-  en cuyo caso el método retorna el elemento <code>DOM</code> del <code>&lt;script&gt;</code> creado.
+  en cuyo caso el método retorna el <code>DOM Element</code> del <code>&lt;script&gt;</code> creado.
   El <code>&lt;script&gt;</code> es insertado antes del último script ejecutado ó antes del script especificado por <strong><em><span>@</span>options.before</em></strong></p>
 <p><strong>Retorna</strong> <a href="http://www.w3schools.com/jsref/dom_obj_all.asp" target="_blank"><code>Element</code></a> o <a href="http://api.jquery.com/Types/#jqXHR" target="_blank"><code>jqXHR</code></a></p>
 <ul>
@@ -566,7 +572,7 @@ Recomiendo que lean los artículos: <a href="http://www.learningjquery.com/2007/
 </ul>
 <p><strong>► module.js</strong> <em>(este es el archivo a cargar)</em></p>
 <pre class="code-example"><code class="javascript">
-var MODULE = (function() {
+var MODULE = (function () {
   var date = new Date().toISOString();
   console.log(">> MODULE loaded > " + date);
   return {
@@ -576,24 +582,24 @@ var MODULE = (function() {
 }());
 </code></pre>
 <p><strong>► main.js</strong> <em>(este es el archivo principal)</em></p>
-<pre class="code-example"><code class="javascript">
-var demo = (function (context, $, jsu, undefined) {
-
+<pre class="code-example next"><code class="javascript">
+(function (demo, context, jsu, undefined) {
+  /* 1 */
   //crea el elemento &lt;script&gt; para cargar
   //el archivo, lo inserta antes de main.js
   //y ejecuta el callback "onload" cuando
   //el script ha sido cargado y ejecutado.
   //vea: <a href="//https://www.igvita.com/2014/05/20/script-injected-async-scripts-considered-harmful/" target="_blank">Script-injected</a>
-  function scriptTag() {
-    setTimeout(function() {
-      printBegin("1.");
+  demo.scriptTag = function () {
+    setTimeout(function () {
+      printBegin("1. Main stack");
       //asegura que MODULE no exista
       if(context.MODULE) MODULE = undefined;
       jsu.fnAddScript({
         src: "demos/fnAddScript/module.js",
         before: "main.js",
         createTag: true,
-        onload: function() {
+        onload: function () {
           console.log("1. onload callback > MODULE:", MODULE);
         }
       });
@@ -601,65 +607,72 @@ var demo = (function (context, $, jsu, undefined) {
     }, 100);
   }
 
+}(jsu.createNS("demo"), window, jsu));
+
+//escribe el mensaje en la consola
+function printBegin (text) {
+  console.log("%c" + text + " > start: " +
+    new Date().toISOString(), "color: green");
+}
+</code></pre>
+<pre class="code-example next"><code class="javascript">
+(function (demo, context, jsu, undefined) {
+  /* 2 */
   //carga el archivo asíncronamente mediante $.ajax,
   //y ejecuta el método ".done()" del objeto jqXHR retornado
-  function ajaxAsync() {
-    setTimeout(function() {
+  demo.ajaxAsync = function () {
+    setTimeout(function () {
       //asegura que MODULE no exista
       if(context.MODULE) MODULE = undefined;
-      printBegin("2.");
+      printBegin("2. Main stack");
       jsu.fnAddScript("demos/fnAddScript/module.js")
-        .done(function() {
+        .done(function () {
           console.log("2. Async promise > MODULE:", MODULE);
         });
       console.log("2. Main stack > MODULE:", context.MODULE);
     }, 200);
   }
 
+}(jsu.createNS("demo"), window, jsu));
+</code></pre>
+<pre class="code-example next"><code class="javascript">
+(function (demo, context, jsu, undefined) {
+  /* 3 */
   //carga el archivo de forma sincrónica mediante $.ajax,
   //y ejecuta el método ".done()" del objeto jqXHR retornado
-  function ajaxSync() {
-    setTimeout(function() {
+  demo.ajaxSync = function () {
+    setTimeout(function () {
       //asegura que MODULE no exista
       if(context.MODULE) MODULE = undefined;
-      printBegin("3.");
+      printBegin("3. Main stack");
       jsu.fnAddScript({
         src: "demos/fnAddScript/module.js",
         async: false
-      }).done(function() {
+      }).done(function () {
           console.log("3. Sync promise > MODULE:", MODULE);
       });
       console.log("3. Main stack > MODULE:", context.MODULE);
     }, 300);
   }
 
-  //escribe el mensaje en la consola
-  function printBegin (step) {
-    console.log("%c" + step + " Main stack > start: " +
-      new Date().toISOString(), "color: green");
-  }
+}(jsu.createNS("demo"), window, jsu));
+</code></pre>
+<pre class="code-example"><code class="javascript">
+  //Ejecutamos las pruebas
+    demo.scriptTag();
 
-  return {
-    "scriptTag": scriptTag,
-    "ajaxAsync": ajaxAsync,
-    "ajaxSync": ajaxSync
-  };
-
-}(window, jQuery, jsu));
-
-  demo.scriptTag();
-//demo.ajaxAsync();
-//demo.ajaxSync();
+  //demo.ajaxAsync();
+  //demo.ajaxSync();
 </code></pre>
 
 <!-- fnAddCSS -->
 <h3 id="fnaddcss-path-before" class="add-methods-link"><a href="#fnaddcss-path-before">fnAddCSS (path, before)</a></h3>
 <p>Agrega dinámicamente un archivo de hoja de estilos (CSS).<br/>
-  Este método es útil para agregar un archivo css al documento.<br/>
-  <strong>Retorna</strong> <a href="http://www.w3schools.com/jsref/dom_obj_all.asp" target="_blank"><code>Element</code></a></p>
+  Este método es útil para agregar un archivo css al documento.</p>
+<p><strong>Retorna</strong> <a href="http://www.w3schools.com/jsref/dom_obj_all.asp" target="_blank"><code>Element</code></a></p>
 <ul>
   <li class="tab"><strong>path:</strong> <code>String</code> URL del archivo css a ser añadido.</li>
-  <li class="tab"><strong>before:</strong> <code>String</code> Parte del atributo <code>href</code> del elemento <code>&lt;link&gt;</code> que identifica en dónde agregar el archivo css. Éste parámetro es opcional y si no se especifica, el nuevo archivo será añadido al final del elemento <code>&lt;head&gt;</code></li>
+  <li class="tab"><strong>before:</strong> <code>String</code> <em>(Opcional)</em> Parte del atributo <code>href</code> del elemento <code>&lt;link&gt;</code> que identifica en dónde agregar el archivo css. Éste parámetro es opcional y si no se especifica, el nuevo archivo será añadido al final del elemento <code>&lt;head&gt;</code></li>
 </ul>
 <p><strong>► demo.css</strong> <em>(este es el archivo css a cargar)</em></p>
 <pre class="code-example"><code class="css">
@@ -667,7 +680,7 @@ var demo = (function (context, $, jsu, undefined) {
 </code></pre>
 <p><strong>► main.js</strong> <em>(este es el script principal)</em></p>
 <pre class="code-example"><code class="javascript">
-  setTimeout(function() {
+  setTimeout(function () {
     //agrega el archivo css antes del &lt;link&gt; jherax.min.css
     var lnk = jsu.fnAddCSS("demos/fnAddCSS/demo.css", "jherax.min.css");
     lnk.id = "lnk-jherax";
@@ -679,113 +692,112 @@ var demo = (function (context, $, jsu, undefined) {
 
 <!-- fnEscapeRegExp -->
 <h3 id="fnescaperegexp-text" class="add-methods-link"><a href="#fnescaperegexp-text">fnEscapeRegExp (text)</a></h3>
-<p>Transforma el texto de entrada a un patrón literal en el <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Creating_a_Regular_Expression" target="_blank">constructor</a> de una expresión regular.<br/>
-  Esto significa que los <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters" target="_blank">caracteres especiales</a> en una expresión regular son tratados como literales.<br/>
-  Por ejemplo, la expresión regular <code>"(A+)"</code> se convertirá en <code>"\(A\+\)"</code><br/>
-<strong>Retorna</strong> <code>String</code> o <code>null</code> si el parámetro <strong><em>text</em></strong> no es un <em>string</em>.</p>
+<p>Escapa los caracteres especiales en el <code>String</code> <strong><em><span>@</span>text</em></strong> de manera que pueda servir de patrón literal en una <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions" target="_blank">expresión regular</a>.
+  Esto significa que los <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters" target="_blank">caracteres especiales</a> en una expresión regular serán tratados como literales.
+  Por ejemplo, en el texto <code>"(A+)"</code> los caracteres especiales son tratados como literales así: <code>"\(A\+\)"</code></p>
+<p><strong>Retorna</strong> <code>String</code> o <code>Null</code> si <strong><em><span>@</span>text</em></strong> no es un <code>String</code></p>
 <ul>
-  <li><strong>text:</strong> <code>String</code> que representa una expresión regular.</li>
+  <li><strong>text:</strong> <code>String</code> que representa un patrón literal en una expresión regular.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="s2">"C:\\Documents"</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">re1</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span> <span class="c1">//representa una expresión regular</span>
-  <span class="kd">var</span> <span class="nx">re2</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">fnEscapeRegExp</span><span class="p">(</span><span class="nx">path</span><span class="p">));</span> <span class="c1">//expresión literal</span>
+<pre class="code-example"><code class="javascript">
+  var path = "C:\\Documents",
+      re1 = new RegExp(path),
+      //escapa los caracteres especiales
+      re2 = new RegExp(jsu.fnEscapeRegExp(path));
 
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Testing &gt; "</span><span class="p">,</span> <span class="nx">path</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"re1: "</span> <span class="o">+</span> <span class="nx">re1</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">", RegExp: "</span> <span class="o">+</span> <span class="nx">re1</span><span class="p">.</span><span class="nx">source</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"re2: "</span> <span class="o">+</span> <span class="nx">re2</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">", RegExp: "</span> <span class="o">+</span> <span class="nx">re2</span><span class="p">.</span><span class="nx">source</span><span class="p">);</span>
-</pre>
-</div>
+  console.log("String: ", path);
+
+  console.log("re1 unescaped: ", re1.source); /* C:\Documents */
+  console.log("test re1: ", re1.test(path));  /* false */
+
+  console.log("re2 escaped: ", re2.source);  /* C\:\\Documents */
+  console.log("test re2: ", re2.test(path)); /* true */
+</code></pre>
 
 <!-- fnGetQueryToString -->
 <h3 id="fngetquerytostring-key" class="add-methods-link"><a href="#fngetquerytostring-key">fnGetQueryToString (key)</a></h3>
-<p>Obtiene el valor de una de las variables proporcionadas en el <em>querystring</em> de la url.<br/>
-<strong>Retorna</strong> <code>String</code>. Si la variable no existe en la url, retorna un <em>string vacío.</em></p>
+<p>Obtiene el valor de una de las variables leídas del <strong>querystring</strong> en la url actual.</p>
+<p><strong>Retorna</strong> <code>String</code>. Si la variable no existe en la url, retorna un <em>string vacío.</em></p>
 <ul>
-  <li><strong>key:</strong> <code>String</code> Especifica el nombre de la variable a recuperar.</li>
+  <li><strong>key:</strong> <code>String</code> Nombre de la variable a recuperar.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="c1">//supongamos que tenemos la siguiente url:</span>
-  <span class="c1">//http://jherax.github.io/?lang=spanish#getting-started</span>
+<pre class="code-example"><code class="javascript">
+  //supongamos que tenemos la siguiente url:
+  //<a href="http://jherax.github.io/?lang=spanish#fngetquerytostring-key">http://jherax.github.io/?lang=spanish#fngetquerytostring-key</a>
 
-  <span class="c1">//queremos recuperar el valor de la variable [lang]</span>
-  <span class="kd">var</span> <span class="nx">lang</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetQueryToString</span><span class="p">(</span><span class="s2">"lang"</span><span class="p">);</span>
-  <span class="c1">//obtenemos el valor: "spanish"</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">lang</span><span class="p">);</span>
-</pre>
-</div>
+  //queremos recuperar el valor de la variable [lang]
+  var lang = jsu.fnGetQueryToString("lang");
+  //obtenemos el valor: "spanish"
+  console.log(lang);
+</code></pre>
 
 <!-- fnGetQueryToObject -->
 <h3 id="fngetquerytoobject-key" class="add-methods-link"><a href="#fngetquerytoobject-key">fnGetQueryToObject (key)</a></h3>
-<p>Obtiene los valores del <em>querystring</em> en la url y los guarda como un <strong>Object literal</strong>.<br/>
-<strong>Nota:</strong> El parámetro <strong><em>key</em></strong> no es obligatorio, y si no se especifica, todas las variables encontradas en el <em>querystring</em> serán retornadas en un <code>Object</code> literal.<br/>
-<strong>Retorna</strong> <code>Object</code></p>
+<p>Obtiene los valores del <strong>querystring</strong> en la url y los guarda como un <strong>Object literal</strong>.</p>
+<p><strong>Nota:</strong> El parámetro <strong><em><span>@</span>key</em></strong> no es obligatorio, y si no se especifica, todas las variables encontradas en el <strong>querystring</strong> serán retornadas como un <code>Object</code> literal.</p>
+<p><strong>Retorna</strong> <code>Object</code></p>
 <ul>
-  <li><strong>key:</strong> <code>String</code> Determina la variable específica a recuperar.</li>
+  <li><strong>key:</strong> <code>String</code> <em>(Opcional)</em> Nombre de la variable a recuperar.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="c1">//supongamos que tenemos la siguiente url:</span>
-  <span class="c1">//http://www.youtube.com/watch?v=hrZl_EQUbRQ&amp;hd=1</span>
+<pre class="code-example"><code class="javascript">
+  //supongamos que tenemos la siguiente url:
+  //http://www.youtube.com/watch?v=hrZl_EQUbRQ&amp;hd=1
 
-  <span class="c1">//queremos recuperar todas las variables del querystring</span>
-  <span class="kd">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetQueryToObject</span><span class="p">();</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">q</span><span class="p">);</span> <span class="c1">//imprime: {v: "hrZl_EQUbRQ", hd: "1"}</span>
+  //queremos recuperar todas las variables del querystring
+  var q = jsu.fnGetQueryToObject();
+  console.log(q); //imprime: {v: "hrZl_EQUbRQ", hd: "1"}
 
-  <span class="c1">//queremos recuperar el valor de la variable [v]</span>
-  <span class="kd">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetQueryToObject</span><span class="p">(</span><span class="s2">"v"</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span> <span class="c1">//imprime: {v: "hrZl_EQUbRQ"}</span>
-</pre>
-</div>
+  //queremos recuperar el valor de la variable [v]
+  var v = jsu.fnGetQueryToObject("v");
+  console.log(v); //imprime: {v: "hrZl_EQUbRQ"}
+</code></pre>
 
 <!-- fnFreezeObject -->
 <h3 id="fnfreezeobject-object" class="add-methods-link"><a href="#fnfreezeobject-object">fnFreezeObject (object)</a></h3>
-<p>Clona y congela un objeto (establece todas las propiedades navegables a sólo lectura).<br/>
-En algunos casos es necesario asegurarnos de mantener un objeto intacto, inmodificable,
-y para ello podemos usar esta función, la cual clona el objeto y sella los atributos que lo hacen escribible.<br/>
-<strong>Retorna</strong> <code>Object</code></p>
+<p>Copia un objeto y congela todas las propiedades navegables del objeto (las establece a sólo lectura).
+  A&nbsp;diferencia del método <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze" target="_blank">Object.freeze()</a>,
+  <code>fnFreezeObject</code> hace <a href="https://jherax.wordpress.com/2014/07/20/js-clonando-objetos/#shallow-deep-copy" target="_blank">deep copy</a> de <strong><em><span>@</span>object</em></strong> y previene futuros cambios en ese objeto, como agregar, eliminar o modificar propiedades.</p>
+<p>En algunos casos puede que necesitemos mantener un objeto inmutable, y para ello podemos usar este método, con el cual copiamos y sellamos los atributos del objeto.</p>
+<p><strong>Retorna</strong> <code>Object</code></p>
 <ul>
-  <li><strong>object:</strong> <code>Object</code> El objeto a congelar.</li>
+  <li><strong>object:</strong> <code>Object</code> El objeto a copiar y sellar.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">oSource</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">serie</span><span class="o">:</span> <span class="s2">"Lenovo IdeaPad Z710"</span><span class="p">,</span>
-    <span class="nx">features</span><span class="o">:</span> <span class="p">{</span>
-      <span class="nx">processor</span><span class="o">:</span> <span class="s2">"Intel Core i7-4700MQ"</span><span class="p">,</span>
-      <span class="nx">graphics</span><span class="o">:</span> <span class="s2">"NVIDIA GeForce GT 745M"</span><span class="p">,</span>
-      <span class="nx">memory</span><span class="o">:</span> <span class="s2">"PC3-12800 DDR3L"</span><span class="p">,</span>
-      <span class="nx">ram</span><span class="o">:</span> <span class="mi">8</span>
-    <span class="p">},</span>
-    <span class="nx">getBasicInfo</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
-        <span class="s2">"\n&gt; Processor: "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">processor</span> <span class="o">+</span>
-        <span class="s2">"\n&gt; RAM (GB): "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">ram</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">};</span>
-  <span class="c1">//clona y congela un objeto</span>
-  <span class="kd">var</span> <span class="nx">oFrozen</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnFreezeObject</span><span class="p">(</span><span class="nx">oSource</span><span class="p">);</span>
+<pre class="code-example"><code class="javascript">
+  var oSource = {
+    serie: "Lenovo IdeaPad Z710",
+    features: {
+      processor: "Intel Core i7-4700MQ",
+      graphics: "NVIDIA GeForce GT 745M",
+      memory: "PC3-12800 DDR3L",
+      ram: 8
+    },
+    getBasicInfo: function () {
+      console.log(
+        "\n> Processor: " + this.features.processor +
+        "\n> RAM (GB): " + this.features.ram);
+    }
+  };
 
-  <span class="c1">//cambia algunas propiedades en ambos objetos</span>
-  <span class="nx">oSource</span><span class="p">.</span><span class="nx">getBasicInfo</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-  <span class="nx">oFrozen</span><span class="p">.</span><span class="nx">getBasicInfo</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-  <span class="nx">oSource</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">ram</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-  <span class="nx">oFrozen</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">ram</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+  //copia y congela las propiedades del objeto
+  var oFrozen = jsu.fnFreezeObject(oSource);
 
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Changed properties in both objects"</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"EDITABLE OBJECT:"</span><span class="p">,</span> <span class="nx">oSource</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"READ-ONLY OBJECT:"</span><span class="p">,</span> <span class="nx">oFrozen</span><span class="p">);</span>
-</pre>
-</div>
+  //cambia algunas propiedades en ambos objetos
+  oSource.features.chasis = "Thermaltake";
+  oFrozen.features.chasis = "Thermaltake";
+  oSource.features.ram = 16;
+  oFrozen.features.ram = 16;
+
+  console.log("Changed properties in both objects?");
+  console.log("SOURCE OBJECT:\n", oSource.features);
+  console.log("FROZEN OBJECT:\n", oFrozen.features);
+</code></pre>
 
 <!-- fnGetDate -->
 <h3 id="fngetdate-options" class="add-methods-link"><a href="#fngetdate-options">fnGetDate (options)</a></h3>
+<p>Muestra la fecha de acuerdo al formato especificado por <code>dateFormat</code> y <code>timeFormat</code> en <a href="#jsuregional"><code>jsu.regional</code></a></p>
+<p>Este método provee soporte para el formato <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15" target="_blank">ISO 8601</a>, el cual es el formato internacional estándar usado por los elementos <code>input</code> del tipo <em>date, datetime, datetime-local.</em>
+  Conforme a la <a href="http://www.w3.org/TR/html-markup/input.datetime.html#input.datetime.attrs.value" target="_blank">w3.org</a> el atributo <code>value</code> debe ser un texto date-time válido según lo definido en el estándar <a href="http://tools.ietf.org/html/rfc3339#section-5.6" target="_blank">RFC 3339</a>.</p>
 <p style="margin-bottom: 10px;">
-  Muestra la fecha de acuerdo al formato especificado por <code>dateFormat</code> y <code>timeFormat</code> en <a href="#jsuregional"><code>jsu.regional</code></a><br/>
-  <strong>Nota:</strong> Este método provee soporte para el formato <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15" target="_blank">ISO 8601</a>, que es el formato usado por los elementos <code>input</code> del tipo <em>date, datetime, datetime-local.</em>
-  Conforme a la <a href="http://www.w3.org/TR/html-markup/input.datetime.html#input.datetime.attrs.value" target="_blank">w3.org</a> el atributo <code>value</code> debe ser un texto date-time válido según lo definido en el estándar <a href="http://tools.ietf.org/html/rfc3339#section-5.6" target="_blank">RFC 3339</a>.<br/>
   <strong>Retorna</strong> <code>Object</code> con las siguientes propiedades:
 </p>
 <ul class="no-title">
@@ -794,262 +806,290 @@ y para ello podemos usar esta función, la cual clona el objeto y sella los atri
   <li><strong>dateTime:</strong> <code>String</code> Muestra la fecha según el formato <code>dateFormat</code> + <code>timeFormat</code></li>
 </ul>
 <ul>
-  <li><strong>options:</strong> <code>Object</code> Opcional. Si no se especifica, se trabajará con la fecha actual.
+  <li><strong>options:</strong> <code>Object</code> <em>(Opcional)</em> Si no se especifica, se trabajará con la fecha actual.
     <ul>
       <li><strong>date:</strong> <code>Date</code> <code>String</code> <code>Number</code> <code class="highlight italic"><span class="nt">default</span>: <span class="k">new</span> <span class="nb">Date</span></code> La fecha que se mostrará.</li>
       <li><strong>ISO8601:</strong> <code>Boolean</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">false</span></code> Determina si la fecha es mostrada en el formato ISO 8601.</li>
     </ul>
   </li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Establecemos la configuración de idioma (no es obligatorio)</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">);</span>
+<pre class="code-example"><code class="javascript">
+(function () {
+  //Establecemos la configuración de idioma (no es obligatorio)
+  jsu.regional.set(jsu.regional.english);
 
-    <span class="c1">// Sin argumentos, obtiene la fecha actual</span>
-    <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetDate</span><span class="p">();</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">"#date"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">date</span> <span class="o">+</span><span class="s2">" &lt;b&gt;"</span><span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">time</span> <span class="o">+</span><span class="s2">"&lt;/b&gt;"</span><span class="p">);</span>
+  //Sin argumentos, obtiene la fecha actual
+  var d = jsu.fnGetDate();
+  console.log("Current:", d.date, "hour:", d.time);
 
-    <span class="c1">// Especificamos el formato de salida ISO-8601</span>
-    <span class="kd">var</span> <span class="nx">dt</span> <span class="o">=</span> <span class="s2">"12/24/2013 23:59:13"</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">iso</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetDate</span><span class="p">({</span> <span class="nx">date</span><span class="o">:</span> <span class="nx">dt</span><span class="p">,</span> <span class="nx">ISO8601</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"ISO 8601:"</span><span class="p">,</span> <span class="nx">iso</span><span class="p">.</span><span class="nx">dateTime</span><span class="p">);</span>
+  //Pasamos un string (acepta String|Number|Date|Object)
+  d = jsu.fnGetDate("01-31-2000");
+  console.log("Date:", d.date);
 
-    <span class="c1">// Proporcionamos la fecha de entrada en ISO 8601</span>
-    <span class="nx">dt</span> <span class="o">=</span> <span class="s2">"1995-12-17T03:24:59Z"</span><span class="p">;</span> <span class="c1">//Z UTC</span>
-    <span class="nx">iso</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetDate</span><span class="p">({</span> <span class="nx">date</span><span class="o">:</span> <span class="nx">dt</span> <span class="p">});</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"UTC:"</span><span class="p">,</span> <span class="nx">iso</span><span class="p">.</span><span class="nx">dateTime</span><span class="p">);</span>
+  //Especificamos un Object con el formato de salida: ISO-8601
+  var dt = "12/24/2013 23:59:13"; /* mm/dd/yyyy */
+  var iso = jsu.fnGetDate({ date: dt, ISO8601: true });
+  console.log("ISO 8601:", iso.dateTime);
 
-    <span class="c1">// Proporcionamos la fecha de entrada en ISO 8601</span>
-    <span class="nx">dt</span> <span class="o">=</span> <span class="s2">"1995-12-17T03:24:59-05:00"</span><span class="p">;</span> <span class="c1">//-05:00 offset</span>
-    <span class="nx">iso</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetDate</span><span class="p">({</span> <span class="nx">date</span><span class="o">:</span> <span class="nx">dt</span> <span class="p">});</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"GMT:"</span><span class="p">,</span> <span class="nx">iso</span><span class="p">.</span><span class="nx">dateTime</span><span class="p">);</span>
+  //Proporcionamos la fecha de entrada en ISO 8601
+  dt = "1995-12-17T03:24:59Z"; //Z UTC
+  iso = jsu.fnGetDate({ date: dt });
+  console.log("UTC:", iso.dateTime);
 
-    <span class="c1">// Proporcionamos la fecha de entrada en objeto Date</span>
-    <span class="nx">dt</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">1395971368528</span><span class="p">);</span>
-    <span class="nx">d</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetDate</span><span class="p">({</span> <span class="nx">date</span><span class="o">:</span> <span class="nx">dt</span> <span class="p">});</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Regional:"</span><span class="p">,</span> <span class="nx">d</span><span class="p">.</span><span class="nx">dateTime</span><span class="p">);</span>
-  <span class="p">})();</span>
-</pre>
-</div>
+  //Proporcionamos la fecha de entrada en ISO 8601
+  dt = "1995-12-17T03:24:59-05:00"; //-05:00 offset
+  iso = jsu.fnGetDate({ date: dt });
+  console.log("GMT:", iso.dateTime);
+
+  //Proporcionamos la fecha de entrada como objeto Date
+  dt = new Date(1395971368528);
+  d = jsu.fnGetDate({ date: dt });
+  console.log("Regional:", d.dateTime);
+}());
+</code></pre>
 
 <!-- fnDateFromISO8601 -->
 <h3 id="fndatefromiso8601-date" class="add-methods-link"><a href="#fndatefromiso8601-date">fnDateFromISO8601 (date)</a></h3>
-<p>Obtiene el objeto <code>Date</code> desde un <code>String</code> que cumple el <a href="http://www.w3.org/TR/NOTE-datetime" target="_blank" style="text-decoration:underline">formato para fechas</a> <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15" target="_blank">ISO 8601</a>.<br/>
-Es obligatorio que la fecha provista esté en formato ISO 8601, de lo contrario, el método retornará <code>null</code>.<br/>
-<strong>Nota:</strong> Si no se especifica el ajuste horario GMT <em style="font-size:.84em;color:#666">(-+hh:mm)</em>, se trabaja con el ajuste de la zona horaria local.<br/>
-<strong>Retorna</strong> <code>Date</code> o <code>Null</code></p>
+<p>Obtiene el objeto <code>Date</code> desde un <code>String</code> que cumple con el <a href="http://www.w3.org/TR/NOTE-datetime" target="_blank" style="text-decoration:underline">formato para fechas</a> <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15" target="_blank">ISO 8601</a>.<br/>
+  Es obligatorio que la fecha provista esté en formato ISO 8601, de lo contrario el método retorna <code>null</code></p>
+<p><strong>Nota:</strong> Si no se especifica el ajuste horario GMT <em style="font-size:.84em;color:#666">(-+hh:mm)</em>, se trabaja con la zona horaria local.</p>
+<p><strong>Retorna</strong> <code>Date</code> o <code>Null</code></p>
 <ul>
-  <li><strong>date:</strong> <code>String</code> fecha en el formato ISO 8601.</li>
+  <li><strong>date:</strong> <code>String</code> Fecha con en el formato ISO 8601.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnDateFromISO8601</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnDateFromISO8601</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
-  <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnDateFromISO8601</span><span class="p">(</span><span class="s2">"12/17/1995"</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnDateFromISO8601</span><span class="p">(</span><span class="s2">"1995-12-17T03:24:59Z"</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Date:"</span><span class="p">,</span> <span class="nx">date</span><span class="p">.</span><span class="nx">toLocaleString</span><span class="p">());</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+  var date;
+  date = jsu.fnDateFromISO8601("12/17/1995"); //no ISO 8601
+  console.log("Date:", date &amp;&amp; date.toLocaleString());
+
+  date = jsu.fnDateFromISO8601("1995-12-17T03:24:59Z");
+  console.log("Date:", date &amp;&amp; date.toLocaleString());
+</code></pre>
 
 <!-- fnGetHtmlText -->
 <h3 id="fngethtmltext-value" class="add-methods-link"><a href="#fngethtmltext-value">fnGetHtmlText (value)</a></h3>
-<p>Convierte todos los caracteres aplicables a su correspondiente entidad HTML.<br/>
-Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la siguiente manera: <code class="highlight"><span class="cm">&amp;lt;</span>p<span class="cm">&amp;gt;</span>hello<span class="cm">&amp;lt;</span>/p<span class="cm">&amp;gt;</span></code><br/>
-<strong>Nota:</strong> Este método puede ser usado también como delegado de los métodos jQuery:<br/>
-<a href="http://api.jquery.com/val/#val2" target="_blank">.val()</a> y <a href="http://api.jquery.com/text/#text2" target="_blank">.text()</a> con la siguiente firma: <code class="highlight italic">fnGetHtmlText (index, value)</code><br/>
-<strong>Retorna</strong> <code>String</code> con el html codificado.</p>
+<p>Codifica una cadena de texto, convirtiendo los caracteres especiales como <code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code>... a la entidad HTML correspondiente.
+  Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la siguiente manera: <code class="highlight"><span class="cm">&amp;lt;</span>p<span class="cm">&amp;gt;</span>hello<span class="cm">&amp;lt;</span>/p<span class="cm">&amp;gt;</span></code></p>
+<p><strong>Nota:</strong> Este método puede ser usado también como delegado de los métodos jQuery:<br/>
+  <a href="http://api.jquery.com/val/#val2" target="_blank">.val()</a> y <a href="http://api.jquery.com/text/#text2" target="_blank">.text()</a> con la siguiente firma: <code class="highlight italic">fnGetHtmlText (index, value)</code></p>
+<p><strong>Retorna</strong> <code>String</code> con el html codificado.</p>
 <ul>
   <li><strong>value:</strong> <code>String</code> html a codificar.</li>
 </ul>
-<div class="highlight highlight-html">
-<pre class="next">
-  <span class="nt">&lt;textarea</span> <span class="na">rows=</span><span class="s">"5"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
-  <span class="nt">&lt;textarea</span> <span class="na">rows=</span><span class="s">"5"</span> <span class="na">id=</span><span class="s">"preview"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
-  <span class="c">&lt;!--Creamos algo de HTML para codificar--&gt;</span>
-  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"html-to-encode"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;h3&gt;</span>fnGetHtmlText<span class="nt">&lt;/h3&gt;</span>
-    <span class="nt">&lt;u&gt;</span>HTML to encode<span class="nt">&lt;/u&gt;</span>
-  <span class="nt">&lt;/div&gt;</span>
-</pre>
-</div>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#html-to-encode"</span><span class="p">).</span><span class="nx">html</span><span class="p">();</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">"textarea"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">html</span><span class="p">));</span>
-    <span class="c1">// obtiene el texto-html codificado</span>
-    <span class="kd">var</span> <span class="nx">htmlEncoded</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetHtmlText</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Encoded:"</span><span class="p">,</span> <span class="nx">htmlEncoded</span><span class="p">);</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">"#preview"</span><span class="p">).</span><span class="nx">fnShowTooltip</span><span class="p">(</span><span class="s2">"This html will be encoded..."</span><span class="p">);</span>
-  <span class="p">},</span> <span class="mi">1</span><span class="p">);</span>
+<p><strong>► Uso básico</strong></p>
+<pre class="code-example"><code class="javascript">
+  var html = "&lt;li&gt; Command &amp; Conquer &lt;/li&gt;";
 
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">".vld-tooltip"</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
-    <span class="c1">// usarlo como método delegado para .val() o .text()</span>
-    <span class="c1">// (sólo pasamos la referencia de la función)</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">"#preview"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetHtmlText</span><span class="p">).</span><span class="nx">fnShowTooltip</span><span class="p">(</span><span class="s2">"Encoded!"</span><span class="p">);</span>
-  <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
-</pre>
-</div>
+  //obtiene el texto-html codificado
+  var htmlEncoded = jsu.fnGetHtmlText(html);
+
+  console.log("Original:", html);
+  console.log("Encoded:", htmlEncoded);
+</code></pre>
+<p><strong>► Uso avanzado</strong></p>
+<pre class="code-example"><code class="xml">
+  &lt;textarea rows="5"&gt;&lt;/textarea&gt;
+  &lt;textarea rows="5" id="preview"&gt;&lt;/textarea&gt;
+  &lt;!-- Especificamos el HTML a codificar --&gt;
+  &lt;div id="html-to-encode"&gt;
+    &lt;h3&gt;fnGetHtmlText&lt;/h3&gt;
+    &lt;u&gt;HTML to encode&lt;/u&gt;
+  &lt;/div&gt;
+</code></pre>
+<pre class="code-example"><code class="javascript">
+  setTimeout(function () {
+    var html = $("#html-to-encode").html();
+    $("textarea").val($.trim(html));
+    //obtiene el texto-html codificado
+    console.log("Encoded:", jsu.fnGetHtmlText(html) );
+    $("#preview").fnShowTooltip("This html will be encoded...");
+  }, 1);
+
+  setTimeout(function () {
+    $(".vld-tooltip").remove();
+    //usado como método delegado para <a href="http://api.jquery.com/val/#val2" target="_blank">.val()</a> o <a href="http://api.jquery.com/text/#text2" target="_blank">.text()</a>
+    //(sólo pasamos la referencia del método)
+    $("#preview").val(jsu.fnGetHtmlText).fnShowTooltip("Encoded!");
+  }, 2000);
+</code></pre>
 
 <!-- fnGetSelectedText -->
 <h3 id="fngetselectedtext-" class="add-methods-link"><a href="#fngetselectedtext-">fnGetSelectedText ()</a></h3>
+<p>Obtiene el texto seleccionado en el documento y en las cajas de texto.</p>
+<p><strong>Nota:</strong> Actualmente los únicos elementos que permiten hacer selección de texto de forma segura son:
+  <code><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#do-not-apply" title="Ver el atributo: selectionStart" target="_blank"><nobr>&lt;input type="text|search|password|tel|url"&gt;</nobr></a></code> y <code>&lt;textarea&gt;</code></p>
 <p style="margin-bottom: 10px;">
-  Obtiene el texto seleccionado en el documento y en las cajas de texto.<br/>
-  <strong>Nota:</strong> Actualmente los únicos elementos que permiten hacer selección de texto de forma segura son:
-  <code><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#do-not-apply" title="Ver el atributo: selectionStart" target="_blank"><nobr>&lt;input type="text|search|password|tel|url"&gt;</nobr></a></code> y <code>&lt;textarea&gt;</code><br/>
   <strong>Retorna</strong> <code>Object</code> con las siguientes propiedades:
 </p>
 <ul class="no-title">
   <li><strong>text:</strong> <code>String</code> Texto seleccionado. Se eliminan los espacios en blanco al inicio y al final del texto.</li>
-  <li><strong>slice:</strong> <code>String</code> Complemento del texto seleccionado (si el elemento activo es <a href="#" class="open-window">inputType:text</a>)</li>
-  <li><strong>start:</strong> <code>Number</code> Posición inicial del cursor (si el elemento activo es <a href="#" class="open-window">inputType:text</a>)</li>
-  <li><strong>end:</strong> <code>Number</code> Posición final del cursor (si el elemento activo es <a href="#" class="open-window">inputType:text</a>)</li>
+  <li><strong>slice:</strong> <code>String</code> Complemento del texto seleccionado (si el elemento activo es <a href="#" class="open-window">inputType.isText</a>)</li>
+  <li><strong>start:</strong> <code>Number</code> Posición inicial del cursor (si el elemento activo es <a href="#" class="open-window">inputType.isText</a>)</li>
+  <li><strong>end:</strong> <code>Number</code> Posición final del cursor (si el elemento activo es <a href="#" class="open-window">inputType.isText</a>)</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">sel</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetSelectedText</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">sel</span><span class="p">.</span><span class="nx">text</span> <span class="o">!==</span> <span class="s2">""</span><span class="p">)</span> <span class="nx">alert</span><span class="p">(</span><span class="nx">sel</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sel</span><span class="p">);</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+  var sel = jsu.fnGetSelectedText();
+  if (sel.text !== "") alert(sel.text);
+  console.log(sel);
+</code></pre>
 
 <!-- fnGetCaretPosition -->
 <h3 id="fngetcaretposition-dom" class="add-methods-link"><a href="#fngetcaretposition-dom">fnGetCaretPosition (dom)</a></h3>
-<p>Obtiene la posición actual del cursor en el elemento <strong><em>dom</em></strong>.<br/>
-  <strong>Nota:</strong> Actualmente los únicos elementos que permiten hacer selección de texto de forma segura son:
-  <code><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#do-not-apply" title="Ver el atributo: selectionStart" target="_blank"><nobr>&lt;input type="text|search|password|tel|url"&gt;</nobr></a></code> y <code>&lt;textarea&gt;</code><br/>
-  <strong>Retorna</strong> <code>Number</code>
-</p>
+<p>Obtiene la posición actual del cursor en el elemento <strong><em><span>@</span>dom</em></strong>.</p>
+<p><strong>Nota:</strong> Actualmente los únicos elementos que permiten hacer selección de texto de forma segura son:
+  <code><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#do-not-apply" title="Ver el atributo: selectionStart" target="_blank"><nobr>&lt;input type="text|search|password|tel|url"&gt;</nobr></a></code> y <code>&lt;textarea&gt;</code>.
+  Si <strong><em><span>@</span>dom</em></strong> no es uno de los elementos anteriores, retorna <code>-1</code></p>
+<p><strong>Retorna</strong> <code>Number</code></p>
 <ul>
-  <li><strong>dom:</strong> <code>DOM</code> Elemento <a href="#" class="open-window">inputType:text</a></li>
+  <li><strong>dom:</strong> <code>DOM Element</code> de categoría <a href="#" class="open-window">inputType.isText</a></li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s2">"Hello!"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnGetCaretPosition</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"caret position: "</span><span class="p">,</span> <span class="nx">pos</span><span class="p">);</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+  var elem = $("#txtName").val("Hello!").get(0),
+      pos = jsu.fnGetCaretPosition(elem);
+  console.log("caret position: ", pos);
+</code></pre>
 
 <!-- fnSetCaretPosition -->
 <h3 id="fnsetcaretposition-dom-position" class="add-methods-link"><a href="#fnsetcaretposition-dom-position">fnSetCaretPosition (dom, position)</a></h3>
-<p>Establece la posición del cursor en el elemento <strong><em>dom</em></strong>.<br/>
-  <strong>Nota:</strong> Actualmente los únicos elementos que permiten hacer selección de texto de forma segura son:
-  <code><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#do-not-apply" title="Ver el atributo: selectionStart" target="_blank"><nobr>&lt;input type="text|search|password|tel|url"&gt;</nobr></a></code> y <code>&lt;textarea&gt;</code><br/>
-  <strong>Retorna</strong> <code>undefined</code>
-</p>
+<p>Establece la posición del cursor <strong><em><span>@</span>position</em></strong> en el elemento <strong><em><span>@</span>dom</em></strong>.</p>
+<p><strong>Nota:</strong> Actualmente los únicos elementos que permiten hacer selección de texto de forma segura son:
+  <code><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#do-not-apply" title="Ver el atributo: selectionStart" target="_blank"><nobr>&lt;input type="text|search|password|tel|url"&gt;</nobr></a></code> y <code>&lt;textarea&gt;</code></p>
+<p><strong>Retorna</strong> <code>Undefined</code></p>
 <ul>
-  <li><strong>dom:</strong> <code>DOM</code> Elemento <a href="#" class="open-window">inputType:text</a>.</li>
+<li><strong>dom:</strong> <code>DOM Element</code> de categoría <a href="#" class="open-window">inputType.isText</a></li>
   <li><strong>position:</strong> <code>Number</code> índice donde se establecerá el cursor.</li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="nx">text</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">"Hello World!"</span><span class="p">;</span>
-  <span class="nx">text</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
-  <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnSetCaretPosition</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
-  <span class="c1">//el cursor es posicionado después de "Hello"</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+  var elem = document.getElementById("txtName");
+  elem.value = "Hello World!";
+  elem.focus();
+  jsu.fnSetCaretPosition(elem, 5);
+  //el cursor es posicionado después de "Hello"
+</code></pre>
 
 <!-- fnCapitalize -->
 <h3 id="fncapitalize-object-type" class="add-methods-link"><a href="#fncapitalize-object-type">fnCapitalize (object, type)</a></h3>
-<p>Elimina todos los saltos de línea consecutivos, espacios, y tabs, al comienzo y al final del texto.
-  <nobr>Si los espacios</nobr> consecutivos se encuentran dentro del texto, también son eliminados.<br/>
-  <strong>Nota:</strong> Si el parámetro <strong><em>object</em></strong> es un nodo <code>INPUT</code>, la propiedad <code>value</code> se usa como el texto a formatear.<br/>
-  <strong>Nota:</strong> Puede definir sus propias reglas para capitalizar el texto usando la opción <code>"word"</code>. La propiedad <a href="#jsuregional"><code>jsu.regional.&lt;language&gt;.wordPattern</code></a> es una expresión regular que define las palabras que no aplican la&nbsp;letra capital.<br/>
-  <strong>Nota:</strong> Puede usar esta función como método de extensión jQuery, vea <a href="#jqueryfncapitalize-type">jQuery.fnCapitalize</a>.<br/>
-  <strong>Retorna</strong> <code>String</code>
-</p>
+<p>Aplica una transformación al texto y elimina todos los saltos de línea consecutivos, espacios, y tabs, al comienzo y al final del texto.
+  Si los espacios consecutivos se encuentran dentro del texto, también son eliminados. Puede usar este método como extensión de jQuery, vea <a href="#jqueryfncapitalize-type">jQuery.fnCapitalize</a>.</p>
+<p>El parámetro <strong><em><span>@</span>type</em></strong> determina el tipo de transformación. Cuando especifica el valor <code>"word"</code> para éste parámetro,
+  puede definir sus propias reglas para transformar a minúsculas las palabras en el texto. La propiedad <a href="#jsuregional"><code>jsu.regional.&lt;language&gt;.wordPattern</code></a> es una expresión regular que define las palabras que permanecen en minúsculas.</p>
+<p><strong>Nota:</strong> Si <strong><em><span>@</span>object</em></strong> es un <a href="https://www.w3.org/wiki/HTML/Elements/input" target="_blank"><code>Input Element</code></a>, se usa la propiedad <code>value</code> como el texto a formatear.</p>
+<p><strong>Retorna</strong> <code>String</code></p>
 <ul>
-  <li><strong>object:</strong> <code>String</code> o elemento <code>INPUT</code> <a href="#" class="open-window">inputType:text</a>.</li>
+  <li><strong>object:</strong> <code>String</code> o <code>DOM Element</code> de categoría <a href="#" class="open-window">inputType.isText</a></li>
   <li><strong>type:</strong> <code>String</code> que especifica el tipo de transformación. Puede ser uno de los siguientes valores:
     <ul>
       <li><code>"word"</code> transforma a minúsculas y luego pone en mayúscula la primera letra de cada palabra.</li>
       <li><code>"title"</code> pone en mayúscula la primera letra de cada palabra.</li>
       <li><code>"first"</code> pone en mayúscula sólo la primera letra del texto.</li>
-      <li><code>"upper"</code> convierte todo el texto a mayúsculas.</li>
-      <li><code>"lower"</code> convierte todo el texto a minúsculas.</li>
+      <li><code>"upper"</code> transforma todo el texto a mayúsculas.</li>
+      <li><code>"lower"</code> transforma todo el texto a minúsculas.</li>
     </ul>
   </li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre class="next">
-  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">"\n  make  your\t  code DRY  \n "</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'original text: "'</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'word : "'</span> <span class="o">+</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="s2">"word"</span> <span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'title: "'</span> <span class="o">+</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'first: "'</span> <span class="o">+</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="s2">"first"</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'upper: "'</span> <span class="o">+</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="s2">"upper"</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'lower: "'</span> <span class="o">+</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="s2">"lower"</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-</pre>
-</div>
-<p>Puede definir las palabras que no llevan letra capital:</p>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Definimos las palabras que no llevan letra capital</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">.</span><span class="nx">wordPattern</span> <span class="o">=</span> <span class="sr">/\s(?:And|Are|At|A|O[nrf]|By|In|The)\b/g</span><span class="p">;</span>
-    <span class="c1">// Establecemos la configuración de idioma</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">" pc AND KEYBOARD\t ArE oN tHe table "</span><span class="p">;</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Before: "</span><span class="p">,</span> <span class="s1">'"'</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-    <span class="c1">// Transforma el texto después de 2 segundos</span>
-    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">text</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="s2">"word"</span><span class="p">);</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"After: "</span><span class="p">,</span> <span class="s1">'"'</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
-    <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
-  <span class="p">})();</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+  var text = "\n  make  your\t  code DRY  \n ";
+  console.log('original text: "' + text + '"');
+  console.log('word : "' + jsu.fnCapitalize(text, "word" ) + '"');
+  console.log('title: "' + jsu.fnCapitalize(text, "title") + '"');
+  console.log('first: "' + jsu.fnCapitalize(text, "first") + '"');
+  console.log('upper: "' + jsu.fnCapitalize(text, "upper") + '"');
+  console.log('lower: "' + jsu.fnCapitalize(text, "lower") + '"');
+</code></pre>
+<p>Puede definir las palabras que permanecen en minúsculas:</p>
+<pre class="code-example"><code class="javascript">
+  (function () {
+    var lang = jsu.regional;
+    //definimos las palabras que no llevan letra capital
+    lang.english.wordPattern = /\s(?:And|Are|At|A|O[nrf]|By|In|The)\b/g;
+    //establecemos la configuración de idioma
+    lang.set(lang.english);
+
+    var text = " pc AND KEYBOARD\t ArE oN tHe table ";
+    console.log("Before: ", '"' + text + '"');
+    //transforma el texto después de 2 segundos
+    setTimeout(function () {
+      text = jsu.fnCapitalize(text, "word");
+      console.log("After: ", '"' + text + '"');
+    }, 2000);
+  }());
+</code></pre>
 
 <!-- fnNumericFormat -->
 <h3 id="fnnumericformat-object-options" class="add-methods-link"><a href="#fnnumericformat-object-options">fnNumericFormat (object, options)</a></h3>
-<p>Establece el formato numérico de acuerdo a la configuración de cultura actual. Si no se proporciona el parámetro <strong>options</strong>, el separador de miles y el separador decimal, reciben su valor de las propiedades <code>decimalMark</code> y <code>thousandsMark</code> en la configuración de idioma actual: <code><a href="#jsuregional">jsu.regional.current</a></code><br/>
-  <strong>Nota:</strong> Si el parámetro <strong><em>object</em></strong> es un nodo <code>INPUT</code>, la propiedad <code>value</code> se usa como el texto a formatear.<br/>
-  <strong>Nota:</strong> Puede usar esta función como método de extensión jQuery, vea <a href="#jqueryfnnumericformat-options">jQuery.fnNumericFormat</a>.<br/>
-  <strong>Retorna</strong> <code>String</code> con el número formateado.</p>
+<p>Establece el formato numérico de acuerdo a la configuración de cultura actual. Si no se proporciona el parámetro <strong><em><span>@</span>options</em></strong>,
+  el separador de miles y el separador decimal, toman el valor de las propiedades <code>decimalMark</code> y <code>thousandsMark</code> según la configuración de idioma actual en <code><a href="#jsuregional">jsu.regional.current</a></code></p>
+<p>
+  <strong>Nota:</strong> Si <strong><em><span>@</span>object</em></strong> es un <a href="https://www.w3.org/wiki/HTML/Elements/input" target="_blank"><code>Input Element</code></a>, se usa la propiedad <code>value</code> como el texto a formatear.<br/>
+  <strong>Nota:</strong> Puede usar este método como extensión de jQuery, vea <a href="#jqueryfnnumericformat-options">jQuery.fnNumericFormat</a>.
+</p>
+<p><strong>Retorna</strong> <code>String</code> con el número formateado.</p>
 <ul>
-  <li><strong>object:</strong> <code>String</code> o elemento <code>INPUT</code> <a href="#" class="open-window">inputType:text</a>.</li>
-  <li><strong>options:</strong> <code>Object</code> con las siguientes propiedades:
+  <li><strong>object:</strong> <code>String</code> o <code>DOM Element</code> de categoría <a href="#" class="open-window">inputType.isText</a></li>
+  <li><strong>options:</strong> <code>Object</code> que configura las siguientes propiedades:
     <ul>
       <li><strong>inDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto de entrada.</li>
       <li><strong>inThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto de entrada.</li>
-      <li><strong>outDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto de salida.</li>
-      <li><strong>outThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto de salida.</li>
+      <li><strong>outDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto retornado.</li>
+      <li><strong>outThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto retornado.</li>
     </ul>
   </li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">//establece la configuración de idioma a español</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">spanish</span><span class="p">);</span>
-    <span class="c1">//ver el objeto del idioma actual</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">current</span><span class="p">);</span>
+<pre class="code-example"><code class="javascript">
+(function () {
+  //establece la configuración de idioma
+  jsu.regional.set(jsu.regional.spanish);
 
-    <span class="kd">var</span> <span class="nx">numEn</span> <span class="o">=</span> <span class="s2">"6079.2499"</span><span class="p">,</span> <span class="c1">//"." es el separador decimal (inglés)</span>
-        <span class="nx">numEs</span> <span class="o">=</span> <span class="s2">"123456789,4715"</span><span class="p">,</span> <span class="c1">//"," es el separador decimal (español)</span>
-        <span class="nx">formatEs</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">numEs</span><span class="p">),</span>
-        <span class="nx">formatEn</span> <span class="o">=</span> <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">numEn</span><span class="p">,</span> <span class="p">{</span>
-          <span class="nx">inDecimalMark</span><span class="o">:</span> <span class="s2">"."</span><span class="p">,</span> <span class="c1">//separador decimal del texto de entrada</span>
-          <span class="nx">inThousandsMark</span><span class="o">:</span> <span class="s2">","</span> <span class="c1">//separador de miles del texto de entrada</span>
-        <span class="p">});</span>
+  //imprime el objeto del idioma actual
+  var lang = jsu.regional.current;
+  console.log("culture:", lang.culture);
+  console.log("decimalMark:", lang.decimalMark);
+  console.log("thousandsMark:", lang.thousandsMark);
 
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"original numEn:"</span><span class="p">,</span> <span class="nx">numEn</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"formatted text:"</span><span class="p">,</span> <span class="nx">formatEn</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"original numEs:"</span><span class="p">,</span> <span class="nx">numEs</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"formatted text:"</span><span class="p">,</span> <span class="nx">formatEs</span><span class="p">);</span>
+  var numberEnUS = "6079.249", //"." es el separador decimal (en-US)
+      numberEsCO = "123456789,472"; //"," es el separador decimal (es-CO)
 
-    <span class="kd">var</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">numEs</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">fnNumericFormat</span><span class="p">(</span><span class="nx">dom</span><span class="p">);</span> <span class="c1">//envía un elemento DOM</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"formatted DOM:"</span><span class="p">,</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
-  <span class="p">})();</span>
-</pre>
-</div>
+  //envía un string como primer argumento
+  var formatEsCO = jsu.fnNumericFormat(numberEsCO),
+      formatEnUS = jsu.fnNumericFormat(numberEnUS, {
+        inDecimalMark: ".", //separador decimal en numberEnUS
+        inThousandsMark: "," //separador de miles en numberEnUS
+      });
+
+  console.log("number en-US:",   numberEnUS);
+  console.log("formatted text:", formatEnUS);
+  console.log("number es-CO:",   numberEsCO);
+  console.log("formatted text:", formatEsCO);
+}());
+</code></pre>
+<p>Personalizar el formato numérico</p>
+<pre class="code-example"><code class="javascript">
+  //aquí no necesaria la configuración regional.
+  //jsu.regional es ignorado en este ejemplo.
+
+  var numberEnUS = "1234567,89.4715", //número malformado
+      customFormat = jsu.fnNumericFormat(numberEnUS, {
+        inDecimalMark: ".", //separador decimal en numberEnUS
+        inThousandsMark: ",", //separador de miles en numberEnUS
+        outDecimalMark: "dec", //separador decimal para el resultado
+        outThousandsMark: "'" //separador de miles para el resultado
+      });
+
+  console.log("number en-US:",   numberEnUS);
+  console.log("formatted text:", customFormat);
+</code></pre>
+<p>Enviando un elemento DOM</p>
+<pre class="code-example"><code class="javascript">
+  //establece la configuración de idioma
+  //jsu.regional.set(jsu.regional.spanish);
+
+  var numberEsCO = "123456789,472",
+      dom = $("#txtName").val(numberEsCO).get(0);
+
+  //envía un elemento DOM como primer argumento
+  jsu.fnNumericFormat(dom);
+  console.log("formatted DOM:", dom.value);
+</code></pre>
 
 <!-- fnIsValidFormat -->
 <h3 id="fnisvalidformat" class="add-methods-link"><a href="#fnisvalidformat">fnIsValidFormat</a></h3>
@@ -1057,7 +1097,7 @@ Por ejemplo, el texto <code>&lt;p&gt;hello&lt;/p&gt;</code> es codificado de la 
 Each function defined in the namespace receives the <strong><em>value</em></strong> parameter as the text to validate.<br/>
 <strong>Note:</strong> Validators are also implemented as a jQuery extension, see <a href="#jqueryfnisvalidformat-type">jQuery.fnIsValidFormat</a>.<br/>
 <strong>Important</strong> The validator functions return <code>Boolean</code></p>
-<p>The <strong><em>value</em></strong> parameter is a <code>String</code> or <code>DOM</code> element <a href="#" class="open-window">inputType:text</a>.</p>
+<p>The <strong><em>value</em></strong> parameter is a <code>String</code> or <code>DOM</code> element <a href="#" class="open-window">inputType.isText</a>.</p>
 <ul class="no-title">
   <li><strong><code>time (value)</code></strong> Validates the time format according to <a href="#jsuregional"><code>timeFormat</code></a></li>
   <li><strong><code>date (value)</code></strong> Validates the date format according to <a href="#jsuregional"><code>dateFormat</code></a></li>
@@ -1117,7 +1157,7 @@ The validation message is displayed with a tooltip. If <a href="http://api.jquer
 <code>dateIsGreater</code> <code>dateIsLesser</code> <code>dateFormatError</code><br/>
 <strong>Returns</strong> <code>Boolean</code></p>
 <ul>
-  <li><strong>dom:</strong> <code>DOM</code> element <a href="#" class="open-window">inputType:text</a></li>
+  <li><strong>dom:</strong> <code>DOM</code> element <a href="#" class="open-window">inputType.isText</a></li>
   <li><strong>options:</strong> <code>Object</code> with the following properties:
     <ul>
       <li><strong>compareTo:</strong> <code>Date</code> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="k">new</span> <span class="nb">Date</span></code> The date to compare against.</li>
@@ -1518,7 +1558,7 @@ If no arguments or the <code>of</code> property is not set, the default <a href=
 
 <!-- jQuery.fnMaxLength -->
 <h3 id="jqueryfnmaxlength-length-position" class="add-jquery-link"><a href="#jqueryfnmaxlength-length-position">jQuery.fnMaxLength (length, position)</a></h3>
-<p>Limits the maximum number of characters allowed for the matching elements <a href="#" class="open-window">inputType:text</a>.<br/>
+<p>Limits the maximum number of characters allowed for the matching elements <a href="#" class="open-window">inputType.isText</a>.<br/>
 A tooltip is placed to the right of the element, showing the actual number of characters typed.<br/>
 By default the tooltip is positioned by <a href="#jqueryposition-options">.position()</a> <code>at: "right bottom"</code> but this position can be overridden for all tooltips by setting the <a href="#jsusettings"><code>jsu.settings.position</code></a> property;
 if you do not want to affect all tooltips, then you can specify the position by providing the <strong><em>position</em></strong> parameter to the function.<br/>
@@ -1546,90 +1586,109 @@ The appearance of the tooltip is ruled by the <a href="https://github.com/jherax
 
 <!-- jQuery.fnCapitalize -->
 <h3 id="jqueryfncapitalize-type" class="add-jquery-link"><a href="#jqueryfncapitalize-type">jQuery.fnCapitalize (type)</a></h3>
-<p>Elimina todos los saltos de línea consecutivos, espacios, y tabs, al comienzo y al final del texto.
-  <nobr>Si los espacios</nobr> consecutivos se encuentran dentro del texto, también son eliminados.<br/>
-  <strong>Nota:</strong> Esta es la versión jQuery de la función <a href="#fncapitalize-object-type">fnCapitalize</a>.<br/>
-  <strong>Nota:</strong> Se usa la propiedad <code>value</code> como el texto a formatear.<br/>
-  <strong>Nota:</strong> El texto es transformado cuando el evento <code>blur</code> es disparado.<br/>
-  <strong>Nota:</strong> Puede definir sus propias reglas para capitalizar el texto usando la opción <code>"word"</code>. La propiedad <a href="#jsuregional"><code>jsu.regional.&lt;language&gt;.wordPattern</code></a> es una expresión regular que define las palabras que no aplican la&nbsp;letra capital.<br/>
-  <strong>Retorna</strong> <code>jQuery</code>
+<p>Aplica una transformación al texto y elimina todos los saltos de línea consecutivos, espacios, y tabs, al comienzo y al final del texto.
+  Si los espacios consecutivos se encuentran dentro del texto, también son eliminados. Esta es una extensión jQuery del método <a href="#fncapitalize-object-type">fnCapitalize</a>.</p>
+<p>El parámetro <strong><em><span>@</span>type</em></strong> determina el tipo de transformación. Cuando especifica el valor <code>"word"</code> para éste parámetro,
+  puede definir sus propias reglas para transformar a minúsculas las palabras en el texto. La propiedad <a href="#jsuregional"><code>jsu.regional.&lt;language&gt;.wordPattern</code></a> es una expresión regular que define las palabras que permanecen en minúsculas.</p>
+<p>
+  <strong>Nota:</strong> La propiedad <code>value</code> de los elementos en la colección es usada como el texto a formatear.<br/>
+  <strong>Nota:</strong> El texto es transformado cuando el evento <code>blur</code> es disparado.
 </p>
+<p><strong>Retorna</strong> <code>String</code></p>
 <ul>
   <li><strong>type:</strong> <code>String</code> que especifica el tipo de transformación. Puede ser uno de los siguientes valores:
     <ul>
       <li><code>"word"</code> transforma a minúsculas y luego pone en mayúscula la primera letra de cada palabra.</li>
       <li><code>"title"</code> pone en mayúscula la primera letra de cada palabra.</li>
       <li><code>"first"</code> pone en mayúscula sólo la primera letra del texto.</li>
-      <li><code>"upper"</code> convierte todo el texto a mayúsculas.</li>
-      <li><code>"lower"</code> convierte todo el texto a minúsculas.</li>
+      <li><code>"upper"</code> transforma todo el texto a mayúsculas.</li>
+      <li><code>"lower"</code> transforma todo el texto a minúsculas.</li>
     </ul>
   </li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre class="next">
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">"\n do\t it  with\t  jQuery\t\n "</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">$input</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">text</span><span class="p">).</span><span class="nx">width</span><span class="p">(</span><span class="mi">180</span><span class="p">);</span>
-    <span class="nx">$input</span><span class="p">.</span><span class="nx">fnShowTooltip</span><span class="p">(</span><span class="s2">"This text will be transformed"</span><span class="p">);</span>
-    <span class="nx">$input</span><span class="p">.</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="s2">"title"</span><span class="p">).</span><span class="nx">focus</span><span class="p">();</span>
-  <span class="p">},</span> <span class="mi">1</span><span class="p">);</span>
+<pre class="code-example"><code class="javascript">
+  setTimeout(function () {
+    var text = "\n do\t it  with\t  jQuery\t\n ";
+    var $input = $("#txtName").val(text).width(180);
+    $input.fnShowTooltip("This text will be transformed");
+    $input.fnCapitalize("title").focus();
+  }, 1);
 
-  <span class="c1">//dispara el evento "blur"</span>
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">alert</span><span class="p">(</span><span class="s2">"click to transform"</span><span class="p">);</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">blur</span><span class="p">();</span>
-  <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
-</pre>
-</div>
-<p>Puede definir las palabras que no llevan letra capital:</p>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Definimos las palabras que no llevan letra capital</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">.</span><span class="nx">wordPattern</span> <span class="o">=</span> <span class="sr">/\s(?:And|Are|At|A|O[nrf]|By|In|The)\b/g</span><span class="p">;</span>
-    <span class="c1">// Establecemos la configuración de idioma</span>
-    <span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">jsu</span><span class="p">.</span><span class="nx">regional</span><span class="p">.</span><span class="nx">english</span><span class="p">);</span>
-    <span class="c1">// Inicializamos el plugin</span>
-    <span class="kd">var</span> <span class="nx">$input</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">fnCapitalize</span><span class="p">(</span><span class="s2">"word"</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">" pc AND KEYBOARD\t ArE oN tHe table "</span><span class="p">;</span>
-    <span class="c1">// Dispara el evento "blur" que transforma el texto</span>
-    <span class="nx">$input</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">text</span><span class="p">).</span><span class="nx">focus</span><span class="p">();</span>
-    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="s2">"transform"</span><span class="p">);</span>
-      <span class="nx">$input</span><span class="p">.</span><span class="nx">blur</span><span class="p">();</span>
-    <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
-  <span class="p">})();</span>
-</pre>
-</div>
+  //dispara el evento "blur"
+  setTimeout(function () {
+    alert("blur to transform");
+    $("#txtName").blur();
+  }, 2000);
+</code></pre>
+<p>Puede definir las palabras que permanecen en minúsculas:</p>
+<pre class="code-example"><code class="javascript">
+  (function () {
+    //definimos las palabras que no llevan letra capital
+    jsu.regional.english.wordPattern = /\s(?:And|Are|At|A|O[nrf]|By|In|The)\b/g;
+    //establecemos la configuración de idioma
+    jsu.regional.set(jsu.regional.english);
+    //inicializamos el plugin
+    var $input = $("#txtName").fnCapitalize("word");
+    var text = " pc AND KEYBOARD\t ArE oN tHe table ";
+    //dispara el evento "blur" que transforma el texto
+    $input.val(text).focus();
+    setTimeout(function () {
+      alert("transform on blur");
+      $input.blur();
+    }, 2000);
+  }());
+</code></pre>
 
 <!-- jQuery.fnNumericFormat -->
 <h3 id="jqueryfnnumericformat-options" class="add-jquery-link"><a href="#jqueryfnnumericformat-options">jQuery.fnNumericFormat (options)</a></h3>
-<p>Establece el formato numérico de acuerdo a la configuración de cultura actual. Si no se proporciona el parámetro <strong>options</strong>, el separador de miles y el separador decimal, reciben su valor de las propiedades <code>decimalMark</code> y <code>thousandsMark</code> en la configuración de idioma actual: <code><a href="#jsuregional">jsu.regional.current</a></code><br/>
-  <strong>Nota:</strong> Esta es la versión jQuery de la función <a href="#fnnumericformat-object-options">fnNumericFormat</a>.<br/>
-  <strong>Nota:</strong> Se usa la propiedad <code>value</code> como el texto a formatear.<br/>
+<p>Establece el formato numérico de acuerdo a la configuración de cultura actual. Si no se proporciona el parámetro <strong><em><span>@</span>options</em></strong>,
+  el separador de miles y el separador decimal, toman el valor de las propiedades <code>decimalMark</code> y <code>thousandsMark</code> según la configuración de idioma actual en <code><a href="#jsuregional">jsu.regional.current</a></code></p>
+<p>
+  <strong>Nota:</strong> La propiedad <code>value</code> de los elementos en la colección es usada como el texto a formatear.<br/>
   <strong>Nota:</strong> El texto es formateado cuando los eventos <code>blur</code> o <code>keyup</code> son disparados.<br/>
-  <strong>Retorna</strong> <code>jQuery</code>
+  <strong>Nota:</strong> Esta es una extensión jQuery del método <a href="#fnnumericformat-object-options">fnNumericFormat</a>.
 </p>
+<p><strong>Retorna</strong> <code>jQuery</code></p>
 <ul>
-  <li><strong>options:</strong> <code>Object</code> con las siguientes propiedades:
+  <li><strong>options:</strong> <code>Object</code> que configura las siguientes propiedades:
     <ul>
       <li><strong>inDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto de entrada.</li>
       <li><strong>inThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto de entrada.</li>
-      <li><strong>outDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto de salida.</li>
-      <li><strong>outThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto de salida.</li>
+      <li><strong>outDecimalMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.decimalMark</span></code><br/>Especifica el separador decimal para el texto retornado.</li>
+      <li><strong>outThousandsMark:</strong> <code>String</code> <code class="highlight italic"><span class="nt">default</span>: <span class="nb">jsu.regional.current.thousandsMark</span></code><br/>Especifica el separador de miles para el texto retornado.</li>
     </ul>
   </li>
 </ul>
-<div class="highlight highlight-javascript">
-<pre>
-  <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="s2">"123456789,47.15"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"original text:"</span><span class="p">,</span> <span class="nx">num</span><span class="p">);</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#txtName"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">fnNumericFormat</span><span class="p">({</span>
-      <span class="nx">inDecimalMark</span><span class="o">:</span> <span class="s2">","</span><span class="p">,</span> <span class="c1">//separador decimal del texto de entrada</span>
-      <span class="nx">inThousandsMark</span><span class="o">:</span> <span class="s2">"."</span> <span class="c1">//separador de miles del texto de entrada</span>
-  <span class="p">}).</span><span class="nx">blur</span><span class="p">();</span>
-</pre>
-</div>
+<pre class="code-example"><code class="javascript">
+(function () {
+  //establece la configuración de idioma
+  jsu.regional.set(jsu.regional.spanish);
+
+  //imprime el objeto del idioma actual
+  var lang = jsu.regional.current;
+  console.log("culture:", lang.culture);
+  console.log("decimalMark:", lang.decimalMark);
+  console.log("thousandsMark:", lang.thousandsMark);
+
+  var box = $("#txtName"),
+      numberEsCO = "6079,249", //"," es el separador decimal (es-CO)
+      malformed = "1234567,89.472"; //número malformado
+
+  box.val(numberEsCO).fnNumericFormat().blur();
+  console.log("original:", numberEsCO, "formatted:", box.val());
+
+  //Personalizar el formato numérico.
+  //jsu.regional es ignorado para este caso.
+  box.val(malformed).fnNumericFormat({
+    inDecimalMark: ".", //separador decimal en malformed
+    inThousandsMark: ",", //separador de miles en malformed
+    outDecimalMark: "dec", //separador decimal para el resultado
+    outThousandsMark: "'" //separador de miles para el resultado
+  }).blur();
+
+  console.log("original:", malformed, "formatted:", box.val());
+}());
+</code></pre>
 
 <!-- jQuery.fnNumericInput -->
 <h3 id="jqueryfnnumericinput-" class="add-jquery-link"><a href="#jqueryfnnumericinput-">jQuery.fnNumericInput ()</a></h3>
