@@ -10,29 +10,29 @@
 
   <meta name="viewport" content="width=device-width" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="description" content="JavaScript: buenas practicas"/>
+  <meta name="description" content="JavaScript: Fundamentals"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
   
-  <link rel="icon" type="image/png" href="js-icon32.png" />
-  <link rel="shortcut icon" href="js-icon32.png" />
-  <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="../shared/js-icon32.png" />
+  <link rel="shortcut icon" href="../shared/js-icon32.png" />
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" />
 
   <link type="text/css" rel="stylesheet" href="css/main.css" />
 
   <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
   <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
   <!--[if lte IE 9]>
-      <script src="js/polyfills/html5shiv.min.js"></script>
+      <script src="../shared/polyfills/html5shiv.min.js"></script>
   <![endif]-->
   
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>
+  <script>window.jQuery || document.write('<script src="../shared/jquery-2.1.1.min.js"><\/script>')</script>
   
   <!-- CSS3 selectors for IE -->
   <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
   <!--[if lt IE 9]>
-      <script src="js/polyfills/selectivizr.js"></script>
+      <script src="../shared/polyfills/selectivizr.js"></script>
   <![endif]-->
 </head>
 
@@ -62,8 +62,8 @@ para ser ejecutado por un intérprete, en contraste con los lenguajes compilados
         href="http://es.wikipedia.org/wiki/Lenguaje_de_programaci%C3%B3n_interpretado" target="_blank">interpretado</a>,<br/>
         definido como <strong>orientado a objetos</strong> basado en <a title="Los objetos existentes pueden servir de plantilla para crear nuevos objetos"
         href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_basada_en_prototipos" target="_blank">prototipos</a>
-        <i>(classless)</i>, <a title="Está basada en órdenes (enunciados imperativos) que se ejecutan de forma secuencial
-y actualizan el estado del programa mediante variables almacenadas en memoria." href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_imperativa"
+        <i>(classless)</i>, <a title="Está basada en órdenes (enunciados imperativos) que se ejecutan de forma
+secuencial y actualizan el estado del programa mediante variables almacenadas en memoria." href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_imperativa"
         target="_blank">imperativo</a>, débilmente<br/>tipado y <strong>dinámico</strong>.</p>
     </div>
 
@@ -154,24 +154,25 @@ function takeFlight(pato) {
     <div id="data-types-2" class="step">
       <h3 class="center">Tipos de datos</h3>
       <p>Para comprobar el tipo de datos de un objeto, podemos utilizar el operador
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof" target="_blank">typeof</a>, o bien,podemos usar el método
+        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof" target="_blank">typeof</a>, y para detectar el tipo/clase del objeto, podemos usar el método
         <a title="Using toString to detect object type" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString#Example:_Using_toString_to_detect_object_type" target="_blank">toString()</a>
-        para detectar el&nbsp;tipo/clase al cual pertenece.</p>
+      </p>
 <pre class="prettyprint lang-js linenums tight">
-var str = "hola",
-    bool = true,
-    num = 6572,
-    nan = +"10m",
-    func = function(){},
-    obj = { value: 1 },
-    date = new Date(),
-    nulo = null,
-    undef = void(0);
+var str = "hola",      //string
+    bool = true,       //boolean
+    num = 6572,        //number
+    nan = +"10m",      //number (NaN)
+    fn = function(){}, //function
+    obj = { value:1 }, //object [Object]
+    arr = [ "zero" ],  //object [Array]
+    date = new Date(), //object [Date]
+    nulo = null,       //object [Null]
+    undef = void(0);   //object [Undefined]
 
-var proto = Object.prototype.toString;
+var getClass = Object.prototype.toString;
 
 console.log("typeof: ", typeof nulo);
-console.log("proto: ", proto.call(nulo));
+console.log("Class: ", getClass.call(nulo));
 </pre>
     </div>
 
@@ -256,8 +257,8 @@ function Person (name, surname, gender, birth) {
     this.gender = gender;
     this.birth = birth;
 }
-
 function Person (options) {
+    "use strict";
     var defaults = {
         name: "unnamed",
         surname: "",
@@ -512,8 +513,8 @@ toObj = $.parseJSON(json); //des-serializa
   </div>
 
   <!-- SCRIPTS ADICIONALES -->
-  <script src="js/impress.js"></script>
-  <script src="js/prettify.min.js"></script>
+  <script src="../shared/impress.js"></script>
+  <script src="../shared/prettify.min.js"></script>
   <script src="js/main.js" charset="utf-8"></script>
   
 </body>

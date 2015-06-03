@@ -372,6 +372,7 @@ pre + .counter { color: white; }
 #object-literal-4 .wrap { margin-top: -14px; }
 
 #data-types-1.active, #data-types-1.past,
+#data-types-2.active, #data-types-2.past,
 #data-types-3.active, #data-types-3.past,
 #object-literal-3.active, #object-literal-3.past,
 #object-literal-5.active, #object-literal-5.past,
