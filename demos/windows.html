@@ -10,19 +10,19 @@
   <meta name="description" content="demos: fnGetDate, fnMaxLength, fnEasyValidate, fnShowDialog, fnConfirm"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
-  
+
   <link rel="icon" type="image/png" href="https://dl.dropboxusercontent.com/u/91579606/js-icon32.png" />
-  <!--<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/hot-sneaks/jquery-ui.css"/>-->
-  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/pepper-grinder/jquery-ui.css" />
+  <!--<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.10.4/themes/hot-sneaks/jquery-ui.css"/>-->
+  <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.10.4/themes/pepper-grinder/jquery-ui.css" />
   <link rel="stylesheet" type="text/css" href="../stylesheets/jherax.min.css" media="screen"/>
 
   <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
-  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!-- https://html5shiv.googlecode.com/svn/trunk/html5.js -->
   <!--[if lte IE 9]>
     <script src="../javascripts/polyfills/html5shiv.min.js"></script>
   <![endif]-->
 
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>window.jQuery || document.write('<script src="../javascripts/jquery-2.1.1.min.js"><\/script>')</script>
 
   <!-- CSS3 selectors for IE -->
@@ -95,7 +95,7 @@
         </form>
       </div>
   </section>
-  
+
   <!-- Pie de página -->
   <footer>
     <div class="footer">
@@ -105,20 +105,20 @@
   </footer>
 
   <!-- SCRIPTS ADICIONALES -->
-  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
   <!--<script type="text/javascript">var jsu = "hello";</script>-->
   <script type="text/javascript" src="../javascripts/jherax.min.js"></script>
 
   <script type="text/javascript">
     $(document).on("ready", function() {
-      
+
       //sets the default container
       jsu.wrapper = "#main-section";
 
       //configure the global language setting
       jsu.regional.english.dialogTitle = "System message";
       jsu.regional.set(jsu.regional.english);
-      
+
       //gets the current time
       $("#hora").text(jsu.fnGetDate().dateTime);
 

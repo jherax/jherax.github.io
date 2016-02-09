@@ -5,30 +5,32 @@
   <meta charset="utf-8"/>
   <!--[if IE]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <![endif]-->  
-  <title>JS: Buenas Prácticas</title>
+  <![endif]-->
+  <title>JS: Fundamentals</title>
 
   <meta name="viewport" content="width=device-width" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="description" content="JavaScript: Fundamentals"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
-  
+
   <link rel="icon" type="image/png" href="../shared/js-icon32.png" />
   <link rel="shortcut icon" href="../shared/js-icon32.png" />
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" />
 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" />
+  <link type="text/css" rel="stylesheet" href="../shared/impress-custom.css" />
+  <link type="text/css" rel="stylesheet" href="../shared/prettify-custom.css" />
   <link type="text/css" rel="stylesheet" href="css/main.css" />
 
   <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
-  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!-- https://html5shiv.googlecode.com/svn/trunk/html5.js -->
   <!--[if lte IE 9]>
       <script src="../shared/polyfills/html5shiv.min.js"></script>
   <![endif]-->
-  
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>window.jQuery || document.write('<script src="../shared/jquery-2.1.1.min.js"><\/script>')</script>
-  
+
   <!-- CSS3 selectors for IE -->
   <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
   <!--[if lt IE 9]>
@@ -41,7 +43,7 @@
   <div class="fallback-wrapper">
     <div class="fallback-message">
       <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
-      <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+      <p>Se recomienda actualizar el <a href="http://browsehappy.com/?locale=es" target="_blank">navegador</a></p>
     </div>
   </div>
 
@@ -79,19 +81,19 @@ secuencial y actualizan el estado del programa mediante variables almacenadas en
     <div id="duck-typing-2" class="step">
       <h2>Duck Typing</h2>
       <blockquote>Cuando veo un ave que camina como un pato, nada como un pato y suena como un pato, a esa ave yo la llamo un pato</blockquote>
-      <p>Por ejemplo, en un lenguaje de tipado estático, podemos crear una función que reciba un objeto de tipo <code>Pato</code> y ejecutar el método <code>volar()</code> de ese objeto.</p>
+      <p>Por ejemplo, en un lenguaje de tipado estático, podemos crear una función que reciba un objeto de tipo <code>Pato</code> e invocar el método <code>volar()</code></p>
     </div>
 
     <!-- 5 -->
     <div id="duck-typing-eg1" class="step">
-      <h3>Tipificado estático <b>(C#)</b>
+      <h3>Tipificado estático (C#)
         <button>1</button>
         <button>2</button>
         <button>3</button>
       </h3>
 <pre class="prettyprint lang-cs linenums">
 class Pato {
-    public void volar() { 
+    public void volar() {
       // implementation
     }
 }
@@ -107,7 +109,7 @@ interface IAves {
 }
 
 class Pato : IAves {
-    public void volar() { 
+    public void volar() {
       // implementation
     }
 }
@@ -119,7 +121,7 @@ class Main {
 }</pre>
 <pre class="prettyprint lang-cs linenums hide">
 class Main {
-    
+
     //C# permite la tipificación dinámica
     //en tiempo de ejecución, mediante
     //el tipo de datos "dynamic"
@@ -132,7 +134,7 @@ class Main {
 
     <!-- 6 -->
     <div id="duck-typing-eg2" class="step">
-      <h3>Tipificado dinámico <b>(JS)</b></h3>
+      <h3>Tipificado dinámico (JS)</h3>
       <p>Con <strong>duck typing</strong>, la función toma un objeto de cualquier tipo e invoca el método <code>volar()</code>. Si el objeto no contiene el método esperado, se arrojará un error</p>
 <pre class="prettyprint lang-js linenums">
 function takeFlight(pato) {
@@ -192,7 +194,7 @@ console.log("Class: ", getClass.call(nulo));
 //by value (primitive)
 var msg1 = "JavaScript rules!",
     msg2 = msg1;
- 
+
 msg1 = "jQuery rules!"; //msg2 is not modified
 console.log("msg1 = ", msg1);
 console.log("msg2 = ", msg2);
@@ -300,10 +302,10 @@ var arr = [0, 1, 1, 2], //new Array(0, 1, 1, 2)
 
     <!-- 17 -->
     <div id="json-2" class="step">
-      <p><h4 class="center">Estructura JSON</h4></p>
-      <p><img src="img/json-object.gif" width="598" /></p>
-      <p><img src="img/json-array.gif" width="598" /></p>
-      <p><img src="img/json-value.gif" width="598" /></p>
+      <h4 class="center">Estructura JSON</h4>
+      <img src="img/json-object.gif" width="598" />
+      <img src="img/json-array.gif" width="598" />
+      <img src="img/json-value.gif" width="598" />
     </div>
 
     <!-- 18 -->
@@ -335,38 +337,9 @@ var toObj = JSON.parse(json); //des-serializa
 //no posee un serializador de JSON
 toObj = $.parseJSON(json); //des-serializa
 </pre>
-    </div>
-
-    <!-- 20 -->
-    <div id="json-5" class="step">
-      <h4 class="center">JSON.stringify Polyfill con jQuery
-        <a href="http://stackoverflow.com/a/29574586/2247494" title="stackoverflow" target="_blank">&#10155;</a>
-      </h4>
-<pre class="prettyprint lang-js linenums" style="line-height: 1.15em;">
-(function (global, $) {
-  var iterator;
-  if (global.JSON &amp;&amp; typeof JSON.stringify == "function")
-      return $.stringify = JSON.stringify;
-
-  //iterator closure
-  iterator = function (arr) {
-    //iterator definition
-    return function (key, val) {
-      var prop = "\"" + key + "\":";
-      prop += ($.isPlainObject(val) ? $.stringify(val) : 
-        typeof val != "string" ? val : "\"" + val + "\"");
-      arr.push(prop);
-    }
-  };
-
-  $.stringify = function (obj) {
-      var arr = [];
-      //let the iterator closure take place
-      $.each(obj, iterator(arr));
-      return "{" + arr.join(",") + "}";
-  };
-})(window, jQuery);
-</pre>
+      <p class="center">
+        <a href="http://stackoverflow.com/a/29574586/2247494" title="stackoverflow" target="_blank">JSON.stringify Polyfill con jQuery</a>
+      </p>
     </div>
 
 <!--
@@ -417,7 +390,7 @@ toObj = $.parseJSON(json); //des-serializa
   (function (a) {
       var f = function() { };
       var n = { valueOf: function() { return 9; } };
-   
+
       //coerción en diferentes tipos de objetos
       console.log("a.", !!f,    typeof f,    f);    //a true:  function
       console.log("b.", !!f(),  typeof f(),  f());  //b false: undefined
@@ -440,23 +413,23 @@ toObj = $.parseJSON(json); //des-serializa
       var list = ["cero", "uno", "dos"];
       console.log("a.", list['1']); //"uno"
       console.log("b.", list[ 2 ]); //"dos"
-   
+
       //accediendo a propiedades
       list = { "5": "cinco" };
       console.log("c.", list['5']); //"cinco"
       console.log("d.", list[ 5 ]); //"cinco"
-   
+
       //coerción con números
       console.log("e.", 5 - "3"); //2
       console.log("f.", 5 * "3"); //15
       console.log("g.", 5 + "3"); //"53"
       console.log("h.", 5 + (+"3")); //8
-   
+
       //coerción con fechas
       var d = new Date();
       console.log("i.", +d); //number
       console.log("j.", d + ""); //string
-   
+
       //coerciones curiosas
       console.log("k.", true + 1); //2
       console.log("l.", true - false); //1
@@ -489,22 +462,22 @@ toObj = $.parseJSON(json); //des-serializa
 -->
 
     <!-- XX -->
-    <div id="the-end" class="step">
+    <div id="the-end" class="step skip-counter">
       <img src="img/thats-all.gif" alt="the end" width="600" />
     </div>
 
     <!-- XX -->
-    <div id="thank-you" class="step">
+    <div id="thank-you" class="step skip-counter">
       <ul>
         <li>David Rivera</li>
         <li><a href="https://jherax.wordpress.com/" target="_blank">jherax.wordpress.com</a></li>
         <li><a href="http://jherax.github.io/?lang=spanish" target="_blank">jherax.github.io</a></li>
         <li><a href="https://github.com/jherax/js-utils" target="_blank">github.com/jherax</a></li>
         <li><a href="https://plus.google.com/+davidriverajherax/posts" target="_blank">+davidriverajherax</a></li>
-      </ul> 
+      </ul>
     </div>
-    
-    <div id="overview" class="step" data-x="1400" data-y="0" data-scale="10" data-rotate-y="360"></div>
+
+    <div id="overview" class="step skip-counter" data-x="1400" data-y="0" data-scale="10" data-rotate-y="360"></div>
 
   </div><!-- #impress -->
 
@@ -515,7 +488,8 @@ toObj = $.parseJSON(json); //des-serializa
   <!-- SCRIPTS ADICIONALES -->
   <script src="../shared/impress.js"></script>
   <script src="../shared/prettify.min.js"></script>
+  <script src="../shared/utils.js" charset="utf-8"></script>
   <script src="js/main.js" charset="utf-8"></script>
-  
+
 </body>
 </html>

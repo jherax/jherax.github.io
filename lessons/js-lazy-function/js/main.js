@@ -1,9 +1,5 @@
 (function($, undefined) {
 
-	if ("ontouchstart" in document.documentElement) {
-	    $(".hint").html("<p>Toque a la izquierda o la derecha para navegar</p>");
-	}
-
 	//Creates the options for the slides
 	var steps = {
         "#title": {
@@ -36,35 +32,35 @@
         "#closure-scoping": {
             x: 4000, y: 1000
         },
-        //the middle
-        "#van-damme-img": {
+        //middle part
+        "#lazy-evaluation": {
             x: 4000, y: 2000
         },
-        "#lazy-evaluation": {
+        "#lazy-evaluation-code": {
             x: 4000, y: 3000
         },
-        "#lazy-evaluation-code": {
+        "#lazy-initialization": {
             x: 3000, y: 2000
         },
-        "#lazy-initialization": {
+        "#lazy-initialization-code": {
             x: 3000, y: 3000
         },
-        "#lazy-initialization-code": {
+        "#van-damme-img": {
             x: 2000, y: 2000
         },
-        "#awsome-img": {
+        "#lazy-function": {
             x: 2000, y: 3000
         },
-        "#lazy-function": {
+        "#lazy-function-code1": {
             x: 1000, y: 2000
         },
-        "#lazy-function-code1": {
+        "#lazy-function-parts": {
             x: 1000, y: 3000
         },
-        "#lazy-function-parts": {
+        "#lazy-function-code2": {
             x: 0, y: 2000
         },
-        "#lazy-function-code2": {
+        "#awsome-img": {
             x: 0, y: 3000
         },
         //last segment
@@ -79,57 +75,10 @@
         }
 	};
 
-    //Local reference declaration
-    var toString = Object.prototype.toString;
-    var i, total;
-
-    //Determines whether the @obj parameter is an object
-    function isObject(obj) {
-        return toString.call(obj) == "[object Object]";
-    }
-
-    //Builds the data-* attribute for each property in the object
-    //@obj: the object that contains the key/values
-    //@name: the prefix and key builds the data-* attribute
-    function buildAttr(obj, name) {
-        var key, value, prefix, attr = {};
-        if (isObject(obj)) {
-            for (key in obj) {
-                value = obj[key];
-                prefix = name + "-" + key;
-                if (isObject(value))
-                    $.extend(attr, buildAttr(value, prefix));
-                else {
-                    attr[prefix] = value;
-                }
-            }//end for
-        }//end if
-        return attr;
-    }
-
-    i = 0;
-    total = $("div.step").length - 2;
-
-    //Adds the data-* attributes to the slides
-    $.each(steps, function(key, value) {
-        var div = $(key)
-                .append("<div class='counter'>" + (i+=1) + " / " + total +"</div>")
-                .wrapInner("<div class='wrap'>"),
-            attr = buildAttr(value, "data");
-        //console.log(key, attr);
-        div.attr(attr);
-    });
-
-    //Makes the code pretty
-    window.prettyPrint && prettyPrint();
-
-    //Adds the event handler
-    $("#impress")
-        .on("impress:init", function() {
-            $("body").on("mousewheel", function() { return false; });
-        });
-
-	//Starts the impress
-    impress().init("impress");
+  utils
+    .addHintMessage()
+    .initDataAttributes(steps, ".skip-counter")
+    .initPrettify()
+    .initImpress("#impress");
 
 }(jQuery));

@@ -5,30 +5,32 @@
   <meta charset="utf-8"/>
   <!--[if IE]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <![endif]-->  
-  <title>JS: Lazy Function Definition</title>
+  <![endif]-->
+  <title>JS: Lazy Function Definition Pattern</title>
 
   <meta name="viewport" content="width=device-width" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="description" content="JavaScript: Lazy Function Definition Pattern"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
-  
+
   <link rel="icon" type="image/png" href="../shared/js-icon32.png" />
   <link rel="shortcut icon" href="../shared/js-icon32.png" />
 
-  <link type="text/css" rel="stylesheet" href="css/font.css" />
+  <link type="text/css" rel="stylesheet" href="../shared/fonts/font.css" />
+  <link type="text/css" rel="stylesheet" href="../shared/impress-custom.css" />
+  <link type="text/css" rel="stylesheet" href="../shared/prettify-custom.css" />
   <link type="text/css" rel="stylesheet" href="css/main.css" />
 
   <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
-  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!-- https://html5shiv.googlecode.com/svn/trunk/html5.js -->
   <!--[if lte IE 9]>
       <script src="../shared/polyfills/html5shiv.min.js"></script>
   <![endif]-->
-  
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>window.jQuery || document.write('<script src="../shared/jquery-2.1.1.min.js"><\/script>')</script>
-  
+
   <!-- CSS3 selectors for IE -->
   <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
   <!--[if lt IE 9]>
@@ -37,11 +39,11 @@
 </head>
 
 <body class="impress-not-supported">
-  
+
   <div class="fallback-wrapper">
     <div class="fallback-message">
       <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
-      <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+      <p>Se recomienda actualizar el <a href="http://browsehappy.com/?locale=es" target="_blank">navegador</a></p>
     </div>
   </div>
 
@@ -67,7 +69,7 @@
         <li>La función es redefinida por una versión optimizada.</li>
         <li>Se gana una mejora en el rendimiento en futuros llamados a la función.</li>
         <li>Los objetos a inicializar sólo serán cargados cuando se invoque la función por primera vez.</li>
-        <li>Puede mantener en cache ( del<a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" title="JavaScript: Closures" target="_jherax">closure</a>) el resultado de una tarea.</li>
+        <li>Puede mantener en cache ( del <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" title="JavaScript: Closures" target="_jherax">closure</a>) el resultado de una tarea.</li>
         <li>Ideal para el uso interno de APIs.</li>
       </ul>
     </div>
@@ -78,15 +80,15 @@
       <ul>
         <li>La función deja de ser un <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/#first-class-functions" title="Funciones: objetos de primera clase" target="_jherax">objeto de primera clase</a></li>
         <li>La función redefinida crea una nueva referencia en memoria (un nuevo objeto es asignado).</li>
-        <li>No se debería usar como método público (como propiedad de un objeto).</li>
-        <li>Si insiste en utilizarla para ser accedida por referencia, se va a arrepentir ;)</li>
+        <li>No se debería usar como método público o propiedad de un objeto. -- Ver <a href="https://jherax.wordpress.com/2015/02/24/js-lazy-function-definition/#case-1" target="_blank">caso 1</a>--</li>
+        <li>Si insiste en utilizarla para ser accedida por referencia, le causará problemas ;)</li>
       </ul>
     </div>
 
     <!-- 5 -->
-    <div id="all-right-img" class="step">
+    <div id="all-right-img" class="step skip-counter">
       <h3 class="center">¿ Quedo claro ?</h3>
-      <p><img src="img/all-right.gif" alt="entendido" width="637" height="480" /></p>
+      <img src="img/all-right.gif" alt="entendido" width="637" height="480" />
     </div>
 
     <!-- 6 -->
@@ -103,7 +105,7 @@
     <!-- 7 -->
     <div id="closure" class="step">
       <h2>¿Que es un closure?</h2>
-      <p>Un <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" title="JavaScript: Closures" target="_jherax">closure</a> es un tipo especial de objeto que combina dos cosas: <strong>una función, y el entorno en que se creó esa función</strong>. Es decir que una función definida dentro del closure “recuerda” el entorno en el que se ha creado y tiene acceso a las variables de ese entorno (el<a href="http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html" title="JavaScript Scoping and Hoisting " target="_blank">scope</a>de la función padre).</p>
+      <p>Un <a href="https://jherax.wordpress.com/2015/02/13/javascript-closures/" title="JavaScript: Closures" target="_jherax">closure</a> es un tipo especial de objeto que combina dos cosas: <strong>una función, y el entorno en que se creó esa función</strong>. Es decir que una función definida dentro del closure “recuerda” el entorno en el que se ha creado y tiene acceso a&nbsp;las variables libres (en el <a href="http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html" title="JavaScript Scoping and Hoisting " target="_blank">scope</a> de la función padre).</p>
     </div>
 
     <!-- 8 -->
@@ -122,13 +124,13 @@
       <h3 class="center">Closure en acción</h3>
 <pre class="prettyprint lang-js linenums tight">
 //inicio closure
-function paddingLeft (total, fillchar) { //función externa
+function paddingLeft (total, fillchar) { //outer fn
 
     //variables libres
     total = total || 2;
     fillchar = fillchar || "0";
 
-    return function padding (text) { //función interna
+    return function padding (text) { //inner fn
         var filled =
             new Array(total).join(fillchar) + text;
         return filled.slice(-total);
@@ -146,24 +148,18 @@ function paddingLeft (total, fillchar) { //función externa
     </div>
 
     <!-- 10 -->
-    <div id="closure-scoping" class="step">
+    <div id="closure-scoping" class="step skip-counter">
       <h3 class="center">Scoping</h3>
-      <p><img src="img/closure-img.png" alt="scoping" width="672" /></p>
+      <img src="img/closure-img.png" alt="scoping" width="672" />
     </div>
 
     <!-- 11 -->
-    <div id="van-damme-img" class="step">
-      <h3 class="center">Ahora sí, que venga el tal Lazy...</h3>
-      <p><img src="img/van-damme-6.gif" alt="van-damme" width="798" height="442" /></p>
-    </div>
-
-    <!-- 12 -->
     <div id="lazy-evaluation" class="step">
       <h2>Lazy evaluation</h2>
       <p>Se conoce también como <strong>call-by-need</strong> y es una estrategia que <strong>retrasa la evaluación de una expresión hasta que su valor es requerido</strong> evitando realizar cálculos innecesarios. En ocasiones, el <a href="http://en.wikipedia.org/wiki/Short-circuit_evaluation" title="Short-circuit evaluation" target="_blank">corto-circuito en la evaluación</a> de expresiones boleanas también es llamado <strong><em>lazy</em></strong>, en donde el segundo argumento es evaluado sólo si el primer argumento resulta satisfactorio para el operador lógico.</p>
     </div>
 
-    <!-- 13 -->
+    <!-- 12 -->
     <div id="lazy-evaluation-code" class="step">
       <h3 class="center">Lazy evaluation en acción</h3>
 <pre class="prettyprint lang-js linenums">
@@ -185,18 +181,18 @@ function canVote (edad) {
 </pre>
     </div>
 
-    <!-- 14 -->
+    <!-- 13 -->
     <div id="lazy-initialization" class="step">
       <h2>Lazy initialization</h2>
       <p>También conocido como <em><a href="http://en.wikipedia.org/wiki/Lazy_initialization" title="Lazy initialization" target="_blank">inicialización perezosa</a> o inicialización tardía,</em> es una técnica utilizada para retrasar la creación de un objeto, el cálculo de una operación, o algún otro proceso costoso hasta que sea necesitado la primera vez. La forma tradicional de lograr el objetivo, es mantener un <strong>flag</strong> <em>(indicador)</em> que nos permita saber si el objeto es requerido.</p>
     </div>
 
-    <!-- 15 -->
+    <!-- 14 -->
     <div id="lazy-initialization-code" class="step">
       <h3 class="center">Lazy initialization en acción</h3>
 <pre class="prettyprint lang-js linenums">
   function foo() {
-      
+
       //t es el flag que determina
       //si el objeto fue requerido
       if (foo.t) {
@@ -210,13 +206,13 @@ function canVote (edad) {
 </pre>
     </div>
 
-    <!-- 16 -->
-    <div id="awsome-img" class="step">
-      <h3 class="center">Asombrosooooo</h3>
-      <p><img src="img/awsome.gif" alt="asombroso" width="750" height="585" /></p>
+    <!-- 15 -->
+    <div id="van-damme-img" class="step skip-counter">
+      <h3 class="center">Ahora sí, que venga el tal Lazy Pattern...</h3>
+      <img src="img/van-damme-6.gif" alt="van-damme" width="798" height="442" />
     </div>
 
-    <!-- 17 -->
+    <!-- 16 -->
     <div id="lazy-function" class="step">
       <h2><a href="https://jherax.wordpress.com/2015/02/24/js-lazy-function-definition/" target="_jherax">Lazy Function Definition</a></h2>
       <p>Como todo patrón de diseño, debemos usarlo en el contexto adecuado, y una función puede implementar el patrón de <em><strong>función perezosa</strong></em> si requiere solucionar alguno de los siguientes problemas:</p>
@@ -227,35 +223,35 @@ function canVote (edad) {
       </ul>
     </div>
 
-    <!-- 18 -->
+    <!-- 17 -->
     <div id="lazy-function-code1" class="step">
       <h3 class="center">Sobrescribiendo funciones</h3>
 <pre class="prettyprint lang-js linenums tight">
-  //declaramos una función
-  function pushButton() {
+//declaramos una función
+function pushButton() {
 
-      //mantenemos el estado interno
-      //de las veces que invoquemos la función
-      var _calls = 1;
+    //mantenemos el estado interno
+    //de las veces que invoquemos la función
+    var _calls = 1;
 
-      //redefinimos la función
-      pushButton = function() {
-          _calls += 1;
-          alert(_calls + " call to pushButton()");
-      };
+    //redefinimos la función
+    pushButton = function() {
+        _calls += 1;
+        alert(_calls + " call to pushButton()");
+    };
 
-      //ésto será ejecutado sólo la primera vez
-      //que se invoque la función pushButton()
-      alert("First call to pushButton()");
-  }
+    //ésto será ejecutado sólo la primera vez
+    //que se invoque la función pushButton()
+    alert("First call to pushButton()");
+}
 
-  pushButton(); //primer llamado
-  pushButton(); //2
-  pushButton(); //3
+pushButton(); //primer llamado
+pushButton(); //2
+pushButton(); //3
 </pre>
     </div>
 
-    <!-- 19 -->
+    <!-- 18 -->
     <div id="lazy-function-parts" class="step">
       <h2><a href="https://jherax.wordpress.com/2015/02/24/js-lazy-function-definition/" target="_jherax">Lazy Function Definition</a></h2>
       <p>De manera sencilla hemos visto lo que es una función que se&nbsp;sobrescribe así misma. Sin embargo, en el patrón <strong>Lazy Function Definition</strong>, una <em>función perezosa</em> esta formada de tres partes:</p>
@@ -266,7 +262,7 @@ function canVote (edad) {
       </ol>
     </div>
 
-    <!-- 20 -->
+    <!-- 19 -->
     <div id="lazy-function-code2" class="step">
       <h3 class="center">Lazy function en acción</h3>
 <pre class="prettyprint lang-js linenums">
@@ -289,6 +285,12 @@ function canVote (edad) {
 </pre>
     </div>
 
+    <!-- 20 -->
+    <div id="awsome-img" class="step skip-counter">
+      <h3 class="center">¡Asombrosooooo!</h3>
+      <img src="img/awsome.gif" alt="asombroso" width="750" height="585" />
+    </div>
+
     <!-- 21 -->
     <div id="lazy-function-code3" class="step">
       <h3 class="center">Lazy function condicional</h3>
@@ -299,10 +301,12 @@ var getText = function (DOMNode) {
     getText =
         typeof DOMNode.innerText !== "undefined"
           ? function (DOMNode) {
-                return DOMNode.innerText }
+                return DOMNode.innerText;
+            }
           : function (DOMNode) {
-                return DOMNode.textContent };
- 
+                return DOMNode.textContent;
+            };
+
     //autoinvocar
     return getText(DOMNode);
 }
@@ -310,25 +314,25 @@ var getText = function (DOMNode) {
     </div>
 
     <!-- 22 -->
-    <div id="self-punish-img" class="step">
-      <p class="center">Utilicemos este patrón en el contexto adecuado,
-        <br/>para que luego no tengamos que hacer esto...
-      </p><br/>
+    <div id="self-punish-img" class="step skip-counter">
+      <p class="center">Si bien este patrón puede ser de mucha utilidad, <br/>no lo usemos inadecuadamente
+        (ver <a href="#/drawbacks">drawbacks</a>), <br/>de lo contrario nos veremos haciendo esto...
+      </p>
       <p><img src="img/self-punish.gif" alt="auto-golpearse" width="589" height="559" /></p>
     </div>
 
     <!-- 23 -->
-    <div id="thank-you" class="step">
+    <div id="thank-you" class="step skip-counter">
       <ul>
         <li>David Rivera</li>
         <li><a href="https://jherax.wordpress.com/" target="_blank">jherax.wordpress.com</a></li>
         <li><a href="http://jherax.github.io/?lang=spanish" target="_blank">jherax.github.io</a></li>
         <li><a href="https://github.com/jherax/js-utils" target="_blank">github.com/jherax</a></li>
         <li><a href="https://plus.google.com/+davidriverajherax/posts" target="_blank">+davidriverajherax</a></li>
-      </ul> 
+      </ul>
     </div>
 
-    <div id="overview" class="step" data-x="2000" data-y="2000" data-scale="10" data-rotate-y="360"></div>
+    <div id="overview" class="step skip-counter" data-x="2000" data-y="2000" data-scale="10" data-rotate-y="360"></div>
 
   </div><!-- #impress -->
 
@@ -339,7 +343,8 @@ var getText = function (DOMNode) {
   <!-- SCRIPTS ADICIONALES -->
   <script src="../shared/impress.js"></script>
   <script src="../shared/prettify.min.js"></script>
+  <script src="../shared/utils.js" charset="utf-8"></script>
   <script src="js/main.js" charset="utf-8"></script>
-  
+
 </body>
 </html>

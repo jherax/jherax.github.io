@@ -5,7 +5,7 @@
   <meta charset="utf-8"/>
   <!--[if IE]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <![endif]-->  
+  <![endif]-->
   <title>JS: Module Pattern</title>
 
   <meta name="viewport" content="width=device-width" />
@@ -13,22 +13,24 @@
   <meta name="description" content="JavaScript: Module Pattern"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
-  
+
   <link rel="icon" type="image/png" href="../shared/js-icon32.png" />
   <link rel="shortcut icon" href="../shared/js-icon32.png" />
 
-  <link type="text/css" rel="stylesheet" href="css/font.css" />
+  <link type="text/css" rel="stylesheet" href="../shared/fonts/font.css" />
+  <link type="text/css" rel="stylesheet" href="../shared/impress-custom.css" />
+  <link type="text/css" rel="stylesheet" href="../shared/prettify-custom.css" />
   <link type="text/css" rel="stylesheet" href="css/main.css" />
 
   <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
-  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!-- https://html5shiv.googlecode.com/svn/trunk/html5.js -->
   <!--[if lte IE 9]>
       <script src="../shared/polyfills/html5shiv.min.js"></script>
   <![endif]-->
-  
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>window.jQuery || document.write('<script src="../shared/jquery-2.1.1.min.js"><\/script>')</script>
-  
+
   <!-- CSS3 selectors for IE -->
   <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
   <!--[if lt IE 9]>
@@ -37,11 +39,11 @@
 </head>
 
 <body class="impress-not-supported">
-  
+
   <div class="fallback-wrapper">
     <div class="fallback-message">
       <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
-      <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+      <p>Se recomienda actualizar el <a href="http://browsehappy.com/?locale=es" target="_blank">navegador</a></p>
     </div>
   </div>
 
@@ -57,7 +59,7 @@
     <!-- 2 -->
     <div id="definition" class="step">
       <h2>¿Qué es?</h2>
-      <p>El patrón <a href="http://en.wikipedia.org/wiki/Module_pattern" target="_blank">Module (Módulo)</a> es un <b>patrón creacional</b> que usa el concepto de la <a href="http://en.wikipedia.org/wiki/Modular_programming" target="_blank">programación modular</a>, encapsulando unidades de código y separando la funcionalidad en módulos intercambiables.</p>
+      <p>El patrón <a href="http://en.wikipedia.org/wiki/Module_pattern" target="_blank">Module (Módulo)</a> es un <b>patrón creacional</b> que&nbsp;usa el concepto de la <a href="http://en.wikipedia.org/wiki/Modular_programming" target="_blank">programación modular</a>, encapsulando unidades de código y separando la funcionalidad en módulos intercambiables.</p>
       <p></p>
     </div>
 
@@ -84,7 +86,7 @@
     </div>
 
     <!-- 5 -->
-    <div id="cat-wtf" class="step">
+    <div id="cat-wtf" class="step skip-counter">
       <img src="img/cat_wtf.jpg" alt="cat wtf" width="480" />
     </div>
 
@@ -127,7 +129,7 @@ function fnCounter() {
     valueOf: 1
   };
   //agregar propiedades
-  obj.fnResta = function(a, b) { return a - b; };
+  obj.fnResta = function(a, b) { return a - b };
   obj["fecha"] = new Date();
   //eliminar propiedades
   delete obj["#text"];</pre>
@@ -157,14 +159,14 @@ function fnCounter() {
     <div id="global-import" class="step">
       <h2>Global Import</h2>
       <p>Podemos <b>importar</b> objetos a nuestro módulo enviándolos como parámetros a la función anónima, de esta manera creamos un <em>alias</em> y&nbsp;evitamos la colisión de nombres.</p>
-    <pre class="prettyprint lang-js">
-    var Module = (function ($, yui) { //&#8678; alias
-      // jQuery alias $
-      // YAHOO.utils alias yui
-      return {
-        // Module Object
-      };
-    }(jQuery, YAHOO.utils)); //&#8678; import</pre>
+  <pre class="prettyprint lang-js">
+  var Module = (function ($, yui) { //&#8678; alias
+    // jQuery alias $
+    // YAHOO.utils alias yui
+    return {
+      // Module Object
+    };
+  }(jQuery, YAHOO.utils)); //&#8678; import</pre>
     <p>Al asignar el alias, creamos una referencia local del objeto importado, mejorando el rendimiento al acortar la cadena de referencias.</p>
     </div>
 
@@ -178,8 +180,8 @@ var MODULE = (function() {
       _calls = 0; //private
 
   //public API
-  module.makeCall = function() { _calls += 1; };
-  module.getCalls = function() { return _calls; };
+  module.makeCall = function() { _calls += 1 };
+  module.getCalls = function() { return _calls };
   <span class="highlight-text" title="returns: locally scoped Object Literal">return module;</span> //export
 }());</pre>
     </div>
@@ -213,12 +215,12 @@ var MODULE = (function (module) {
   // private members
   var _length = 0,
       _items = [];
-      
-  function append (item) { _length = _items.push(item) }
-  function total () { return _length; }
+
+  function add(it) { _length = _items.push(it); }
+  function total() { return _length; }
 
   // public members
-  module.addItems = append;
+  module.addItems = add;
   module.getTotal = total;
 
   return module;
@@ -267,14 +269,14 @@ var MODULE = (function (undefined) {
   var _toString = Object.prototype.toString,
       _length = 0,
       _items = [];
-      
+
   function getTotal () { return _length; }
   function getItems () { return _items; }
-  
-  function addItems (item) {
-    if (item === undefined) return;
-    if (_toString.call(item) != "[object Array]")
-        item = [item];
+
+  function addItems (it) {
+    if (it === undefined) return;
+    if (_toString.call(it) != "[object Array]")
+        it = [it];
     <span class="highlight-text" title="_length = Array.prototype.push.apply(_items, item)">_items = _items.concat(item);
     _length = _items.length;</span>
   }
@@ -289,23 +291,23 @@ var MODULE = (function (undefined) {
     </div>
 
     <!-- 18 -->
-    <div id="questions" class="step">
-      <h2>¿Preguntas?</h2>
-      <img src="img/any-question.jpg" alt="¿preguntas?" width="303" />
+    <div id="questions" class="step skip-counter">
+      <h2>...eeemm...</h2>
+      <img src="img/any-question.jpg" alt="¿preguntas?" width="360" />
     </div>
 
     <!-- 19 -->
-    <div id="thank-you" class="step">
+    <div id="thank-you" class="step skip-counter">
       <h2>David Rivera</h2>
       <ul>
         <li><a href="https://jherax.wordpress.com/" target="_blank">jherax.wordpress.com</a></li>
         <li><a href="http://jherax.github.io/?lang=spanish" target="_blank">jherax.github.io</a></li>
         <li><a href="https://github.com/jherax/js-utils" target="_blank">github.com/jherax</a></li>
         <li><a href="https://plus.google.com/+davidriverajherax/posts" target="_blank">+davidriverajherax</a></li>
-      </ul> 
+      </ul>
     </div>
 
-    <div id="overview" class="step" data-x="3400" data-y="1000" data-scale="10" data-rotate-y="360"></div>
+    <div id="overview" class="step skip-counter" data-x="3400" data-y="1000" data-scale="10" data-rotate-y="360"></div>
 
   </div><!-- #impress -->
 
@@ -316,7 +318,8 @@ var MODULE = (function (undefined) {
   <!-- SCRIPTS ADICIONALES -->
   <script src="../shared/impress.js"></script>
   <script src="../shared/prettify.min.js"></script>
+  <script src="../shared/utils.js" charset="utf-8"></script>
   <script src="js/main.js" charset="utf-8"></script>
-  
+
 </body>
 </html>

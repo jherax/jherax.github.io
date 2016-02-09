@@ -5,30 +5,32 @@
   <meta charset="utf-8"/>
   <!--[if IE]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <![endif]-->  
-  <title>JS: Buenas Prácticas</title>
+  <![endif]-->
+  <title>JS: Good Practices</title>
 
   <meta name="viewport" content="width=device-width" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="description" content="JavaScript: Principios del diseño"/>
+  <meta name="description" content="JavaScript: Good Practices"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
-  
+
   <link rel="icon" type="image/png" href="../shared/js-icon32.png" />
   <link rel="shortcut icon" href="../shared/js-icon32.png" />
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" />
 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" />
+  <link type="text/css" rel="stylesheet" href="../shared/impress-custom.css" />
+  <link type="text/css" rel="stylesheet" href="../shared/prettify-custom.css" />
   <link type="text/css" rel="stylesheet" href="css/main.css" />
 
   <!-- HTML5 shim, for IE6-9 support of HTML5 elements -->
-  <!-- http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+  <!-- https://html5shiv.googlecode.com/svn/trunk/html5.js -->
   <!--[if lte IE 9]>
       <script src="../shared/polyfills/html5shiv.min.js"></script>
   <![endif]-->
-  
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>window.jQuery || document.write('<script src="../shared/jquery-2.1.1.min.js"><\/script>')</script>
-  
+
   <!-- CSS3 selectors for IE -->
   <!-- https://raw.github.com/keithclark/selectivizr/master/selectivizr.js -->
   <!--[if lt IE 9]>
@@ -41,7 +43,7 @@
   <div class="fallback-wrapper">
     <div class="fallback-message">
       <p>Este navegador no soporta las características<br/>requeridas para la correcta visualización.</p>
-      <p>Para una mejor experiencia, <a href="http://browsehappy.com/?locale=es" target="_blank">actualice su navegador</a></p>
+      <p>Se recomienda actualizar el <a href="http://browsehappy.com/?locale=es" target="_blank">navegador</a></p>
     </div>
   </div>
 
@@ -72,7 +74,7 @@
       <p>Veamos este ejemplo...</p>
 <pre class="prettyprint lang-js linenums">
 function afterEvent1 (obj, text) {
-  if (obj && obj instanceof HTMLElement && obj.value) {
+  if (obj instanceof HTMLElement && obj.value) {
     console.log("Message: ", text);
     obj.value = text;
     obj.className = "";
@@ -81,7 +83,7 @@ function afterEvent1 (obj, text) {
 }
 
 function afterEvent2 (obj, text) {
-  if (obj && obj instanceof HTMLElement && obj.value) {
+  if (obj instanceof HTMLElement && obj.value) {
     console.log("Message: ", text);
     obj.value = text;
     obj.className = "active";
@@ -94,72 +96,41 @@ function afterEvent2 (obj, text) {
     <div id="dry-eg2" class="step">
       <p>Podríamos mejorarlo de la siguiente manera:</p>
 <pre class="prettyprint lang-js linenums tight">
-function doAfter (obj, text, fn) {
-  if (obj && obj instanceof HTMLElement && obj.value) {
+function doAfter (obj, text, callback) {
+  if (obj instanceof HTMLElement && obj.value) {
     console.log("Message: ", text);
     obj.value = text;
-    //ejecutamos el callback "fn"
-    fn(obj);
+    //ejecutamos la función callback
+    callback();
   }
 }
 
 function afterEvent1 (obj, text) {
-  doAfter(obj, text, function (o) {
-    o.className = "";
-    o.disabled = true;
+  doAfter(obj, text, function () {
+    obj.className = "";
+    obj.disabled = true;
   });
 }
 
 function afterEvent2 (obj, text) {
-  doAfter(obj, text, function (o) {
-    o.className = "active";
+  doAfter(obj, text, function () {
+    obj.className = "active";
   });
 }
 </pre>
     </div>
 
-    <!-- 6 -->
-    <div id="dry-eg3" class="step">
-      <p>Podríamos mejorarlo de la siguiente manera:</p>
-<pre class="prettyprint lang-js linenums tight">
-function doAfter (obj, text, fn) {
-  if (obj && obj instanceof HTMLElement && obj.value) {
-    console.log("Message: ", text);
-    obj.value = text;
-    if (({}).toString.call(fn) == '[object Function]')
-      fn(obj);
-  }
-}
-
-function afterEvent1 (obj, text) {
-  doAfter(obj, text, function (o) {
-    o.className = "";
-    o.disabled = true;
-  });
-}
-
-function afterEvent2 (obj, text) {
-  doAfter(obj, text, function (o) {
-    o.className = "active";
-  });
-}
-</pre>
-    </div>
 
     <!-- 7 -->
-    <div id="dry-eg4" class="step">
-      <p>... y podemos mejorarlo aún más:</p>
+    <div id="dry-eg3" class="step">
+      <p>Siguiendo buenas prácticas...</p>
 <pre class="prettyprint lang-js linenums tight">
-function isFunction (obj) {
-  var toString = Object.prototype.toString;
-  return (!!obj && toString.call(obj) == '[object Function]');
-}
-
 function doAfter (obj, text, callback) {
-  if (obj && obj instanceof HTMLElement && obj.value) {
+  if (obj instanceof HTMLElement && obj.value) {
     console.log("Message: ", text);
     obj.value = text;
-    if (isFunction(callback)) callback(obj);
+    if (typeof callback === 'function')
+      callback(obj); //bajo acoplamiento
   }
 }
 
@@ -217,32 +188,33 @@ function afterEvent2 (obj, text) {
     <div id="code-eg1" class="step">
 <pre class="prettyprint lang-cs linenums">
 class File {
-    public int length { get; set; }
-    public int sent { get; set; }
+  public int length { get; set; }
+  public int sent { get; set; }
 }
 
 class Progress {
-    private File _file;
- 
-    public Progress(File file) {
-        this._file = file;
-    }
- 
-    public int getPercent() {
-        return this._file.sent * 100 / this._file.length;
-    }
+  private File _file;
+
+  public Progress(File file) {
+    this._file = file;
+  }
+
+  public int getPercent() {
+    return this._file.sent * 100 / this._file.length;
+  }
 }
 </pre>
     </div>
 
     <!-- 14 -->
-    <div id="remarks" class="step">
-      <p>Aunque el código anterior parece correcto, está violando el principio <strong>Open/Closed</strong>, ya que si se desea agregar una nueva característica (como <em>streaming</em> de música/video) tendríamos que modificar la clase <code>Progress</code> porque tiene una dependencia directa con la&nbsp;implementación de <code>File</code> <nobr>(alto acoplamiento)</nobr></p>
+    <div id="splash" class="step skip-counter">
+      <h3 class="center">Oooops!</h3>
+      <img src="img/water-balloon.gif" alt="splash" width="600" />
     </div>
 
     <!-- 15 -->
-    <div id="splash" class="step">
-      <img src="img/water-balloon.gif" alt="splash" width="600" />
+    <div id="remarks" class="step">
+      <p>Aunque el código anterior parece correcto, está violando el principio <strong>Open/Closed</strong>, ya que si se desea agregar una nueva característica (como <em>streaming</em> de música/video) tendríamos que modificar la clase <code>Progress</code> porque tiene una dependencia directa con la&nbsp;implementación de <code>File</code> <nobr>(alto acoplamiento)</nobr></p>
     </div>
 
     <!-- 16 -->
@@ -255,17 +227,17 @@ class Progress {
     <!-- 17 -->
     <div id="solution-2" class="step">
       <p>Hablando estrictamente, podemos decir que cualquier clase que dependa directamente de otra está violando el principio <strong>Open/Closed</strong>, pero recordemos el principio <strong>KISS</strong>, no&nbsp;agregar complejidad innecesaria; a&nbsp;veces no se justifica el costo que implica modificar el código existente.</p>
-      <p>Bien, ahora vamos a modificar la solución anterior utilizando el patrón <a title="Strategy Pattern" href="http://es.wikipedia.org/wiki/Strategy_%28patr%C3%B3n_de_dise%C3%B1o%29" target="_blank">Strategy</a>, trabajando contra <strong>abstracciones</strong> en lugar de implementaciones <span>(<a href="http://csharperimage.jeremylikness.com/2009/05/solid-and-dry.html" target="_blank">Liskov Substitution</a>)</span>, y así respetamos de manera simple y efectiva el principio <strong>OCP</strong>.</p>
+      <p>Ahora vamos a modificar la solución anterior siguiendo el pincipio de <a href="http://csharperimage.jeremylikness.com/2009/05/solid-and-dry.html" target="_blank">Liskov Substitution</a>, en el cual la clase derivada puede ser sustituida por su clase base (dependencia en <strong>abstracciones</strong> en lugar de implementaciones), y de esta manera respetamos el principio <strong>Open/Closed</strong> para la<br/>clase <code>Progress</code></p>
     </div>
 
     <!-- 18 -->
-    <div id="strategy-1" class="step">
-      <h3 class="center">Strategy Pattern</h3>
+    <div id="solution-3" class="step">
+      <h3 class="center">OCP and LSP</h3>
       <img src="img/diagram-3.png" alt="strategy pattern diagram" width="860" />
     </div>
 
     <!-- 19 -->
-    <div id="strategy-2" class="step">
+    <div id="solution-4" class="step">
 <pre class="prettyprint lang-java linenums tight">
 interface IMedia {
   int length { get; set; }
@@ -273,48 +245,49 @@ interface IMedia {
 }
 
 class File : IMedia {
-    private int _length;
-    private int _sent;
-    
-    public int length { 
-      get { return _length; }
-    }
+  private int _length;
+  private int _sent;
 
-    public int sent { 
-      get { return _sent; }
-    }
+  public int length {
+    get { return _length; }
+  }
+
+  public int sent {
+    get { return _sent; }
+  }
 }
 
 class Progress {
-    private IMedia _data;
- 
-    public Progress(IMedia file) {
-        this._data = file;
-    }
- 
-    public int getPercent() {
-        return this._data.sent*100 / this._data.length;
-    }
+  private IMedia _data;
+
+  public Progress(IMedia file) {
+    this._data = file;
+  }
+
+  public int getPercent() {
+    return this._data.sent * 100 / this._data.length;
+  }
 }</pre>
     </div>
 
     <!-- 20 -->
-    <div id="awsome" class="step">
-      <img src="img/awsome.gif" alt="asombroso!" width="600" />
+    <div id="chuza" class="step skip-counter">
+      <h3 class="center">Chuzaaa!</h3>
+      <img src="img/chuza.gif" alt="asombroso!" width="600" />
     </div>
 
     <!-- 21 -->
-    <div id="thank-you" class="step">
+    <div id="thank-you" class="step skip-counter">
       <ul>
         <li>David Rivera</li>
         <li><a href="https://jherax.wordpress.com/" target="_blank">jherax.wordpress.com</a></li>
         <li><a href="http://jherax.github.io/?lang=spanish" target="_blank">jherax.github.io</a></li>
         <li><a href="https://github.com/jherax/js-utils" target="_blank">github.com/jherax</a></li>
         <li><a href="https://plus.google.com/+davidriverajherax/posts" target="_blank">+davidriverajherax</a></li>
-      </ul> 
+      </ul>
     </div>
-    
-    <div id="overview" class="step" data-x="200" data-y="0" data-scale="10" data-rotate-y="360"></div>
+
+    <div id="overview" class="step skip-counter" data-x="200" data-y="0" data-scale="10" data-rotate-y="360"></div>
 
   </div><!-- #impress -->
 
@@ -325,7 +298,8 @@ class Progress {
   <!-- SCRIPTS ADICIONALES -->
   <script src="../shared/impress.js"></script>
   <script src="../shared/prettify.min.js"></script>
+  <script src="../shared/utils.js" charset="utf-8"></script>
   <script src="js/main.js" charset="utf-8"></script>
-  
+
 </body>
 </html>
