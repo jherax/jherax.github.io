@@ -1,9 +1,9 @@
 [Documentation Site](http://jherax.github.io/)
 ====================
-This site shows examples and the documentation of JSU Library.
+This site shows examples and the API reference for JSU Library.
 
 # JSU Library
-This is a library of JavaScript / jQuery utilities, which includes tools for data validation and text formatting, plugins for tooltip, modal-windows and positioning elements, resources injection, string and JSON manipulation, object cloning, sorting arrays, and other features.
+This is a library of utilities for JavaScript and jQuery, which includes tools for data validation, text formatting, tooltips, positioning elements, JSON manipulation, cloning objects, sorting arrays, resource injection, among others.
 
 ## Getting the Library
 You can download the library and get the source code from: https://github.com/jherax/js-utils

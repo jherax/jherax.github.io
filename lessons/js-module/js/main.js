@@ -1,7 +1,7 @@
 (function($, undefined) {
 
-	//Creates the options for the slides
-	var steps = {
+    //Creates the options for the slides
+    var steps = {
         "#title": {
             x: 300, y: -600, scale: 5, rotate: { x: 90 }
         },
@@ -59,16 +59,16 @@
         "#thank-you": {
             x: 5800, y: 700, z: 700, scale: 4
         }
-	};
+    };
 
-  utils
+    utils
     .addHintMessage()
     .initDataAttributes(steps, ".skip-counter")
     .initPrettify()
-    .initImpress("#impress", function ($impress) {
-      $impress.on("impress:stepenter", function(e) {
-        $("#global-import").toggle(e.target.id !== "privacy");
-      });
+    .initImpress("#impress", function($impress) {
+        $impress.on("impress:stepenter", function(e) {
+            $("#global-import").toggle(e.target.id !== "privacy");
+        });
     });
 
 }(jQuery));

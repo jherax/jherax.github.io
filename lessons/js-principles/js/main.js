@@ -1,7 +1,7 @@
 (function($, undefined) {
 
-	//Creates the options for the slides
-	var steps = {
+    //Creates the options for the slides
+    var steps = {
         "#title": {
             x: -1000, y: -1500, scale: 5, rotate: { x: 90 }
         },
@@ -62,9 +62,9 @@
         "#thank-you": {
             x: 2400, y: 1300, scale: 3, z: 500
         }
-  };
-  
-  utils
+    };
+
+    utils
     .addHintMessage()
     .initDataAttributes(steps, ".skip-counter")
     .initPrettify()

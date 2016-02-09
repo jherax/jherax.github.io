@@ -46,12 +46,12 @@ b, strong { color: #ddd; }
 #all-right-img   h3,
 #closure-scoping h3,
 #van-damme-img   h3,
-#awsome-img      h3 { margin: 0 auto 0.5em; }
+#awesome-img     h3 { margin: 0 auto 0.5em; }
 
 #all-right-img   img,
 #closure-scoping img,
 #van-damme-img   img,
-#awsome-img      img,
+#awesome-img     img,
 #self-punish-img img { display: flex; margin: 0 auto; }
 
 #definition .wrap { width: 860px; }

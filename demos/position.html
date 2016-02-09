@@ -83,10 +83,10 @@
 	<script type="text/javascript" src="../javascripts/jherax.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
-			jsu.fnLoading({ of: "#target" });
-			$("[type=number]").fnCustomInput(/[\d\-]/);
+			jsu.showLoading({ of: "#target" });
+			$("[type=number]").customInput(/[\d\-]/);
 			setTimeout(function() {
-				jsu.fnLoading({ hide: true });
+				jsu.showLoading({ hide: true });
 				var div = $('<div id="dialogWrapper"/>').css({
 					'display': 'inline-block',
 					'padding': '20px',
@@ -94,7 +94,7 @@
 					'border': 'solid 1px #61948A',
 					'borderRadius': '10px'
 				}).appendTo("body").html("<h4>positioning</h4>");
-				div.fnCenter({ of: "#target" });
+				div.center({ of: "#target" });
 			}, 5000);
 
 			var setPosition = function() {

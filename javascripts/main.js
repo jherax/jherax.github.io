@@ -12,7 +12,7 @@
         body = $("body");
 
     //loading animation
-    var circleG = 
+    var circleG =
         '<div id="circleG">' +
           '<div id="circleG_1" class="circleG"></div>' +
           '<div id="circleG_2" class="circleG"></div>' +
@@ -22,7 +22,7 @@
 
     //Document ready
     $(function() {
-        var lang = jsu.fnGetQueryToString("lang") || "english";
+        var lang = jsu.getQueryToString("lang") || "english";
         $("#select-language").val(lang).trigger("change.language");
     });//end .ready
 
@@ -57,7 +57,7 @@
         language.set(lang);
         jsu.regional.set(jsu.regional[lang]);
         //location.search = "?lang=" + lang;
-      
+
         //loads the view according to the selected language
         $("#main-content").load("views/" + lang + ".html", function() {
             var hash, canOpen = true;
@@ -88,7 +88,7 @@
                 onClosed: function() { canOpen = true; },
                 onLoad: function() {
                     $("#cboxContent").addClass("loader");
-                    $(circleG).appendTo(jsu.wrapper).fnCenter({of: "#colorbox"});
+                    $(circleG).appendTo(jsu.wrapper).center({of: "#colorbox"});
                 },
                 onComplete: function() {
                     var iframe = $("#cboxLoadedContent iframe"),

@@ -14,7 +14,7 @@ var setHandler = (function (context, $, jsu, undefined) {
         printBegin("1.");
         //asegura que MODULE no exista
         if(context.MODULE) MODULE = undefined;
-        jsu.fnAddScript({
+        jsu.addScript({
           src: "module.js",
           before: "main.js",
           createTag: true,
@@ -33,7 +33,7 @@ var setHandler = (function (context, $, jsu, undefined) {
         //asegura que MODULE no exista
         if(context.MODULE) MODULE = undefined;
         printBegin("2.");
-        jsu.fnAddScript("module.js").done(function() {
+        jsu.addScript("module.js").done(function() {
           console.log("2. Async promise > MODULE:", MODULE);
         });
         console.log("2. Main stack > MODULE:", context.MODULE);
@@ -47,7 +47,7 @@ var setHandler = (function (context, $, jsu, undefined) {
         //asegura que MODULE no exista
         if(context.MODULE) MODULE = undefined;
         printBegin("3.");
-        jsu.fnAddScript({
+        jsu.addScript({
           src: "module.js",
           async: false
         }).done(function() {

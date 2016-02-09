@@ -1,7 +1,7 @@
 (function($, undefined) {
 
-	//Creates the options for the slides
-	var steps = {
+    //Creates the options for the slides
+    var steps = {
         "#title": {
             x: 0, y: 0
         },
@@ -60,7 +60,7 @@
         "#lazy-function-code2": {
             x: 0, y: 2000
         },
-        "#awsome-img": {
+        "#awesome-img": {
             x: 0, y: 3000
         },
         //last segment
@@ -73,9 +73,9 @@
         "#thank-you": {
             x: 3000, y: 4000, z: 400, scale: 3
         }
-	};
+    };
 
-  utils
+    utils
     .addHintMessage()
     .initDataAttributes(steps, ".skip-counter")
     .initPrettify()

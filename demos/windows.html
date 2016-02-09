@@ -4,10 +4,10 @@
 <head profile="http://www.w3.org/2005/10/profile">
   <meta charset='utf-8'/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <title>fnEasyValidate</title>
+  <title>jsu.easyValidate</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="description" content="demos: fnGetDate, fnMaxLength, fnEasyValidate, fnShowDialog, fnConfirm"/>
+  <meta name="description" content="demos: dateToString, maxLength, easyValidate, showDialog, showConfirm"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
 
@@ -65,11 +65,11 @@
         <form action="" method="post">
           <h2>Demos</h2>
           <ul>
-            <li><a href="http://jherax.github.io/?lang=spanish#fngetdate-options" target="_blank">fnGetDate</a></li>
-            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnmaxlength-length-position" target="_blank">fnMaxLength</a></li>
-            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfneasyvalidate-options" target="_blank">fnEasyValidate</a></li>
-            <li><a href="http://jherax.github.io/?lang=spanish#fnshowdialog-options" target="_blank">fnShowDialog</a></li>
-            <li><a href="#" target="_blank">fnConfirm</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#fngetdate-options" target="_blank">dateToString</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnmaxlength-length-position" target="_blank">maxLength</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfneasyvalidate-options" target="_blank">easyValidate</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#fnshowdialog-options" target="_blank">showDialog</a></li>
+            <li><a href="#" target="_blank">showConfirm</a></li>
           </ul>
           <a href="#" id="link">Abrir ventana</a>
           <div id="panel" style="display:none">
@@ -108,9 +108,10 @@
   <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
   <!--<script type="text/javascript">var jsu = "hello";</script>-->
   <script type="text/javascript" src="../javascripts/jherax.min.js"></script>
+  <script type="text/javascript" src="../javascripts/jsu-dialog.js"></script>
 
   <script type="text/javascript">
-    $(document).on("ready", function() {
+    $(function() {
 
       //sets the default container
       jsu.wrapper = "#main-section";
@@ -120,46 +121,57 @@
       jsu.regional.set(jsu.regional.english);
 
       //gets the current time
-      $("#hora").text(jsu.fnGetDate().dateTime);
+      $("#hora").text(jsu.dateToString().dateTime);
 
       //initializes the plugins
       $("#fecha").datepicker();
-      $("#area").fnMaxLength(20, {
+      $("#area").maxLength(20, {
         at: "right bottom",
         my: "right top+4"
       });
 
       //sets specific dates
-      $("#date").val(jsu.fnGetDate({ ISO8601: true }).date);
-      $("#datetime").val(jsu.fnGetDate({ ISO8601: true }).dateTime);
-      $("#time").val(jsu.fnGetDate({ ISO8601: true }).time);
+      $("#date").val(jsu.dateToString({ ISO8601: true }).date);
+      $("#datetime").val(jsu.dateToString({ ISO8601: true }).dateTime);
+      $("#time").val(jsu.dateToString({ ISO8601: true }).time);
 
       //opens the modal window with an existing HTML element
-      $("#link").on("click.dialog", function(e) {
+      $("#link").on("click.demo-dialog", function(e) {
         e.preventDefault();
-        jsu.fnShowDialog({ appendTo: "#page-wrapper", content: $("#lista") });
-      }).trigger("click.dialog");
+        jsu.showDialog({ appendTo: "#page-wrapper", content: $("#lista") });
+      }).trigger("click.demo-dialog");
 
       //creates the click handlers
       $(".validator")
-        .click(function() { alert("1.click()"); })
-        .bind("click.a", function() { alert("2.bind('click.a')"); })
-        //initializes the fnEasyValidate plugin
-        .fnEasyValidate({
-          fnBeforeTooltip: function(args) {
+        .click(function() { alert("1. click()"); })
+        .bind("click.a", function() { alert("2. bind('click.a')"); })
+        //initializes the easyValidate plugin
+        .easyValidate({
+          onBeforeTooltip: function(args) {
             if ((/textarea/i).test(args.target.nodeName)) {
               args.target = $("#output").get(0);
               args.position = { at: "left top-4", my: "left bottom" };
             }
           }
         })
-        //initializes the fnConfirm plugin
-        .fnConfirm({
-          content: "<nobr>Demo de la función $.fnConfirm()</nobr>",
+        //initializes the showConfirm plugin
+        .showConfirm({
+          content: function () {
+            var button = this;
+            return [
+              "<nobr>Click en el boton: <strong>",
+              button.innerText || button.textContent,
+              "</strong></nobr><br/>",
+              "Demo de jQuery.showConfirm()"
+            ].join("");
+          },
           icon: "cancel",
-          beforeShow: function() { alert("4.fnConfirm() : beforeShow"); }
+          beforeShow: function() {
+            var button = this;
+            alert("4. beforeShow in jsu.showConfirm()");
+          }
         })
-        .on("click.b", function() { alert("5.on('click.b')"); });
+        .on("click.b", function() { alert("5. on('click.b')"); });
 
     }); //end document.ready
   </script>

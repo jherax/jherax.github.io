@@ -7,7 +7,7 @@
   <title>JSU Tooltips</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="description" content="demos: fnGetDate, fnIsValidDate, fnIsValidFormat, fnShowTooltip"/>
+  <meta name="description" content="demos: dateToString, isValidDate, isValidFormat, showTooltip"/>
   <meta name="author" content="david rivera perez"/>
   <meta name="layout" content="main"/>
 
@@ -61,10 +61,10 @@
         <form action="" method="post">
           <h2>Demos</h2>
           <ul>
-            <li><a href="http://jherax.github.io/?lang=spanish#fngetdate-options" target="_blank">fnGetDate</a></li>
-            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnisvaliddate-options" target="_blank">fnIsValidDate</a></li>
-            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnisvalidformat-type" target="_blank">fnIsValidFormat</a></li>
-            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnshowtooltip-message-position" target="_blank">fnShowTooltip</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#fngetdate-options" target="_blank">dateToString</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnisvaliddate-options" target="_blank">isValidDate</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnisvalidformat-type" target="_blank">isValidFormat</a></li>
+            <li><a href="http://jherax.github.io/?lang=spanish#jqueryfnshowtooltip-message-position" target="_blank">showTooltip</a></li>
           </ul>
           <p class="label">
             <label>
@@ -118,7 +118,7 @@
       };
 
       //gets the current time
-      $("#hora").text(jsu.fnGetDate().dateTime);
+      $("#hora").text(jsu.dateToString().dateTime);
 
     }());
 
@@ -129,16 +129,16 @@
       var d = new Date();
       //sets specific dates
       $("#txtLicence").val(
-        jsu.fnGetDate({ date: d.setHours(24) }).date);
+        jsu.dateToString({ date: d.setHours(24) }).date);
       $("#txtBirthday").val(
-        jsu.fnGetDate({ date: d.setHours(24) }).date);
+        jsu.dateToString({ date: d.setHours(24) }).date);
     }); //end document.ready
 
     //-----------------------------------
     // Validates the dates
     $(document).on("click", "#btnDates", function() {
-      if (!$("#txtLicence").fnIsValidDate()) return false;
-      if (!$("#txtBirthday").fnIsValidDate({
+      if (!$("#txtLicence").isValidDate()) return false;
+      if (!$("#txtBirthday").isValidDate({
           compareTo: $("#txtLicence").val(),
           warning: "Your birthday can't be greater than driver's license expedition"
       })) return false;
@@ -152,18 +152,18 @@
       var email = $("#txtEmail");
 
       //displays the tooltip at the specified position
-      if (!licence.fnIsValidFormat("date")) {
-        return !licence.fnShowTooltip(
+      if (!licence.isValidFormat("date")) {
+        return !licence.showTooltip(
           "The licensing date is not valid");
       }
       //displays the tooltip at the default position
-      if (!$("#txtBirthday").fnIsValidDate({
+      if (!$("#txtBirthday").isValidDate({
           warning: "Your next birthday can't be lesser than today",
           isFuture: true
       })) return false;
       //displays the tooltip at the specified position
-      if (!email.fnIsValidFormat("email")) {
-        return !email.fnShowTooltip(
+      if (!email.isValidFormat("email")) {
+        return !email.showTooltip(
           "The email address is not valid", {
               at: "right+5 center",
               my: "left center"

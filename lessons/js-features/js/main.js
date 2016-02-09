@@ -1,7 +1,7 @@
 (function ($) {
 
-	//Creates the options for the slides
-	var steps = {
+    //Creates the options for the slides
+    var steps = {
         "#title": {
             x: -200, y: -2000, z: 1000, scale: 2, rotate: { x: 270, y: 450 }
         },
@@ -67,16 +67,16 @@
         "#thank-you": {
             x: -400, y: 1500, z: 400, scale: 3
         }
-  };
+    };
 
-  utils
+    utils
     .addHintMessage()
     .initDataAttributes(steps, ".skip-counter")
     .initPrettify()
     .initImpress("#impress", function ($impress) {
-      $impress.on("impress:stepenter", function(e) {
-        $("#open-closed").toggle(e.target.id !== "definition");
-      });
+        $impress.on("impress:stepenter", function(e) {
+            $("#open-closed").toggle(e.target.id !== "definition");
+        });
     });
 
     //Adds the event listener for the buttons buttons "duck typing"

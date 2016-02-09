@@ -286,9 +286,9 @@ pushButton(); //3
     </div>
 
     <!-- 20 -->
-    <div id="awsome-img" class="step skip-counter">
+    <div id="awesome-img" class="step skip-counter">
       <h3 class="center">¡Asombrosooooo!</h3>
-      <img src="img/awsome.gif" alt="asombroso" width="750" height="585" />
+      <img src="img/awesome.gif" alt="asombroso" width="750" height="585" />
     </div>
 
     <!-- 21 -->
@@ -298,14 +298,15 @@ pushButton(); //3
 var getText = function (DOMNode) {
 
     //inicializar y redefinir condicionalmente
-    getText =
+    getText = (
         typeof DOMNode.innerText !== "undefined"
           ? function (DOMNode) {
                 return DOMNode.innerText;
             }
           : function (DOMNode) {
                 return DOMNode.textContent;
-            };
+            }
+        );
 
     //autoinvocar
     return getText(DOMNode);
@@ -316,7 +317,7 @@ var getText = function (DOMNode) {
     <!-- 22 -->
     <div id="self-punish-img" class="step skip-counter">
       <p class="center">Si bien este patrón puede ser de mucha utilidad, <br/>no lo usemos inadecuadamente
-        (ver <a href="#/drawbacks">drawbacks</a>), <br/>de lo contrario nos veremos haciendo esto...
+        (ver <a href="#/drawbacks">drawbacks</a>), <br/>ya que podríamos terminar haciendo esto...
       </p>
       <p><img src="img/self-punish.gif" alt="auto-golpearse" width="589" height="559" /></p>
     </div>
