@@ -108,7 +108,62 @@ var sumValues = function (arr, prop) {
 };
 
 //-----------------------------------
-//Get the value associated to a key
+// Motivation:
+// Pass the result of a function as the input to the next function
+let data = {};
+fun3(fun2(fun1(data)));
+
+// Proposal 1:
+let funcs = [f1, f2, f3];
+let data = {};
+for (let func of funcs) data = func(data);
+
+// Proposal 2:
+[f1, f2, f3].reduce((o, fn) => fn(o), {});
+
+//-----------------------------------
+/**
+ * Multi-filter an array of objects
+ * @param  {Array}  array  : list of elements to apply a multiple criteria filter
+ * @param  {Object} filters: Contains multiple criteria filters by the property names of the objects to filter
+ * @return {Array}
+ */
+function multiFilter(array, filters) {
+  let filterKeys = Object.keys(filters);
+  // filters all elements passing the criteria
+  return array.filter((item) => {
+    // validates all filters criteria dynamically
+    return filterKeys.every((key) => {
+      return (filters[key].indexOf(item[key]) !== -1);
+    });
+  });
+}
+
+let products = [
+  { name: "A", color: "Blue", size: 50 },
+  { name: "B", color: "Blue", size: 60 },
+  { name: "C", color: "Black", size: 70 }
+];
+
+let filters = {
+  color: ["Blue", "Black"],
+  size: [70, 50]
+};
+
+// expected
+let expected = [
+  { name: "A", color: "Blue", "size": 50 },
+  { name: "C", color: "Black", "size": 70 }
+];
+
+var filtered = multiFilter(products, filters);
+console.info('Expected');
+console.log(expected);
+console.info('Filtered');
+console.log(filtered);
+
+//-----------------------------------
+// Get the value associated to a key
 function getValueByKey(obj, key) {
     var value;
     //go recursively through objects and arrays
@@ -120,6 +175,34 @@ function getValueByKey(obj, key) {
         }
     }
 }
+
+//-----------------------------------
+// Establece el valor de 'this' en el callback
+// 'this' es {Any}
+(function() {
+  'use strict';
+  var products = [
+      { name: "A", color: "Blue", size: 50 },
+      { name: "B", color: "Blue", size: 60 },
+      { name: "C", color: "Black", size: 70 }
+    ];
+
+  var names = [];
+  products.forEach(
+    // no funciona con arrow functions
+    function (item) {
+      names.push(item.name);
+      console.info(`added: ${item.name}`);
+      console.dir(this);
+      this(item.color);
+    },
+    print
+  );
+
+  function print(color) {
+    console.log(`context color: ${color}`);
+  }
+}());
 
 //-----------------------------------
 // Quita los acentos del texto
@@ -183,6 +266,22 @@ var onHashChange = (function (window, jsu) {
     };
 }(window, jsu));
 
+//-----------------------------------
+// Multiples ventanas con jsu.showDialog
+jsu.showDialog({
+    id: "jherax-dev",
+    title: "Acerca de Jherax",
+    content: "Visita mi blog en wordpress<p><a href='https://jherax.wordpress.com'>jherax.wordpress.com</a></p><button class='close-dialog'>Cerrar</button>",
+    closeOnPageUnload: true,
+    modal: true
+});
+jsu.showDialog({
+    id: "david-rivera",
+    title: "Acerca de David",
+    content: "Visita mi blog en wordpress<p><a href='https://jherax.wordpress.com'>jherax.wordpress.com</a></p><button class='close-dialog'>Cerrar</button>",
+    closeOnPageUnload: false,
+    modal: false
+});
 
 //===================================
 /* POLLYFILLS */
