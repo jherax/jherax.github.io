@@ -94,6 +94,9 @@ Object.defineProperties(jsu, {
     value: function(namespace) {
       'use strict';
 
+      // See an example here:
+      // https://gist.github.com/jherax/97cce1801527b84782a2
+
       var nsparts = namespace.toString().split("."),
         reName = (/^[A-Za-z_]\w+/),
         cparent = window,
@@ -202,10 +205,14 @@ Object.defineProperties(jsu, {
   var _toString = Object.prototype.toString,
     _language = jherax.regional.current;
 
-  //-----------------------------------
-  // Create a custom exception notifier
-  // Constructor Pattern
-  // @@Private
+  /**
+   * @@Private
+   * Create a custom exception notifier.
+   * https://gist.github.com/jherax/c2f151165ecb19b9f8e3
+   *
+   * @param  {String} message: the message and the format to show the error
+   * @return {Error}
+   */
   var CustomError = (function() {
     function CustomError(message) {
       var i, argsLength, error;
@@ -320,7 +327,6 @@ Object.defineProperties(jsu, {
   }
 
   /**
-   * -----------------------------------
    * Sort an array and allows multiple sort criteria.
    * https://gist.github.com/jherax/ce5d7ba5f7bba519a575e1dfe9cd92c8
    *
@@ -378,7 +384,6 @@ Object.defineProperties(jsu, {
   }());
 
   /**
-   * -----------------------------------
    * Multi filters an array of objects.
    * https://gist.github.com/jherax/f11d669ba286f21b7a2dcff69621eb72
    *
@@ -398,7 +403,6 @@ Object.defineProperties(jsu, {
   }
 
   /**
-   * -----------------------------------
    * Flattens an array of arrays into one-dimensional array.
    * https://gist.github.com/jherax/7dce66c97ea06150e00c5a6febec26e7
    *
@@ -414,7 +418,6 @@ Object.defineProperties(jsu, {
   }
 
   /**
-   * -----------------------------------
    * Sum all values in the array by reducing it.
    * https://gist.github.com/jherax/a9846d44b62b64d7a182d6d6ec9de526
    *
@@ -456,13 +459,21 @@ Object.defineProperties(jsu, {
       }
     };
   }());
-  //-----------------------------------
-  // Determines if an event listener (defined by @eventName + @namespace) was created previously
+
+  /**
+   * Determines whether an event listener (defined by @eventName + @namespace) was bound to a DOM element.
+   * https://gist.github.com/jherax/22f3f1b696943af63fbd
+   *
+   * @param  {DOMElement} dom: element to which search for a namespaced-event listener.
+   * @param  {String} eventName: the name of the event to search for.
+   * @param  {String} namespace: the namespace in which the event was registered.
+   * @return {Boolean}
+   */
   function handlerExist(dom, eventName, namespace) {
-    var listener,
-      listeners = $._data(dom, 'events');
+    let listener;
+    let listeners = $._data(dom, 'events');
     if (listeners) listeners = listeners[eventName];
-    for (var i in listeners) {
+    for (let i in listeners) {
       listener = listeners[i];
       if (namespace === (listener.namespace || (listener.data && listener.data.handler))) {
         return true;
@@ -560,15 +571,32 @@ Object.defineProperties(jsu, {
     if (typeof text !== "string") return null;
     return text.replace(_ESCAPE_CHARS, "\\$1");
   }
-  //-----------------------------------
-  // Gets the value of a specific @key read from the querystring in the url
-  function getQueryToString(url, key) {
+
+  /**
+   * Gets the value of a specific @key from the url search.
+   * https://gist.github.com/jherax/e6ecb05aa35eb0219525#file-urlparamstostring-js
+   *
+   * @param  {String} url: Url from where extract search params
+   * @param  {String} key: specific search param to extract
+   * @return {String}
+   */
+  function urlParamsToString(url, key) {
     if (!key || key === "") return "";
     if (!url) url = window.location.search;
     var m = url.match(new RegExp("(" + key.toString() + ")=([^&#]+)"));
     return m && m[2] || "";
   }
+
   //-----------------------------------
+  // @@Private
+  var _TYPES = {
+    _true: /true/i,
+    _false: /false/i,
+    _null: /null/i,
+    _undefined: /undefined/i,
+    _number: /^[0-9]+$/
+  };
+
   // Parses the input value to the correct data type
   // @@Private
   function _parserType(value) {
@@ -579,21 +607,21 @@ Object.defineProperties(jsu, {
     if (_TYPES._number.test(value)) return +value;
     return value;
   }
-  // @@Private
-  var _TYPES = {
-    _true: /true/i,
-    _false: /false/i,
-    _null: /null/i,
-    _undefined: /undefined/i,
-    _number: /^[0-9]+$/
-  };
+
   //-----------------------------------
   // @@Private
   var _URL_PARAM = /(.+)=([^&]+)/;
 
-  // Gets querystring values from an url and save them as an object
-  function getQueryToObject(url, key) {
-    var m, value, params = {};
+  /**
+   * Gets values from the url search and save them as an Object.
+   * https://gist.github.com/jherax/e6ecb05aa35eb0219525#file-urlparamstoobject-js
+   *
+   * @param  {String} url: Url from where extract search params
+   * @param  {String} key: specific search param to extract
+   * @return {Object}
+   */
+  function urlParamsToObject(url, key) {
+    var m, value, paramsObj = {};
     key = key ? key.toString() : "";
     if (!url) url = window.location.search;
     url.split(/[?&#]/g).forEach(function(param) {
@@ -608,17 +636,22 @@ Object.defineProperties(jsu, {
         if (typeof(value) === "string") {
           value = decodeURIComponent(value);
         }
-        params[m[1].trim()] = value;
+        paramsObj[m[1].trim()] = value;
       }
     });
-    return params;
+    return paramsObj;
   }
   //-----------------------------------
   // @@Private
   var _KEY_VALUE = /['"]?(\w+)['"]?\s*:\s*['"]?([^'"]+|(?:.*(?='|")))/;
 
-  // Deserialize an inconsistent JSON string to the correct JavaScript Object
-  // https://gist.github.com/jherax/689d3c9bbcc3d4d4ae1c
+  /**
+   * Try to parse a JSON-like string to a JavaScript Object.
+   * https://gist.github.com/jherax/689d3c9bbcc3d4d4ae1c
+   *
+   * @param  {String} json: valid or inconsistent json string
+   * @return {Object}
+   */
   function tryParseToObject(json) {
     var m, obj = {};
     json = json ? json.toString() : "";
@@ -646,9 +679,15 @@ Object.defineProperties(jsu, {
     }
     return Object.preventExtensions(n);
   }
-  //-----------------------------------
-  // Extends the properties of the object @from to the object @to.
-  // If @to is not provided, then a deep copy of @from is returned.
+
+  /**
+   * Creates a deep copy of an object.
+   * https://gist.github.com/jherax/05204bdf9eb47eeffdc8
+   *
+   * @param  {Any}    from: Source object to clone
+   * @param  {Object} dest: (Optional) destination object to merge with
+   * @return {Any} The cloned object
+   */
   var extend = (function() {
     function _extend(from, to, objectsCache) {
       var prop;
@@ -683,17 +722,6 @@ Object.defineProperties(jsu, {
       return _extend(from, to, objectsCache);
     };
   }());
-  //-----------------------------------
-  // @@Private
-  var _$DIV = $('<div>');
-
-  // Encodes a string, by converting special characters like <, >, &... to its corresponding HTML entity.
-  // This method also can be used as a delegate for the jQuery methods: $.val() and $.text()
-  function getHtmlText(i, value) {
-    if (!value && typeof i === "string") value = i;
-    var html = _$DIV.text(value).html();
-    return $.trim(html);
-  }
   //-----------------------------------
   // Gets the selected text in the document and inside the text boxes.
   function getSelectedText() {
@@ -947,7 +975,6 @@ Object.defineProperties(jsu, {
   }());
 
   /**
-   * -----------------------------------
    * Changes the format of a date string.
    * https://gist.github.com/jherax/e58ee9f560764a72a90ded5fc53e4105
    *
@@ -982,6 +1009,7 @@ Object.defineProperties(jsu, {
       });
     };
   }());
+
   //-----------------------------------
   // Displays the date according to the format specified by .dateFormat and .timeFormat in jsu.regional
   // The supported formats for ISO 8601 are: [YYYY-MM-DD] and [YYYY-MM-DDThh:mm]
@@ -1128,6 +1156,17 @@ Object.defineProperties(jsu, {
     else overlay.show();
     loading.center({ of: d.of });
     return true;
+  }
+  //-----------------------------------
+  // @@Private
+  var _$DIV = $('<div>');
+
+  // Encodes a string, by converting special characters like <, >, &... to its corresponding HTML entity.
+  // This method also can be used as a delegate for the jQuery methods: $.val() and $.text()
+  function getHtmlText(i, value) {
+    if (!value && typeof i === "string") value = i;
+    var html = _$DIV.text(value).html();
+    return $.trim(html);
   }
   //-----------------------------------
   // Detects the width of the scrollbar
@@ -1294,8 +1333,9 @@ Object.defineProperties(jsu, {
     };
   })();
   //-----------------------------------
-  // Centers an element relative to another
-  // css:calc [http://jsfiddle.net/apaul34208/e4y6F]
+  // Centers an element relative to another.
+  // https://gist.github.com/jherax/ad41f92597e6d95bdee1
+  // https://jsfiddle.net/apaul34208/e4y6F (css:calc)
   $.fn.center = function(o) {
     o = $.extend({}, o);
     if (o.of) {
@@ -1646,11 +1686,14 @@ Object.defineProperties(jsu, {
     }; //end easyValidate
   })();
 
-  //-----------------------------------
-  //@signature: $(selector).saveBoundaries(prefix)
-  //@description: stores the current location of the set of matched elements taking into account its boundary/adjacent elements.
-  //@param prefix (String): the prefix to build the class name for the boundary elements.
-  //@returns: jQuery.
+  /**
+   * Stores the current location of the set of matched elements taking into account its boundary/adjacent elements.
+   * https://gist.github.com/jherax/ad41f92597e6d95bdee1
+   *
+   * @signature: $(selector).saveBoundaries(prefix)
+   * @param  {String} prefix: the prefix to build the class name for the boundary elements.
+   * @return {jQuery}
+   */
   $.fn.saveBoundaries = function(prefix) {
     prefix = prefix ? prefix + "-" : "";
     return this.each(function(i, dom) {
@@ -1662,10 +1705,14 @@ Object.defineProperties(jsu, {
       $elem.next().addClass(id + '-next');
     });
   };
-  //-----------------------------------
-  //@signature: $(selector).restoreBoundaries()
-  //@description: restores the set of matched elements to its original location stored by $.saveBoundaries()
-  //@returns: jQuery.
+
+  /**
+   * Restores the set of matched elements to its original location stored by $.saveBoundaries()
+   * https://gist.github.com/jherax/ad41f92597e6d95bdee1
+   *
+   * @signature: $(selector).restoreBoundaries()
+   * @return {jQuery}
+   */
   $.fn.restoreBoundaries = function() {
     return this.each(function(i, dom) {
       var $elem = $(dom),
@@ -1674,8 +1721,8 @@ Object.defineProperties(jsu, {
         prev = id + '-prev',
         next = id + '-next',
         originalCSS = $elem.data('originalCSS');
-      if (originalCSS) { $elem.css($.parseJSON(originalCSS)); }
-      if (!id) { return true; } //continue
+      if (originalCSS) $elem.css($.parseJSON(originalCSS));
+      if (!id) return true; //continue
       $elem.removeData("jqboundary");
       $("[class*=" + id + "]").reverse().each(function() {
         var boundary = $(this);
@@ -1703,12 +1750,11 @@ Object.defineProperties(jsu, {
   jherax.addScript = addScript;
   jherax.addCSS = addCSS;
   jherax.escapeRegExp = escapeRegExp;
-  jherax.getQueryToString = getQueryToString;
-  jherax.getQueryToObject = getQueryToObject;
+  jherax.urlParamsToString = urlParamsToString;
+  jherax.urlParamsToObject = urlParamsToObject;
   jherax.tryParseToObject = tryParseToObject; //undocumented
   jherax.freezeClone = freezeClone;
   jherax.extend = extend; //undocumented
-  jherax.getHtmlText = getHtmlText;
   jherax.getSelectedText = getSelectedText;
   jherax.getCaretPosition = getCaretPosition;
   jherax.setCaretPosition = setCaretPosition;
@@ -1721,12 +1767,18 @@ Object.defineProperties(jsu, {
   jherax.dateFromISO8601 = dateFromISO8601;
   jherax.showTooltip = showTooltip;
   jherax.showLoading = showLoading;
+  jherax.getHtmlText = getHtmlText;
   jherax.getScrollbarWidth = getScrollbarWidth;
   jherax.updateCache = updateCache; //undocumented
 
   //Provide compatibility with older versions
-  /*jherax.fnGetQueryToJSON = function () {
-      deprecated("fnGetQueryToJSON", "getQueryToObject");
-      return getQueryToObject.apply(this, arguments);
-  };*/
+  jherax.getQueryToString = function () {
+    deprecated("getQueryToString", "urlParamsToString");
+    return urlParamsToString.apply(this, arguments);
+  };
+  jherax.getQueryToObject = function () {
+    deprecated("getQueryToObject", "urlParamsToObject");
+    return urlParamsToObject.apply(this, arguments);
+  };
+
 }(window, jQuery, jsu));

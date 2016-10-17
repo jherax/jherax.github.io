@@ -2,34 +2,11 @@
  *  Description: Utilities
  *  Author: David Rivera
  */
-
-//TODO: Agregar documentación de sortBy
-//TODO: Agregar documentación de flatten
-//TODO: Agregar documentación de tryParseToObject
-//TODO: Agregar documentación de extend
-//TODO: Actualizar documentación para isValidFormat
-//TODO: Actualizar documentación para showLoading
-//TODO: Agregar documentación para $.reverse;
-//TODO: Agregar documentación para $.isAfter;
-//TODO: Agregar documentación para $.isBefore;
-//TODO: Agregar documentación de updateCache
 //TODO: Actualizar documentación de easyValidate (onBeforeTooltip (args) args.target, args.position)
 //TODO: Agregar propiedad arrow para las flechas del tooltip
 //TODO: Crear funcion que sume valores en un array
 //TODO: Agregar documentación de $.saveBoundaries
 //TODO: Agregar documentación de $.restoreBoundaries
-
-//-----------------------------------
-// Enables Cross Domain Requests
-$.ajaxPrefilter(function (options) {
-    if (options.crossDomain && $.support.cors) {
-        var http = (window.location.protocol === 'http:' ? 'http:' : 'https:'),
-            url = options.url; //encodeURIComponent(options.url);
-        options.url = http + '//cors-anywhere.herokuapp.com/' + url;
-        //options.url = "http://cors.corsproxy.io/url=" + url;
-        //options.crossDomain = false;
-    }
-});
 
 //===================================
 /* MISCELLANEOUS */
@@ -232,6 +209,81 @@ function fillPadding (direction, quantity, fillchar) {
             return filled.slice(0, quantity);
         })
 }
+
+//-----------------------------------
+// Enables Cross Domain Requests
+$.ajaxPrefilter(function (options) {
+    if (options.crossDomain && $.support.cors) {
+        var http = (window.location.protocol === 'http:' ? 'http:' : 'https:'),
+            url = options.url; //encodeURIComponent(options.url);
+        options.url = http + '//cors-anywhere.herokuapp.com/' + url;
+        //options.url = "http://cors.corsproxy.io/url=" + url;
+        //options.crossDomain = false;
+    }
+});
+
+// -----------------------------------
+// Llama un servicio web mediante AJAX
+// Fachada de jQuery.ajax()
+// Ver documentación en:
+// http://api.jquery.com/jquery.ajax/#jQuery-ajax-settings
+window.callAjax = (function() {
+    var defaults = {
+        settings: {}, // sobrescribe los parámetros de configuración de $.ajax()
+        async: true, // determina si la solicitud AJAX es enviada asíncronamente
+        cache: false, // determina si el recurso solicitado es almacenado en caché por el navegador
+        type: 'POST', // tipo de petición que se hará al servidor
+        dataType: 'json', // el tipo de datos que retorna el servicio web
+        contentType: 'application/json; charset=utf-8', // tipo de datos enviado al servidor
+        url: '', // nombre del servicio web y del método a ser consumido
+        params: {}, // objeto JSON que contiene los parámetros esperados por el servicio web
+        processData: false, // determina si convierte {params} a querystring y lo añade en la url (para peticiones GET)
+        crossDomain: false, // forzar una solicitud crossDomain (como JSONP) en el mismo dominio
+        showLoading: false, // determina si debe mostrar la animación cuando se inicie la petición AJAX
+        success: null, // este callback es ejecutado luego de una respuesta exitosa del servidor
+        error: null, // este callback se ejecuta si la solicitud falla
+    };
+    function _ajax(options) {
+        var config = $.extend(defaults, options);
+        if (!config.url) throw new Error('Debe especificar la url');
+        if (!config.crossDomain) {
+            if (!config.processData && config.type === 'GET') {
+                config.url += '?' + $.map(config.params, function(value, key) {
+                    return key + '=' + encodeURIComponent(value);
+                }).join('&');
+                config.params = undefined;
+            }
+        }
+        if (config.showLoading === true) {/* show loading animation */}
+        var jqxhr = $.ajax($.extend({
+            type: (config.dataType === 'jsonp' ? 'GET' : config.type),
+            url: config.url,
+            data: JSON.stringify(config.params),
+            processData: config.processData,
+            contentType: config.contentType,
+            dataType: config.dataType,
+            cache: config.cache,
+            async: config.async,
+            crossDomain: config.crossDomain,
+            success: function(data, status, jqXHR) {
+                if ($.isFunction(config.success)) {
+                    config.success(data, status, jqXHR);
+                }
+            },
+            error: function(jqXHR, status, errorThrown) {
+                if ($.isFunction(config.error)) config.error(jqXHR);
+                else throw new Error([errorThrown, options.url, jqXHR.responseText].join('\n'));
+            },
+        }, config.settings));
+        jqxhr.always(function() {
+            if (config.showLoading === true) {/* hide loading animation */}
+        });
+        return jqxhr;
+    }
+
+    return _ajax;
+}());
+
 
 //-----------------------------------
 // Observa cambios en el hash de la url
