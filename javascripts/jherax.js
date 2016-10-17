@@ -318,49 +318,57 @@ Object.defineProperties(jsu, {
   function isFunction(obj) {
     return typeof obj === 'function';
   }
-  //-----------------------------------
+
   /**
-   * Learn about Schwartzian transform
+   * -----------------------------------
+   * Sort an array and allows multiple sort criteria.
+   * https://gist.github.com/jherax/ce5d7ba5f7bba519a575e1dfe9cd92c8
+   *
+   * It applies the Schwartzian transform:
    * https://en.wikipedia.org/wiki/Schwartzian_transform
    *
-   * Examples
-   * https://gist.github.com/jherax/ce5d7ba5f7bba519a575e1dfe9cd92c8
+   * @param  {Array} array: the collection to sort
+   * @param  {Function} parser: transform each item and specify the sort order
+   * @return {Array}
    */
-  var sortBy = (function() {
-    var _DESC = (/^desc\:\s*/i);
+  const sortBy = (function() {
+    const _DESC = (/^desc\:\s*/i);
+    const isDesc = (s) => typeof s === 'string' && _DESC.test(s);
 
-    //comparison criteria
+    // comparison criteria
     function comparer(prev, next) {
-      var asc = 1;
-      if (typeof prev === "string") {
-        if (_DESC.test(prev)) asc = -1;
-      }
+      let asc = 1;
       if (prev === next) return 0;
+      if (isDesc(prev)) asc = -1;
       return (prev > next ? 1 : -1) * asc;
     }
 
+    // compares each decorated element
+    function sortItems(aprev, anext) {
+      let sorted, i;
+      for (i in aprev) {
+        sorted = comparer(aprev[i], anext[i]);
+        if (sorted) return sorted;
+      }
+      return 0;
+    }
+
+    // return the sorting method
     return function sortBy(array, parser) {
-      var i, item,
-        arrLength = array.length;
+      let i, item;
+      const arrLength = array.length;
       if (typeof parser !== "function") {
         return array.sort(Array.prototype.sort.bind(array));
       }
-      //Schwartzian transform (decorate-sort-undecorate)
+      // Schwartzian transform (decorate-sort-undecorate)
       for (i = arrLength; i;) {
         item = array[i -= 1];
-        //decorate the array
-        array[i] = [].concat(parser.call(null, item, i), item);
+        // decorate the array
+        array[i] = [].concat(parser(item, i), item);
       }
-      //sort the array
-      array.sort(function(prev, next) {
-        var sorted, length = prev.length;
-        for (i = 0; i < length; i += 1) {
-          sorted = comparer(prev[i], next[i]);
-          if (sorted) return sorted;
-        }
-        return 0;
-      });
-      //undecorate the array
+      // sort the array
+      array.sort(sortItems);
+      // undecorate the array
       for (i = arrLength; i;) {
         item = array[i -= 1];
         array[i] = item[item.length - 1];
@@ -368,15 +376,65 @@ Object.defineProperties(jsu, {
       return array;
     }
   }());
-  //-----------------------------------
+
+  /**
+   * -----------------------------------
+   * Multi filters an array of objects.
+   * https://gist.github.com/jherax/f11d669ba286f21b7a2dcff69621eb72
+   *
+   * @param  {Array}  array  : list of elements to apply a multiple criteria filter
+   * @param  {Object} filters: Contains multiple criteria filters by the property names of the objects to filter
+   * @return {Array}
+   */
+  function multiFilter(array, filters) {
+    let filterKeys = Object.keys(filters);
+    // filters all elements passing the criteria
+    return array.filter((item) => {
+      // validates all filters criteria dynamically
+      return filterKeys.every((key) => {
+        return (filters[key].indexOf(item[key]) !== -1);
+      });
+    });
+  }
+
+  /**
+   * -----------------------------------
+   * Flattens an array of arrays into one-dimensional array.
+   * https://gist.github.com/jherax/7dce66c97ea06150e00c5a6febec26e7
+   *
+   * @param  {Array} array: the array to be flattened
+   * @return {Array}
+   */
+  function flatten(array) {
+    return array.reduce(_reducer, []);
+  }
   // @@Private
   function _reducer(flattened, cv) {
     return flattened.concat(Array.isArray(cv) ? flatten(cv) : cv);
   }
-  // Flattens a multidimensional array into one dimension array
-  function flatten(arr) {
-    return arr.reduce(_reducer, []);
+
+  /**
+   * -----------------------------------
+   * Sum all values in the array by reducing it.
+   * https://gist.github.com/jherax/a9846d44b62b64d7a182d6d6ec9de526
+   *
+   * @param  {Array} array: the collection to iterate
+   * @param  {String, Number} prop: property name or array index to sum values
+   * @return {Number}
+   */
+  function sumValues(array, prop) {
+    if (!array || !array.length) return 0;
+    if ((/string|number/).test(typeof prop)) {
+      return array.reduce(function(total, cv) {
+        return total + (+cv[prop]);
+      }, 0);
+    } else {
+      return array.reduce(function(total, cv) {
+        return total + (+cv);
+      }, 0);
+    }
   }
+
   //-----------------------------------
   // Determines whether the @dom parameter is a text or checkable <input>
   // http://www.quackit.com/html_5/tags/html_input_tag.cfm
@@ -557,20 +615,19 @@ Object.defineProperties(jsu, {
   }
   //-----------------------------------
   // @@Private
-  // "{id:0,edad:32,nombre:'',casado:true,hijos:false,salario:undefined,cesantias:null}"
   var _KEY_VALUE = /['"]?(\w+)['"]?\s*:\s*['"]?([^'"]+|(?:.*(?='|")))/;
 
-  // Deserialize an inconsistent JSON string to the correct JavaScript Object notation
-  function tryParseToObject(data) {
-    var m, params = {};
-    data = data ? data.toString() : "";
-    $.each(data.split(/[\{\},]/g),
-      function(i, item) {
-        m = item.match(_KEY_VALUE);
-        if (!m) return true;
-        params[$.trim(m[1])] = _parserType(m[2]);
-      });
-    return params;
+  // Deserialize an inconsistent JSON string to the correct JavaScript Object
+  // https://gist.github.com/jherax/689d3c9bbcc3d4d4ae1c
+  function tryParseToObject(json) {
+    var m, obj = {};
+    json = json ? json.toString() : "";
+    json.split(/[\{\},]/g).forEach(function(item) {
+      m = item.match(_KEY_VALUE);
+      if (!m) return true;
+      obj[m[1].trim()] = _parserType(m[2]);
+    });
+    return obj;
   }
   //-----------------------------------
   // Clones an object (shallow) and freezes recursively all navigable properties in the object.
@@ -888,8 +945,15 @@ Object.defineProperties(jsu, {
       return true;
     };
   }());
-  //-----------------------------------
-  // Applies a specific date format
+
+  /**
+   * -----------------------------------
+   * Changes the format of a date string.
+   * https://gist.github.com/jherax/e58ee9f560764a72a90ded5fc53e4105
+   *
+   * @param  {Object, String} options: the date string or an object containing the configuration
+   * @return {String}
+   */
   var formatDate = (function() {
     var defaults = {
       date: '',
@@ -1630,7 +1694,9 @@ Object.defineProperties(jsu, {
   jherax.isDOM = isDOM;
   jherax.isFunction = isFunction;
   jherax.sortBy = sortBy; //undocumented
+  jherax.multiFilter = multiFilter; //undocumented
   jherax.flatten = flatten; //undocumented
+  jherax.sumValues = sumValues; //undocumented
   jherax.inputType = inputType;
   jherax.handlerExist = handlerExist;
   jherax.nsEvents = nsEvents;
