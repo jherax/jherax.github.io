@@ -27,19 +27,6 @@ var array = [[1], [2], [3, 4], [['a', 'b'], [['c'], 'd']], 9];
 flatten(array);
 
 //-----------------------------------
-// Elimina los elementos repetidos
-function reduceRepeated() {
-    //ordena antes de eliminar repetidos
-    jsu.sortBy(brushes, { prop: "brush" });
-    //elimina los elementos repetidos
-    brushes = brushes.reduce(function (uniques, cv) {
-        var last = uniques.slice(-1)[0];
-        if (last.brush !== cv.brush) uniques.push(cv);
-        return uniques;
-    }, brushes.slice(0, 1)); //valor inicial para @uniques
-}
-
-//-----------------------------------
 (function() {
     var list = [[12345, "product", "10"], [12345, "product", "15"], [12765, "other", "10"], [12345, "product", "5"]];
 

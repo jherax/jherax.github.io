@@ -24,12 +24,12 @@
     if (jsu.regional.current.culture === "en")
         jsu.regional.set(jsu.regional.english);
 
-    // @@Private
+    // @private
     var _language = jsu.regional.current;
 
     // Sets the @value of specific @property in the @obj,
     // keeping the writable attribute to false
-    // @@Private
+    // @private
     function setValueNotWritable (obj, property, value) {
         Object.defineProperty(obj, property, {
             "configurable": true,
@@ -62,7 +62,7 @@
 
     // Private implementation to display a modal window.
     // This is a facade for jQuery.ui.dialog window.
-    // @@Private
+    // @private
     function _showDialog (o) {
         if (!jQuery.ui || !jQuery.ui.dialog)
             throw new Error("jQuery.ui.dialog is required");
@@ -183,18 +183,18 @@
     /* JQUERY SHOWCONFIRM PLUGIN */
     //===================================
 
-    // @@Private
+    // @private
     var type = "click",
         pattern = (/(?:^\w+:\/\/[^\s\n]+)[^#]$/);
 
     // Validates an URL address
-    // @@Private
+    // @private
     function hasValidUrl (href) {
         return !!(href && href.length && pattern.test(href));
     }
 
     // Click handler for 'OK' Button
-    // @@Private
+    // @private
     function onClickAgree (event) {
         var button = this.context;
         console.log("event", event);
@@ -211,7 +211,7 @@
     }
 
     // Click handler for 'Cancel' Button
-    // @@Private
+    // @private
     function onClickCancel (event) {
         console.log("event", event);
         console.log("button", this.context);

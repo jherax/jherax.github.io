@@ -206,7 +206,7 @@ Object.defineProperties(jsu, {
     _language = jherax.regional.current;
 
   /**
-   * @@Private
+   * @private
    * Create a custom exception notifier.
    * https://gist.github.com/jherax/c2f151165ecb19b9f8e3
    *
@@ -246,7 +246,7 @@ Object.defineProperties(jsu, {
   }());
   //-----------------------------------
   // Prints a console message notifying the compatibility mode
-  // @@Private
+  // @private
   function deprecated(oldname, newname) {
     console.log("%c" +
       _language.deprecated.replace("{0}", oldname).replace("{1}", newname),
@@ -254,7 +254,7 @@ Object.defineProperties(jsu, {
   }
   //-----------------------------------
   // Seals the writable attribute in all object's properties
-  // @@Private
+  // @private
   function _setPropertiesNotWritable(obj) {
     for (var p in obj) {
       Object.defineProperty(obj, p, {
@@ -268,7 +268,7 @@ Object.defineProperties(jsu, {
   //-----------------------------------
   // Sets the @value of specific @property in the @obj,
   // keeping the writable attribute to false
-  // @@Private
+  // @private
   function _setValueNotWritable(obj, property, value, enumerable) {
     Object.defineProperty(obj, property, {
       "configurable": true,
@@ -278,15 +278,15 @@ Object.defineProperties(jsu, {
     });
   }
   //-----------------------------------
-  // @@Private
-  var _SELECTABLE_TYPES = (/text|password|search|tel|url/);
+  // @private
+  var SELECTABLE_TYPES = (/text|password|search|tel|url/);
 
   // Fix: failed to read the 'selectionStart' property from 'HTMLInputElement'
   // The @fn parameter provides a callback to execute additional code
   // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
-  // @@Private
+  // @private
   function _fixSelection(dom, fn) {
-    var validType = _SELECTABLE_TYPES.test(dom.type),
+    var validType = SELECTABLE_TYPES.test(dom.type),
       selection = {
         start: validType ? dom.selectionStart : 0,
         end: validType ? dom.selectionEnd : 0
@@ -315,10 +315,15 @@ Object.defineProperties(jsu, {
     return Object.freeze(b);
   }());
   //-----------------------------------
-  // Determines if the @obj parameter is a DOM Element
+  /**
+   * Determines if the entry parameter is a DOM Element
+   *
+   * @param  {Any} obj: the object to test
+   * @return {Boolean}
+   */
   function isDOM(obj) {
-    if ("HTMLElement" in window) return (obj && obj instanceof HTMLElement);
-    return !!(obj && typeof obj === "object" && obj.nodeType === 1 && obj.nodeName);
+    if ('HTMLElement' in window) return !!(obj && obj instanceof HTMLElement);
+    return !!(obj && typeof obj === 'object' && obj.nodeType === 1 && obj.nodeName);
   }
   //-----------------------------------
   // Determines if the @obj parameter is a function
@@ -327,115 +332,60 @@ Object.defineProperties(jsu, {
   }
 
   /**
-   * Sort an array and allows multiple sort criteria.
-   * https://gist.github.com/jherax/ce5d7ba5f7bba519a575e1dfe9cd92c8
+   * Filters an array of objects with multiple criteria.
    *
-   * It applies the Schwartzian transform:
-   * https://en.wikipedia.org/wiki/Schwartzian_transform
+   * @see https://gist.github.com/jherax/f11d669ba286f21b7a2dcff69621eb72
    *
-   * @param  {Array} array: the collection to sort
-   * @param  {Function} parser: transform each item and specify the sort order
-   * @return {Array}
-   */
-  const sortBy = (function() {
-    const _DESC = (/^desc\:\s*/i);
-    const isDesc = (s) => typeof s === 'string' && _DESC.test(s);
-
-    // comparison criteria
-    function comparer(prev, next) {
-      let asc = 1;
-      if (prev === next) return 0;
-      if (isDesc(prev)) asc = -1;
-      return (prev > next ? 1 : -1) * asc;
-    }
-
-    // compares each decorated element
-    function sortItems(aprev, anext) {
-      let sorted, i;
-      for (i in aprev) {
-        sorted = comparer(aprev[i], anext[i]);
-        if (sorted) return sorted;
-      }
-      return 0;
-    }
-
-    // return the sorting method
-    return function sortBy(array, parser) {
-      let i, item;
-      const arrLength = array.length;
-      if (typeof parser !== "function") {
-        return array.sort(Array.prototype.sort.bind(array));
-      }
-      // Schwartzian transform (decorate-sort-undecorate)
-      for (i = arrLength; i;) {
-        item = array[i -= 1];
-        // decorate the array
-        array[i] = [].concat(parser(item, i), item);
-      }
-      // sort the array
-      array.sort(sortItems);
-      // undecorate the array
-      for (i = arrLength; i;) {
-        item = array[i -= 1];
-        array[i] = item[item.length - 1];
-      }
-      return array;
-    }
-  }());
-
-  /**
-   * Multi filters an array of objects.
-   * https://gist.github.com/jherax/f11d669ba286f21b7a2dcff69621eb72
-   *
-   * @param  {Array}  array  : list of elements to apply a multiple criteria filter
-   * @param  {Object} filters: Contains multiple criteria filters by the property names of the objects to filter
+   * @export
+   * @param  {Array}  array: the array to filter
+   * @param  {Object} filters: an object with the filter criteria as the property names
    * @return {Array}
    */
   function multiFilter(array, filters) {
-    let filterKeys = Object.keys(filters);
+    const filterKeys = Object.keys(filters);
     // filters all elements passing the criteria
-    return array.filter((item) => {
-      // validates all filters criteria dynamically
-      return filterKeys.every((key) => {
-        return (filters[key].indexOf(item[key]) !== -1);
-      });
-    });
+    return array.filter(item =>
+      // dynamically validate all filter criteria
+      // eslint-disable-next-line
+      filterKeys.every(key => !!~filters[key].indexOf(item[key]))
+    );
+  }
+
+  //-----------------------------------
+  // @private
+  function _reducer(flat, cv) {
+    return flat.concat(Array.isArray(cv) ? flatten(cv) : cv);
   }
 
   /**
-   * Flattens an array of arrays into one-dimensional array.
-   * https://gist.github.com/jherax/7dce66c97ea06150e00c5a6febec26e7
+   * Merges all inner arrays into one-level depth array.
    *
+   * @see https://gist.github.com/jherax/7dce66c97ea06150e00c5a6febec26e7
+   *
+   * @export
    * @param  {Array} array: the array to be flattened
    * @return {Array}
    */
   function flatten(array) {
     return array.reduce(_reducer, []);
   }
-  // @@Private
-  function _reducer(flattened, cv) {
-    return flattened.concat(Array.isArray(cv) ? flatten(cv) : cv);
-  }
 
   /**
-   * Sum all values in the array by reducing it.
-   * https://gist.github.com/jherax/a9846d44b62b64d7a182d6d6ec9de526
+   * Sums all the values in an array by reducing it.
    *
-   * @param  {Array} array: the collection to iterate
-   * @param  {String, Number} prop: property name or array index to sum values
+   * @see https://gist.github.com/jherax/a9846d44b62b64d7a182d6d6ec9de526
+   *
+   * @export
+   * @param  {Array} array: the collection to iterate.
+   * @param  {String | Number} prop: (optional) property name or array index.
    * @return {Number}
    */
   function sumValues(array, prop) {
     if (!array || !array.length) return 0;
     if ((/string|number/).test(typeof prop)) {
-      return array.reduce(function(total, cv) {
-        return total + (+cv[prop]);
-      }, 0);
-    } else {
-      return array.reduce(function(total, cv) {
-        return total + (+cv);
-      }, 0);
+      return array.reduce((total, cv) => total + (+cv[prop]), 0);
     }
+    return array.reduce((total, cv) => total + (+cv), 0);
   }
 
   //-----------------------------------
@@ -443,26 +393,27 @@ Object.defineProperties(jsu, {
   // http://www.quackit.com/html_5/tags/html_input_tag.cfm
   // http://github.com/jherax/js-utils#inputtypeistext
   var inputType = (function() {
-    var _TEXTAREA = /textarea/i,
-      _TEXT = /text|password|file|number|search|tel|url|email|datetime|datetime-local|date|time|month|week/i,
-      _RADIO = /checkbox|radio/i,
-      _INPUT = /input/i;
+    var TEXTAREA = /textarea/i,
+      TEXT = /text|password|file|number|search|tel|url|email|datetime|datetime-local|date|time|month|week/i,
+      RADIO = /checkbox|radio/i,
+      INPUT = /input/i;
     return {
       isText: function(dom) {
         if (!isDOM(dom)) return false;
-        if (_TEXTAREA.test(dom.nodeName)) return true;
-        return _TEXT.test(dom.type) && _INPUT.test(dom.nodeName);
+        if (TEXTAREA.test(dom.nodeName)) return true;
+        return TEXT.test(dom.type) && INPUT.test(dom.nodeName);
       },
       isCheck: function(dom) {
         if (!isDOM(dom)) return false;
-        return _RADIO.test(dom.type) && _INPUT.test(dom.nodeName);
+        return RADIO.test(dom.type) && INPUT.test(dom.nodeName);
       }
     };
   }());
 
   /**
    * Determines whether an event listener (defined by @eventName + @namespace) was bound to a DOM element.
-   * https://gist.github.com/jherax/22f3f1b696943af63fbd
+   *
+   * @see  https://gist.github.com/jherax/22f3f1b696943af63fbd
    *
    * @param  {DOMElement} dom: element to which search for a namespaced-event listener.
    * @param  {String} eventName: the name of the event to search for.
@@ -482,14 +433,29 @@ Object.defineProperties(jsu, {
     return false;
   }
   //-----------------------------------
-  // @@Private
-  var _SPACES_TABS = /\s+|\t+/g;
+  // @private
+  var SPACES_TABS = /\s+|\t+/g;
 
   // Builds the event name, by appending "." + @namespace at the end of @eventName
   function nsEvents(eventName, namespace) {
     namespace = "." + namespace;
     eventName = eventName.trim().replace(".", "") + namespace;
-    return eventName.replace(_SPACES_TABS, namespace + " ");
+    return eventName.replace(SPACES_TABS, namespace + " ");
+  }
+  //-----------------------------------
+  // @private
+  const ESCAPE_CHARS = /[.*+?=!:${}()\|\-\^\[\]\/\\]/g;
+
+  /**
+   * Escapes the special characters in the entry parameter, so that
+   * it can be used as a pattern in a regular expression constructor.
+   *
+   * @param  {String} text: pattern to escape special characters
+   * @return {String | Null}
+   */
+  function escapeRegExp(text) {
+    if (typeof text !== 'string') return null;
+    return text.replace(ESCAPE_CHARS, '\\$&');
   }
   //-----------------------------------
   // Dynamically adds a script.
@@ -563,105 +529,105 @@ Object.defineProperties(jsu, {
     return file;
   }
   //-----------------------------------
-  // @@Private
-  var _ESCAPE_CHARS = (/([.*+?=!:${}()\|\-\^\[\]\/\\])/g);
-
-  // Escapes the special characters in @text so that it can serve as a literal pattern in a regular expression
-  function escapeRegExp(text) {
-    if (typeof text !== "string") return null;
-    return text.replace(_ESCAPE_CHARS, "\\$1");
-  }
-
   /**
-   * Gets the value of a specific @key from the url search.
-   * https://gist.github.com/jherax/e6ecb05aa35eb0219525#file-urlparamstostring-js
-   *
-   * @param  {String} url: Url from where extract search params
-   * @param  {String} key: specific search param to extract
-   * @return {String}
+   * @private
    */
-  function urlParamsToString(url, key) {
-    if (!key || key === "") return "";
-    if (!url) url = window.location.search;
-    var m = url.match(new RegExp("(" + key.toString() + ")=([^&#]+)"));
-    return m && m[2] || "";
-  }
-
-  //-----------------------------------
-  // @@Private
-  var _TYPES = {
+  const TYPES = {
     _true: /true/i,
     _false: /false/i,
     _null: /null/i,
     _undefined: /undefined/i,
-    _number: /^[0-9]+$/
+    _number: /^[0-9]+$/,
+    //_object: /^\{/,
+    //_array: /^\[/,
   };
 
-  // Parses the input value to the correct data type
-  // @@Private
-  function _parserType(value) {
-    if (_TYPES._true.test(value)) return true;
-    if (_TYPES._false.test(value)) return false;
-    if (_TYPES._null.test(value)) return null;
-    if (_TYPES._undefined.test(value)) return undefined;
-    if (_TYPES._number.test(value)) return +value;
+  /**
+   * @private
+   */
+  const URL_PARAM = /(.+)=([^&]+)/;
+
+  /**
+   * Parses the input value to the correct data type
+   *
+   * @private
+   * @param  {Any} value: value to test its type
+   * @return {Any}
+   */
+  function parseType(value) {
+    if (TYPES._true.test(value)) return true;
+    if (TYPES._false.test(value)) return false;
+    if (TYPES._null.test(value)) return null;
+    if (TYPES._undefined.test(value)) return undefined;
+    if (TYPES._number.test(value)) return +value;
     return value;
   }
 
-  //-----------------------------------
-  // @@Private
-  var _URL_PARAM = /(.+)=([^&]+)/;
+  /**
+   * Try to parse the text to a primitive value
+   *
+   * @private
+   * @param  {String} text: string to parse
+   * @return {String}
+   */
+  function getValue(text) {
+    let value = parseType(text);
+    // prevents a string such as "00" be converted to number 0
+    if (typeof value === 'number' && String(value).length !== text.length) {
+      value = text;
+    }
+    if (typeof value === 'string') {
+      value = decodeURIComponent(value);
+    }
+    return value;
+  }
 
   /**
-   * Gets values from the url search and save them as an Object.
-   * https://gist.github.com/jherax/e6ecb05aa35eb0219525#file-urlparamstoobject-js
+   * Gets values from the url search and store them as an object.
    *
-   * @param  {String} url: Url from where extract search params
-   * @param  {String} key: specific search param to extract
+   * @see https://gist.github.com/jherax/e6ecb05aa35eb0219525
+   *
+   * @export
+   * @param  {String} url: (optional) url from where extract the search parameters
+   * @param  {String} key: (optional) specific parameter in the url-search to extract
    * @return {Object}
    */
-  function urlParamsToObject(url, key) {
-    var m, value, paramsObj = {};
-    key = key ? key.toString() : "";
-    if (!url) url = window.location.search;
-    url.split(/[?&#]/g).forEach(function(param) {
-      m = param.match(_URL_PARAM);
-      if (!param || !m) return true;
-      if (key === "" || key === m[1]) {
-        value = _parserType(m[2]);
-        //prevents a string such as "00" be converted to number 0
-        if (typeof(value) === "number" && String(value).length !== m[2].length) {
-          value = m[2];
-        }
-        if (typeof(value) === "string") {
-          value = decodeURIComponent(value);
-        }
-        paramsObj[m[1].trim()] = value;
+  function urlParamsToObject(url = window.location.search, key) {
+    let m;
+    const paramsObj = {};
+    url.split(/[?&#]/g).forEach((param) => { // eslint-disable-line
+      m = param.match(URL_PARAM);
+      if (!param || !m) return true; // continue
+      if (!key || key === m[1]) {
+        paramsObj[m[1].trim()] = getValue(m[2]);
       }
     });
     return paramsObj;
   }
-  //-----------------------------------
-  // @@Private
-  var _KEY_VALUE = /['"]?(\w+)['"]?\s*:\s*['"]?([^'"]+|(?:.*(?='|")))/;
 
   /**
-   * Try to parse a JSON-like string to a JavaScript Object.
-   * https://gist.github.com/jherax/689d3c9bbcc3d4d4ae1c
+   * Gets the value of a specific key from the url search.
    *
-   * @param  {String} json: valid or inconsistent json string
-   * @return {Object}
+   * @see https://gist.github.com/jherax/e6ecb05aa35eb0219525
+   *
+   * @export
+   * @param  {String} url: (optional) url from where extract the search parameters
+   * @param  {String} key: specific parameter in the url-search to extract
+   * @return {Primitive}
    */
-  function tryParseToObject(json) {
-    var m, obj = {};
-    json = json ? json.toString() : "";
-    json.split(/[\{\},]/g).forEach(function(item) {
-      m = item.match(_KEY_VALUE);
-      if (!m) return true;
-      obj[m[1].trim()] = _parserType(m[2]);
-    });
-    return obj;
+  function urlParameter(...args) {
+    let url = window.location.search,
+      key = args[0],
+      value = '';
+    if (args.length > 1) {
+      [url, key] = args;
+    }
+    if (!key) return '';
+    const m = url.match(new RegExp(`[?&](${key})=([^&#]+)`));
+    if (m) value = getValue(m[2]);
+    return value;
   }
+
   //-----------------------------------
   // Clones an object (shallow) and freezes recursively all navigable properties in the object.
   // Combines Object.preventExtensions(), Object.seal() and Object.freeze()
@@ -747,7 +713,7 @@ Object.defineProperties(jsu, {
       if (selection && selection.type !== "Control")
         sel.text = selection.createRange().text;
     }
-    if (sel.text !== "") sel.text = $.trim(sel.text);
+    if (sel.text !== "") sel.text = sel.text.trim();
     return sel;
   }
   //-----------------------------------
@@ -791,40 +757,39 @@ Object.defineProperties(jsu, {
   // Applies a transformation to the text,
   // also it removes all consecutive spaces
   var capitalize = (function() {
-    var _TEXTAREA = (/textarea/i),
-      _LINEBREAK = (/\r|\n/g),
-      _PARAGRAPH = (/^[¶\s]+|[¶\s]+$/g),
-      _SECTION = (/\s*¶+\s*/g),
-      _SPACES = (/\s{2,}/g),
-      _WORD = (/(?:^|-|:|;|\s|\.|\(|\/)[a-záéíóúüñ]/g),
-      _FIRST = (/^\w/);
+    const TEXTAREA = /textarea/i,
+      LINEBREAK = /\r|\n/g,
+      PARAGRAPH = /^[¶\s]+|[¶\s]+$/g,
+      SECTION = /\s*¶+\s*/g,
+      SPACES = /\s{2,}/g,
+      WORD = /(?:^|-|:|;|\s|\.|\(|\/)[a-záéíóúüñ]/g,
+      FIRST = /^\w/;
 
-    function _matchToUpper(m) { return m.toUpperCase(); }
-
-    function _matchToLower(m) { return m.toLowerCase(); }
+    const matchToUpper = (m) => m.toUpperCase();
+    const matchToLower = (m) => m.toLowerCase();
 
     return function(obj, type) {
       var isInput = inputType.isText(obj),
         text = isInput ? obj.value : obj && obj.toString();
       if (!text || !text.length) return "";
-      if (_TEXTAREA.test(obj.nodeName)) {
-        text = text.replace(_LINEBREAK, "¶").replace(_SPACES, " ");
-        while (_PARAGRAPH.test(text)) text = text.replace(_PARAGRAPH, "");
-        text = text.replace(_SECTION, "\n");
-      } else text = $.trim(text.replace(_SPACES, " "));
-      if (+text === 0) text = "0";
+      if (TEXTAREA.test(obj.nodeName)) {
+        text = text.replace(LINEBREAK, "¶").replace(SPACES, " ");
+        while (PARAGRAPH.test(text)) text = text.replace(PARAGRAPH, "");
+        text = text.replace(SECTION, "\n");
+      } else {
+        text = text.replace(SPACES, " ").trim();
+      }
       switch (type) {
         case "word":
-          text = text.toLowerCase().replace(_WORD, _matchToUpper);
+          text = text.toLowerCase().replace(WORD, matchToUpper);
           text = (_language.wordPattern instanceof RegExp ?
-            text.replace(_language.wordPattern, _matchToLower) :
-            text);
+            text.replace(_language.wordPattern, matchToLower) : text);
           break;
         case "title":
-          text = text.replace(_WORD, _matchToUpper);
+          text = text.replace(WORD, matchToUpper);
           break;
         case "first":
-          text = text.replace(_FIRST, _matchToUpper);
+          text = text.replace(FIRST, matchToUpper);
           break;
         case "upper":
           text = text.toUpperCase();
@@ -835,10 +800,10 @@ Object.defineProperties(jsu, {
       }
       if (isInput) obj.value = text;
       return text;
-    }
+    };
   }());
   //-----------------------------------
-  // @@Private
+  // @private
   var _DIGIT_THOUSANDS = (/\B(?=(\d{3})+(?!\d))/g);
 
   // Sets the numeric format according to current culture.
@@ -928,7 +893,8 @@ Object.defineProperties(jsu, {
     return validator;
   }());
   //-----------------------------------
-  // @@Private
+  // @private
+  const _YMD = (/[yMd]+/gi);
   var _Y = (/y+/);
   var _M = (/M+/);
   var _D = (/d+/);
@@ -975,40 +941,47 @@ Object.defineProperties(jsu, {
   }());
 
   /**
-   * Changes the format of a date string.
-   * https://gist.github.com/jherax/e58ee9f560764a72a90ded5fc53e4105
+   * @private
+   */
+  const defaults = {
+    formatDate: {
+      date: null,
+      inputFormat: 'yyyy/MM/dd',
+      outputFormat: 'MM/dd/yyyy',
+    },
+  };
+
+  /**
+   * Changes the format of a string-date.
    *
-   * @param  {Object, String} options: the date string or an object containing the configuration
+   * @see https://gist.github.com/jherax/e58ee9f560764a72a90ded5fc53e4105
+   *
+   * @export
+   * @param  {Object | String} options: it can be a String with the date, or an Object with the following properties:
+   *         - {String} date: the entry date to change the format
+   *         - {String} inputFormat: the format of the entry date
+   *         - {String} outputFormat: the format of the output date
    * @return {String}
    */
-  var formatDate = (function() {
-    var defaults = {
-      date: '',
-      inputFormat: _language.dateFormat,
-      outputFormat: 'yyyy/MM/dd'
-    };
-    return function(options) {
-      var d, m, y, i;
-      if (typeof options === "string") {
-        options = { date: options };
-      }
-      if (!Object(options).date) return '';
-      defaults.inputFormat = _language.dateFormat;
-      var opt = Object.assign({}, defaults, options),
-        dateParts = opt.date.split(/\D/),
-        formatParts = opt.inputFormat.split(/\W/);
-      for (i in formatParts) {
-        if (_Y.test(formatParts[i])) { y = dateParts[i]; continue }
-        if (_M.test(formatParts[i])) { m = dateParts[i]; continue }
-        if (_D.test(formatParts[i])) { d = dateParts[i]; continue }
-      }
-      return opt.outputFormat.replace(/[yMd]+/gi, function(match) {
-        if (_Y.test(match)) return y;
-        if (_M.test(match)) return m;
-        if (_D.test(match)) return d;
-      });
-    };
-  }());
+  function formatDate(options) {
+    let d, m, y; // eslint-disable-line
+    if (typeof options === 'string') {
+      options = {date: options};
+    }
+    const opt = Object.assign({}, defaults.formatDate, options);
+    const dateParts = opt.date.split(/\D/);
+    const formatParts = opt.inputFormat.split(/\W/);
+    for (let i = 0; i < formatParts.length; i += 1) {
+      if (_Y.test(formatParts[i])) { y = dateParts[i]; continue; }
+      if (_M.test(formatParts[i])) { m = dateParts[i]; continue; }
+      if (_D.test(formatParts[i])) { d = dateParts[i]; continue; }
+    }
+    return opt.outputFormat.replace(_YMD, (match) => { // eslint-disable-line
+      if (_Y.test(match)) return y;
+      if (_M.test(match)) return m;
+      if (_D.test(match)) return d;
+    });
+  }
 
   //-----------------------------------
   // Displays the date according to the format specified by .dateFormat and .timeFormat in jsu.regional
@@ -1076,7 +1049,7 @@ Object.defineProperties(jsu, {
     };
   }());
   //-----------------------------------
-  // @@Private
+  // @private
   var _ISO_8601 = /(?:(\d{4})-(\d{2})-(\d{2}))(?:T(?:(\d{2})(?:\:(\d{2}))?(?:\:(\d{2}))?)?(?:([+\-]\d{2})(?:\:?(\d{2}))?)?)?/;
 
   // Gets the Date object from a string that meets the ISO 8601 format
@@ -1158,7 +1131,7 @@ Object.defineProperties(jsu, {
     return true;
   }
   //-----------------------------------
-  // @@Private
+  // @private
   var _$DIV = $('<div>');
 
   // Encodes a string, by converting special characters like <, >, &... to its corresponding HTML entity.
@@ -1520,7 +1493,7 @@ Object.defineProperties(jsu, {
     });
   };
   //-----------------------------------
-  // @@Private
+  // @private
   function _filterLength(n) { return (n && n.length) }
 
   // Prevents press specific keys for the matched elements
@@ -1740,7 +1713,6 @@ Object.defineProperties(jsu, {
   jherax.browser = browser;
   jherax.isDOM = isDOM;
   jherax.isFunction = isFunction;
-  jherax.sortBy = sortBy; //undocumented
   jherax.multiFilter = multiFilter; //undocumented
   jherax.flatten = flatten; //undocumented
   jherax.sumValues = sumValues; //undocumented
@@ -1750,9 +1722,8 @@ Object.defineProperties(jsu, {
   jherax.addScript = addScript;
   jherax.addCSS = addCSS;
   jherax.escapeRegExp = escapeRegExp;
-  jherax.urlParamsToString = urlParamsToString;
   jherax.urlParamsToObject = urlParamsToObject;
-  jherax.tryParseToObject = tryParseToObject; //undocumented
+  jherax.urlParameter = urlParameter;
   jherax.freezeClone = freezeClone;
   jherax.extend = extend; //undocumented
   jherax.getSelectedText = getSelectedText;
@@ -1773,8 +1744,8 @@ Object.defineProperties(jsu, {
 
   //Provide compatibility with older versions
   jherax.getQueryToString = function () {
-    deprecated("getQueryToString", "urlParamsToString");
-    return urlParamsToString.apply(this, arguments);
+    deprecated("getQueryToString", "urlParameter");
+    return urlParameter.apply(this, arguments);
   };
   jherax.getQueryToObject = function () {
     deprecated("getQueryToObject", "urlParamsToObject");
