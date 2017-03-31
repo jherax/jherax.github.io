@@ -537,9 +537,8 @@ Object.defineProperties(jsu, {
     _false: /false/i,
     _null: /null/i,
     _undefined: /undefined/i,
+    _object: /^[{[].*[}\]]$/,
     _number: /^[0-9]+$/,
-    //_object: /^\{/,
-    //_array: /^\[/,
   };
 
   /**
@@ -560,6 +559,13 @@ Object.defineProperties(jsu, {
     if (TYPES._null.test(value)) return null;
     if (TYPES._undefined.test(value)) return undefined;
     if (TYPES._number.test(value)) return +value;
+    if (TYPES._object.test(value)) {
+      try {
+        value = JSON.parse(value);
+      } catch (e) {
+        return value;
+      }
+    }
     return value;
   }
 
@@ -571,13 +577,10 @@ Object.defineProperties(jsu, {
    * @return {String}
    */
   function getValue(text) {
-    let value = parseType(text);
+    let value = parseType(decodeURIComponent(text));
     // prevents a string such as "00" be converted to number 0
     if (typeof value === 'number' && String(value).length !== text.length) {
       value = text;
-    }
-    if (typeof value === 'string') {
-      value = decodeURIComponent(value);
     }
     return value;
   }
