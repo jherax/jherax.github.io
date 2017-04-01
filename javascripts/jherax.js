@@ -631,66 +631,52 @@ Object.defineProperties(jsu, {
     return value;
   }
 
-  //-----------------------------------
-  // Clones an object (shallow) and freezes recursively all navigable properties in the object.
-  // Combines Object.preventExtensions(), Object.seal() and Object.freeze()
-  function freezeClone(obj) {
-    var n = {},
-      p;
-    for (p in obj) {
-      Object.defineProperty(n, p, {
-        __proto__: null, //no inherited properties
-        configurable: false, //+ Object.preventExtensions = Object.seal
-        enumerable: true,
-        writable: false, //+ Object.seal = Object.freeze
-        value: $.isPlainObject(obj[p]) ? freezeClone(obj[p]) : obj[p]
-      });
-    }
-    return Object.preventExtensions(n);
-  }
-
   /**
    * Creates a deep copy of an object.
    * https://gist.github.com/jherax/05204bdf9eb47eeffdc8
    *
-   * @param  {Any}    from: Source object to clone
+   * @param  {Any} from: Source object to clone
    * @param  {Object} dest: (Optional) destination object to merge with
    * @return {Any} The cloned object
    */
-  var extend = (function() {
-    function _extend(from, to, objectsCache) {
-      var prop;
-      // determines whether @from is a primitive value or a function
-      if (from === null || typeof from !== "object") return from;
-      // checks if @from refers to an object created previously
-      if (_toString.call(from) === "[object Object]") {
-        if (objectsCache.filter(function(item) {
-            return item === from;
-          }).length) return from;
-        // keeps reference to created objects
-        objectsCache.push(from);
-      }
-      // determines whether @from is an instance of any of the following constructors
-      if (from.constructor === Date || from.constructor === RegExp || from.constructor === Function ||
-        from.constructor === String || from.constructor === Number || from.constructor === Boolean) {
-        return new from.constructor(from);
-      }
-      if (from.constructor !== Object && from.constructor !== Array) return from;
-      // creates a new object and recursively iterates over its properties
-      to = to || new from.constructor();
-      for (prop in from) {
-        // TODO: allow overwrite existing properties
-        to[prop] = (typeof to[prop] === "undefined" ?
-          _extend(from[prop], null, objectsCache) :
-          to[prop]);
-      }
-      return to;
+  var clone = (() => {
+    const constructors = [Date, RegExp, Function, String, Number, Boolean];
+    ['Map', 'Set'].forEach((c) => {
+      if (c in window) constructors.push(window[c]);
+    });
+
+    function compare(obj) {
+      return obj === this;
     }
-    return function(from, to) {
-      var objectsCache = [];
-      return _extend(from, to, objectsCache);
+
+    function cloner(source, dest, cache) {
+      let prop;
+      // determines whether @source is a primitive value or a function
+      if (source == null || typeof source !== 'object') return source;
+      // checks if @source refers to an object created previously
+      if (_toString.call(source) === '[object Object]') {
+        if (cache.find(compare, source)) return source;
+        // keeps reference to created objects
+        cache.push(source);
+      }
+
+      // determines whether @source is an instance of any of the constructors
+      if (~constructors.indexOf(source.constructor)) return new source.constructor(source);
+      if (source.constructor !== Object && source.constructor !== Array) return source;
+      // creates a new object and recursively iterates over its properties
+      dest = dest || new source.constructor();
+      for (prop in source) {
+        // merges @source into @dest
+        dest[prop] = cloner(source[prop], dest[prop], cache);
+      }
+      return dest;
+    }
+
+    return (source, dest) => {
+      const cache = [];
+      return cloner(source, dest, cache);
     };
-  }());
+  })();
   //-----------------------------------
   // Gets the selected text in the document and inside the text boxes.
   function getSelectedText() {
@@ -1727,8 +1713,7 @@ Object.defineProperties(jsu, {
   jherax.escapeRegExp = escapeRegExp;
   jherax.urlParamsToObject = urlParamsToObject;
   jherax.urlParameter = urlParameter;
-  jherax.freezeClone = freezeClone;
-  jherax.extend = extend; //undocumented
+  jherax.clone = clone; //undocumented
   jherax.getSelectedText = getSelectedText;
   jherax.getCaretPosition = getCaretPosition;
   jherax.setCaretPosition = setCaretPosition;
