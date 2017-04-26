@@ -1,4 +1,5 @@
 "use strict";
+
 /*
  *  JSU Library
  *  Author: David Rivera
@@ -206,17 +207,22 @@ Object.defineProperties(jsu, {
    * @return {Error}
    */
   var CustomError = (function() {
-    function CustomError(message) {
-      var i, max, error;
-      //enforces new
+    function CustomError() {
+      //enforces 'new' instance
       if (!(this instanceof CustomError)) {
-        return new CustomError(message);
+        return new CustomError(arguments);
       }
-      message = message || 'An exception has occurred';
-      for (i = 1, max = arguments.length; i < max; i += 1) {
-        message = message.replace(RegExp('\\{' + (i - 1) + '}', 'g'), arguments[i]);
+      var error,
+        //handles the arguments object when is passed by enforcing a 'new' instance
+        args = Array.apply(null, typeof arguments[0] === 'object' ? arguments[0] : arguments),
+        message = args.shift() || 'An exception has occurred';
+      //builds the message with multiple arguments
+      if (~message.indexOf('}')) {
+        args.forEach(function(arg, i) {
+          message = message.replace(RegExp('\\{' + i + '}', 'g'), arg);
+        });
       }
-      //saves the current stack
+      //gets the exception stack
       error = new Error(message);
       error.name = this.name;
       Object.defineProperties(this, {
@@ -230,7 +236,7 @@ Object.defineProperties(jsu, {
         }
       });
     }
-    // Prevents reference to Error.prototype
+    //prevents direct reference to Error.prototype
     CustomError.prototype = Object.create(Error.prototype, {
       constructor: jherax.setDescriptor(CustomError),
       name: jherax.setDescriptor('JSU Error')
@@ -241,9 +247,9 @@ Object.defineProperties(jsu, {
   // Prints a console message notifying the compatibility mode
   // @private
   function deprecated(oldname, newname) {
-    console.log('%c' +
-      _language.deprecated.replace('{0}', oldname).replace('{1}', newname),
-      'background: tomato; color: white; display: block;');
+    var style = 'color: red; display: block;',
+      text = _language.deprecated.replace('{0}', oldname).replace('{1}', newname);
+    console.warn('%c' + text, style); // eslint-disable-line
   }
   //-----------------------------------
   // Seals the writable attribute in all object's properties
