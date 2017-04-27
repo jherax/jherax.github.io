@@ -54,11 +54,11 @@ if (window.jsu && jsu.author !== 'jherax') {
 
 // Creates the initial properties
 var jsu = window.jsu || {
-  setDescriptor: function(value) {
+  setDescriptor: function(value, enumerable) {
     return {
       writable: false,
-      enumerable: false,
       configurable: false,
+      enumerable: !!enumerable,
       value: value
     };
   }
@@ -71,59 +71,48 @@ Object.defineProperties(jsu, {
   //selector where dynamic HTML is placed
   wrapper: {
     writable: true,
-    enumerable: true,
     configurable: false,
+    enumerable: true,
     value: 'body'
   },
   //polyfill to get the host of the site
-  siteOrigin: {
-    writable: false,
-    enumerable: true,
-    configurable: false,
-    value:
-      (function(loc) {
-        var port = loc.port ? ':' + loc.port : '';
-        return (loc.origin || (loc.protocol + '//' + loc.hostname + port));
-      }(window.location))
-  },
+  siteOrigin: jsu.setDescriptor((function() {
+    var port = location.port ? ':' + location.port : '';
+    return (location.origin || (location.protocol + '//' + location.hostname + port));
+  }()), true),
   //utility to create safe namespaces
-  createNS: {
-    writable: false,
-    enumerable: true,
-    configurable: false,
-    value: function(namespace) {
-      // @see https://gist.github.com/jherax/97cce1801527b84782a2
-      var nsparts = namespace.toString().split("."),
-        reName = (/^[A-Za-z_]\w+/),
-        cparent = window,
-        i, subns, nspartsLength;
-      // we want to be able to include or exclude the root namespace so we strip it if it's in the namespace
-      if (nsparts[0] === "window") { nsparts = nsparts.slice(1); }
-      // loop through the parts and create a nested namespace if necessary
-      for (i = 0, nspartsLength = nsparts.length; i < nspartsLength; i += 1) {
-        subns = nsparts[i];
-        // check if the namespace is a valid variable name
-        if (!reName.test(subns)) { throw new Error('Incorrect namespace'); }
-        // check if the current parent already has the namespace declared,
-        // if it isn't, then create it
-        if (typeof cparent[subns] === 'undefined') {
-          cparent[subns] = {};
-        }
-        cparent = cparent[subns];
+  createNS: jsu.setDescriptor(function(namespace) {
+    // @see https://gist.github.com/jherax/97cce1801527b84782a2
+    var nsparts = namespace.toString().split("."),
+      reName = (/^[A-Za-z_]\w+/),
+      cparent = window,
+      i, subns, nspartsLength;
+    // we want to be able to include or exclude the root namespace so we strip it if it's in the namespace
+    if (nsparts[0] === "window") { nsparts = nsparts.slice(1); }
+    // loop through the parts and create a nested namespace if necessary
+    for (i = 0, nspartsLength = nsparts.length; i < nspartsLength; i += 1) {
+      subns = nsparts[i];
+      // check if the namespace is a valid variable name
+      if (!reName.test(subns)) { throw new Error('Incorrect namespace'); }
+      // check if the current parent already has the namespace declared,
+      // if it isn't, then create it
+      if (typeof cparent[subns] === 'undefined') {
+        cparent[subns] = {};
       }
-      i = subns = nsparts = nspartsLength = reName = undefined;
-      // the parent is now constructed with empty namespaces and can be used.
-      // we return the outermost namespace
-      return cparent;
+      cparent = cparent[subns];
     }
-  }
+    i = subns = nsparts = nspartsLength = reName = undefined;
+    // the parent is now constructed with empty namespaces and can be used.
+    // we return the outermost namespace
+    return cparent;
+  }, true),
 });
 
 //-----------------------------------
 // Immediately-invoked Function Expressions (IIFE)
 // We pass the namespace as an argument to a self-invoking function.
-// "regional" is the context of the local namespace, and "$" is the jQuery object.
-(function(regional, $) {
+// "regional" is the context of the local namespace.
+(function(regional) {
   // Creates the messages for specific culture
   regional.spanish = {
     culture: 'es',
@@ -162,20 +151,16 @@ Object.defineProperties(jsu, {
 
   //-----------------------------------
   // Sets the default language configuration
-  Object.defineProperty(regional, 'set', {
-    configurable: false,
-    enumerable: true,
-    writable: false,
-    value: function(obj, callback) {
+  Object.defineProperty(regional, 'set', jsu.setDescriptor(
+    function(obj, callback) {
       if (typeof obj === 'string')
         obj = regional[obj];
       $.extend(regional.current, obj);
       //this segment must be called before the plugin initialization
       if ($.isFunction(callback)) callback.apply(regional);
-    }
-  });
+    }, true));
 
-}(jsu.createNS('jsu.regional'), jQuery));
+}(jsu.createNS('jsu.regional')));
 
 //-----------------------------------
 // We provide an object to override default settings.
@@ -251,31 +236,28 @@ Object.defineProperties(jsu, {
       text = _language.deprecated.replace('{0}', oldname).replace('{1}', newname);
     console.warn('%c' + text, style); // eslint-disable-line
   }
-  //-----------------------------------
-  // Seals the writable attribute in all object's properties
-  // @private
-  function _setPropertiesNotWritable(obj) {
-    for (var p in obj) {
-      Object.defineProperty(obj, p, {
-        __proto__: null,
+
+  /**
+   * Configures each property descriptor in an object.
+   *
+   * @private
+   * @param {Object} obj: the object to set the descriptors
+   * @param {String|Array} properties: the property or properties to configure
+   * @param {any} values: the value for each property
+   * @param {any} enumerable: (optional) if is a printable property
+   */
+  function _setPropertiesNotWritable(obj, properties, values, enumerable) {
+    values = [].concat(values);
+    [].concat(properties).forEach((prop, i) => {
+      Object.defineProperty(obj, prop, {
+        writable: false,
         configurable: true,
-        enumerable: true,
-        writable: false
+        enumerable: !!enumerable,
+        value: values[i] != null ? values[i] : obj[prop],
       });
-    }
-  }
-  //-----------------------------------
-  // Sets the @value of specific @property in the @obj,
-  // keeping the writable attribute to false
-  // @private
-  function _setValueNotWritable(obj, property, value, enumerable) {
-    Object.defineProperty(obj, property, {
-      configurable: true,
-      enumerable: !!enumerable,
-      writable: false,
-      value: value
     });
   }
+
   //-----------------------------------
   // @private
   var SELECTABLE_TYPES = (/text|password|search|tel|url/);
@@ -390,24 +372,39 @@ Object.defineProperties(jsu, {
   //-----------------------------------
   // Determines whether the @dom parameter is a text or checkable <input>
   // http://www.quackit.com/html_5/tags/html_input_tag.cfm
-  // http://github.com/jherax/js-utils#inputtypeistext
-  var inputType = (function() {
-    var TEXTAREA = /textarea/i,
-      TEXT = /text|password|file|number|search|tel|url|email|datetime|datetime-local|date|time|month|week/i,
-      RADIO = /checkbox|radio/i,
-      INPUT = /input/i;
-    return {
-      isText: function(dom) {
-        if (!isDOM(dom)) return false;
-        if (TEXTAREA.test(dom.nodeName)) return true;
-        return TEXT.test(dom.type) && INPUT.test(dom.nodeName);
-      },
-      isCheck: function(dom) {
-        if (!isDOM(dom)) return false;
-        return RADIO.test(dom.type) && INPUT.test(dom.nodeName);
-      }
-    };
-  }());
+  // http://github.com/jherax/js-utils#inputTypeisText
+  const SELECT = /select/i,
+    TEXTAREA = /textarea/i,
+    TEXT = /text|password|file|number|search|tel|url|email|datetime|datetime-local|date|time|month|week/i,
+    RADIO = /checkbox|radio/i,
+    INPUT = /input/i;
+
+  /**
+   * This object contains methods to determine the type of a FORM element.
+   * If you provide an argument that is not a DOM Element, or is not any of
+   * the FORM fields, the methods below will return false.
+   *
+   * The methods exposed are: {isWritable, isCheckable, isSelectable}.
+   * All of them receive a single argument which is the object to be
+   * tested against a DOM Element and a FORM field.
+   *
+   * @public
+   */
+  const fieldType = {
+    isWritable: (dom) => {
+      if (!isDOM(dom)) return false;
+      if (TEXTAREA.test(dom.nodeName)) return true;
+      return TEXT.test(dom.type) && INPUT.test(dom.nodeName);
+    },
+    isCheckable: (dom) => {
+      if (!isDOM(dom)) return false;
+      return RADIO.test(dom.type) && INPUT.test(dom.nodeName);
+    },
+    isSelectable: (dom) => {
+      if (!isDOM(dom)) return false;
+      return SELECT.test(dom.nodeName);
+    },
+  };
 
   /**
    * Determines whether an event listener (defined by @eventName + @namespace) was bound to a DOM element.
@@ -685,7 +682,7 @@ Object.defineProperties(jsu, {
       _getSelection = window.getSelection || document.getSelection;
     if (_getSelection) {
       // Get selected text from an input field
-      if (inputType.isText(dom)) {
+      if (fieldType.isWritable(dom)) {
         selection = _fixSelection(dom);
         sel.start = selection.start;
         sel.end = selection.end;
@@ -757,7 +754,7 @@ Object.defineProperties(jsu, {
     const matchToLower = (m) => m.toLowerCase();
 
     return function(obj, type) {
-      var isInput = inputType.isText(obj),
+      var isInput = fieldType.isWritable(obj),
         text = isInput ? obj.value : obj && obj.toString();
       if (!text || !text.length) return '';
       if (TEXTAREA.test(obj.nodeName)) {
@@ -803,7 +800,7 @@ Object.defineProperties(jsu, {
       outDecimalMark: _language.decimalMark,
       outThousandsMark: _language.thousandsMark
     }, o);
-    var isInput = inputType.isText(obj),
+    var isInput = fieldType.isWritable(obj),
       text = isInput ? obj.value : obj && obj.toString();
     if (!text || !text.length) return '';
     var thousands = new RegExp(escapeRegExp(o.inThousandsMark), 'g'),
@@ -843,7 +840,7 @@ Object.defineProperties(jsu, {
     }
 
     function _validate(obj, pattern) {
-      obj = inputType.isText(obj) ? obj.value : obj.toString();
+      obj = fieldType.isWritable(obj) ? obj.value : obj.toString();
       return pattern.test(obj);
     }
     //built-in validators
@@ -871,11 +868,11 @@ Object.defineProperties(jsu, {
       }
     });
     //Set properties as not writable
-    _setPropertiesNotWritable(validator);
+    _setPropertiesNotWritable(validator, Object.keys(validator), null, true);
     Object.defineProperty(validator, 'set', jherax.setDescriptor(
       function(property, value) {
         if (!isFunction(value)) return;
-        _setValueNotWritable(this, property, value, true);
+        _setPropertiesNotWritable(this, property, value, true);
       }
     ));
     return validator;
@@ -912,7 +909,7 @@ Object.defineProperties(jsu, {
       return new Date(date + ' ' + dateParts.join(':'));
     }
     return function(obj, o) {
-      var isInput = inputType.isText(obj),
+      var isInput = fieldType.isWritable(obj),
         text = isInput ? obj.value : obj && obj.toString();
       o = $.extend({
         isFuture: false,
@@ -1330,7 +1327,7 @@ Object.defineProperties(jsu, {
     }, jherax.config.position, o);
     return this.each(function(i, dom) {
       var count = 'Max: ' + length;
-      if (!inputType.isText(dom)) return true; //continue
+      if (!fieldType.isWritable(dom)) return true; //continue
       dom.maxLength = length;
       $(dom).attr('data-role', 'tooltip')
         .off('.jsu-maxLength')
@@ -1535,7 +1532,7 @@ Object.defineProperties(jsu, {
         .find('input:not([type=button]):not([type=submit]), textarea')
         .filter(':not(:disabled):not(.no-auto-focus)').get().reverse();
       $(elements).each(function() {
-        if (inputType.isText(this) && this.getAttribute('data-group') === group) {
+        if (fieldType.isWritable(this) && this.getAttribute('data-group') === group) {
           $(this).focus();
         }
       });
@@ -1599,15 +1596,15 @@ Object.defineProperties(jsu, {
               tag = input.nodeName.toLowerCase();
             // Gets the html5 data- attribute; modern browsers admit: dom.dataset[attribute]
             if (btn.getAttribute('data-group') !== input.getAttribute('data-group')) return true; //continue
-            if (inputType.isText(input)) { input.value = $.trim(input.value); }
+            if (fieldType.isWritable(input)) { input.value = $.trim(input.value); }
 
             // Validates the elements marked with the css class "vld-required"
             // Looks for empty [input, select] elements, and those having the [value] attribute equal to "0"
             if ($input.hasClass('vld-required') && ((tag === 'select' && (_fnValidateFirstItem(input, d) || input.value === '0')) ||
-                (inputType.isText(input) && !input.value.length) || (inputType.isCheck(input) && !input.checked) || tag === 'span')) {
+                (fieldType.isWritable(input) && !input.value.length) || (fieldType.isCheckable(input) && !input.checked) || tag === 'span')) {
               checkbox = input;
               // Awful asp.net radiobutton / checkbox
-              if (tag === 'span' || inputType.isCheck(input)) {
+              if (tag === 'span' || fieldType.isCheckable(input)) {
                 if (tag === 'input') { checkbox = $input; } else { checkbox = $input.find('input:first-child'); }
                 if (checkbox.is(':checked') || $('[name="' + checkbox.attr('name') + '"]').filter(':checked').length) {
                   return true; //continue
@@ -1619,7 +1616,7 @@ Object.defineProperties(jsu, {
               return (submit = false); //break
             } //end of "vld-required" elements
 
-            if (!inputType.isText(input) || !input.value.length) return true; //continue
+            if (!fieldType.isWritable(input) || !input.value.length) return true; //continue
             // Validates the elements marked with specific formats like "vld-email"
             for (type in isValidFormat) {
               if ($input.hasClass('vld-' + type) && !isValidFormat[type](input)) {
@@ -1633,7 +1630,7 @@ Object.defineProperties(jsu, {
           if (submit && isFunction(d.fnValidator) && !d.fnValidator(btn)) {
             submit = false;
           }
-          _setValueNotWritable($.fn.easyValidate, 'canSubmit', submit);
+          _setPropertiesNotWritable($.fn.easyValidate, 'canSubmit', submit);
           if (!submit) { event.stopImmediatePropagation(); }
           return submit;
 
@@ -1704,7 +1701,7 @@ Object.defineProperties(jsu, {
   jherax.multiFilter = multiFilter; //undocumented
   jherax.flatten = flatten; //undocumented
   jherax.sumValues = sumValues; //undocumented
-  jherax.inputType = inputType;
+  jherax.fieldType = fieldType;
   jherax.handlerExist = handlerExist;
   jherax.nsEvents = nsEvents;
   jherax.addScript = addScript;
