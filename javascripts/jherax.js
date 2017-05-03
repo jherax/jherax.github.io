@@ -184,10 +184,10 @@ Object.defineProperties(jsu, {
     _language = jherax.regional.current;
 
   /**
-   * @private
    * Create a custom exception notifier.
    * https://gist.github.com/jherax/c2f151165ecb19b9f8e3
    *
+   * @private
    * @param  {String} message: the message and the format to show the error
    * @return {Error}
    */
@@ -228,13 +228,23 @@ Object.defineProperties(jsu, {
     });
     return CustomError;
   }());
-  //-----------------------------------
-  // Prints a console message notifying the compatibility mode
-  // @private
-  function deprecated(oldname, newname) {
-    var style = 'color: red; display: block;',
-      text = _language.deprecated.replace('{0}', oldname).replace('{1}', newname);
-    console.warn('%c' + text, style); // eslint-disable-line
+
+  /**
+   * Prints a message for deprecated methods and runs the new function.
+   *
+   * @private
+   * @param  {String} oldname: name of deprecated method
+   * @param  {String} newname: name of the new method
+   * @param  {Function} fn: reference to the new method
+   * @return {Function}
+   */
+  function deprecated(oldname, newname, fn) {
+    return (...args) => {
+      const text = `%c${message.replace('{0}', oldname).replace('{1}', newname)}`;
+      const style = 'color: red; display: block;';
+      console.warn(text, style); // eslint-disable-line
+      return fn(...args);
+    };
   }
 
   /**
@@ -246,7 +256,7 @@ Object.defineProperties(jsu, {
    * @param {any} values: the value for each property
    * @param {any} enumerable: (optional) if is a printable property
    */
-  function _setPropertiesNotWritable(obj, properties, values, enumerable) {
+  function setPropertiesNotWritable(obj, properties, values, enumerable) {
     values = [].concat(values);
     [].concat(properties).forEach((prop, i) => {
       Object.defineProperty(obj, prop, {
@@ -317,7 +327,7 @@ Object.defineProperties(jsu, {
    *
    * @see https://gist.github.com/jherax/f11d669ba286f21b7a2dcff69621eb72
    *
-   * @export
+   * @public
    * @param  {Array}  array: the array to filter
    * @param  {Object} filters: an object with the filter criteria as the property names
    * @return {Array}
@@ -343,7 +353,7 @@ Object.defineProperties(jsu, {
    *
    * @see https://gist.github.com/jherax/7dce66c97ea06150e00c5a6febec26e7
    *
-   * @export
+   * @public
    * @param  {Array} array: the array to be flattened
    * @return {Array}
    */
@@ -356,7 +366,7 @@ Object.defineProperties(jsu, {
    *
    * @see https://gist.github.com/jherax/a9846d44b62b64d7a182d6d6ec9de526
    *
-   * @export
+   * @public
    * @param  {Array} array: the collection to iterate.
    * @param  {String | Number} prop: (optional) property name or array index.
    * @return {Number}
@@ -586,7 +596,7 @@ Object.defineProperties(jsu, {
    *
    * @see https://gist.github.com/jherax/e6ecb05aa35eb0219525
    *
-   * @export
+   * @public
    * @param  {String} url: (optional) url from where extract the search parameters
    * @param  {String} key: (optional) specific parameter in the url-search to extract
    * @return {Object}
@@ -609,7 +619,7 @@ Object.defineProperties(jsu, {
    *
    * @see https://gist.github.com/jherax/e6ecb05aa35eb0219525
    *
-   * @export
+   * @public
    * @param  {String} url: (optional) url from where extract the search parameters
    * @param  {String} key: specific parameter in the url-search to extract
    * @return {Primitive}
@@ -868,11 +878,11 @@ Object.defineProperties(jsu, {
       }
     });
     //Set properties as not writable
-    _setPropertiesNotWritable(validator, Object.keys(validator), null, true);
+    setPropertiesNotWritable(validator, Object.keys(validator), null, true);
     Object.defineProperty(validator, 'set', jherax.setDescriptor(
       function(property, value) {
         if (!isFunction(value)) return;
-        _setPropertiesNotWritable(this, property, value, true);
+        setPropertiesNotWritable(this, property, value, true);
       }
     ));
     return validator;
@@ -941,7 +951,7 @@ Object.defineProperties(jsu, {
    *
    * @see https://gist.github.com/jherax/e58ee9f560764a72a90ded5fc53e4105
    *
-   * @export
+   * @public
    * @param  {Object | String} options: it can be a String with the date, or an Object with the following properties:
    *         - {String} date: the entry date to change the format
    *         - {String} inputFormat: the format of the entry date
@@ -1039,9 +1049,11 @@ Object.defineProperties(jsu, {
 
   // Gets the Date object from a string that meets the ISO 8601 format
   function dateFromISO8601(date) {
-    if (typeof date !== 'string') { throw new CustomError('Date format must be ISO 8601 » {0}', date); }
+    if (typeof date !== 'string') {
+      throw new CustomError('ISO 8601 wrong format » {0}', date);
+    }
     var r = date.match(_ISO_8601);
-    if (!r) { throw new CustomError('Date format must be ISO 8601 » {0}', date); }
+    if (!r) throw new CustomError('ISO 8601 wrong format » {0}', date);
     var gmt = new Date(),
       th = +r[7] || (gmt.getTimezoneOffset() / -60), //normalize the hours offset
       tm = +r[8] || (gmt.getTimezoneOffset() % -60), //normalize the minutes offset
@@ -1630,7 +1642,7 @@ Object.defineProperties(jsu, {
           if (submit && isFunction(d.fnValidator) && !d.fnValidator(btn)) {
             submit = false;
           }
-          _setPropertiesNotWritable($.fn.easyValidate, 'canSubmit', submit);
+          setPropertiesNotWritable($.fn.easyValidate, 'canSubmit', submit);
           if (!submit) { event.stopImmediatePropagation(); }
           return submit;
 
@@ -1725,15 +1737,5 @@ Object.defineProperties(jsu, {
   jherax.getHtmlText = getHtmlText;
   jherax.getScrollbarWidth = getScrollbarWidth;
   jherax.updateCache = updateCache; //undocumented
-
-  //Provide compatibility with older versions
-  jherax.getQueryToString = function () {
-    deprecated('getQueryToString', 'urlParameter');
-    return urlParameter.apply(this, arguments);
-  };
-  jherax.getQueryToObject = function () {
-    deprecated('getQueryToObject', 'urlParamsToObject');
-    return urlParamsToObject.apply(this, arguments);
-  };
 
 }(window, jQuery, jsu));
