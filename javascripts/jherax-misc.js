@@ -4,72 +4,12 @@
  */
 //TODO: Actualizar documentación de easyValidate (onBeforeTooltip (args) args.target, args.position)
 //TODO: Agregar propiedad arrow para las flechas del tooltip
-//TODO: Crear funcion que sume valores en un array
 //TODO: Agregar documentación de $.saveBoundaries
 //TODO: Agregar documentación de $.restoreBoundaries
 
 //===================================
 /* MISCELLANEOUS */
 //===================================
-
-/**
- * Flattens an array of arrays into one-dimensional array
- * @param  {Array} arr: the array to be flattened
- * @return {Array}
- */
-const flatten = arr => arr.reduce(
-  (flattened, cv) => flattened.concat(Array.isArray(cv) ? flatten(cv) : cv),
-  [] // initial value of flattened array
-);
-
-//test
-var array = [[1], [2], [3, 4], [['a', 'b'], [['c'], 'd']], 9];
-flatten(array);
-
-//-----------------------------------
-(function() {
-    var list = [[12345, "product", "10"], [12345, "product", "15"], [12765, "other", "10"], [12345, "product", "5"]];
-
-    //sorts the array by id
-    list.sort(function(pv, cv) {
-        var a = +pv[0],
-            b = +cv[0];
-        return a - b;
-    });
-
-    //reduce the array for repeated elements
-    var reduced = list.reduce(function(uniques, cv) {
-        //slice keeps reference when item is an object/array
-        var last = uniques.slice(-1)[0];
-        //compares the id
-        if (last[0] == cv[0])
-            last[2] = +last[2] + (+cv[2]); //sums values
-        else uniques.push(cv);
-        return uniques;
-    }, list.slice(0, 1)); //initial value for @uniques
-
-    console.log(reduced);
-
-    //sums all values
-    [9, 1, 2, 3].reduce(function(total, cv) {
-        return total + cv;
-    }, 0);
-}());
-
-//-----------------------------------
-var list = [{id:12345, type:"product", quantity:"10"}, {id:12346, type:"product", quantity:"15"}, {id:12765, type:"other", quantity:"12"}];
-var sumValues = function (arr, prop) {
-    if (!arr || !arr.length) return 0;
-    if ((/string|number/).test(typeof prop)) {
-        return arr.reduce(function(total, cv) {
-            return total + (+cv[prop]);
-        }, 0);
-    } else {
-        return arr.reduce(function(total, cv) {
-            return total + (+cv);
-        }, 0);
-    }
-};
 
 //-----------------------------------
 // Motivation:
@@ -86,93 +26,10 @@ for (let func of funcs) data = func(data);
 [f1, f2, f3].reduce((o, fn) => fn(o), {});
 
 //-----------------------------------
-/**
- * Multi-filter an array of objects
- * @param  {Array}  array  : list of elements to apply a multiple criteria filter
- * @param  {Object} filters: Contains multiple criteria filters by the property names of the objects to filter
- * @return {Array}
- */
-function multiFilter(array, filters) {
-  let filterKeys = Object.keys(filters);
-  // filters all elements passing the criteria
-  return array.filter((item) => {
-    // validates all filters criteria dynamically
-    return filterKeys.every((key) => {
-      return (filters[key].indexOf(item[key]) !== -1);
-    });
-  });
-}
-
-let products = [
-  { name: "A", color: "Blue", size: 50 },
-  { name: "B", color: "Blue", size: 60 },
-  { name: "C", color: "Black", size: 70 }
-];
-
-let filters = {
-  color: ["Blue", "Black"],
-  size: [70, 50]
-};
-
-// expected
-let expected = [
-  { name: "A", color: "Blue", "size": 50 },
-  { name: "C", color: "Black", "size": 70 }
-];
-
-var filtered = multiFilter(products, filters);
-console.info('Expected');
-console.log(expected);
-console.info('Filtered');
-console.log(filtered);
-
-//-----------------------------------
-// Get the value associated to a key
-function getValueByKey(obj, key) {
-    var value;
-    //go recursively through objects and arrays
-    for (var prop in obj) {
-        if (prop === key) return obj[prop];
-        if (typeof(obj[prop]) === "object") {
-            value = getValueByKey(obj[prop], key);
-            if (value !== void 0) return value;
-        }
-    }
-}
-
-//-----------------------------------
-// Establece el valor de 'this' en el callback
-// 'this' es {Any}
-(function() {
-  'use strict';
-  var products = [
-      { name: "A", color: "Blue", size: 50 },
-      { name: "B", color: "Blue", size: 60 },
-      { name: "C", color: "Black", size: 70 }
-    ];
-
-  var names = [];
-  products.forEach(
-    // no funciona con arrow functions
-    function (item) {
-      names.push(item.name);
-      console.info(`added: ${item.name}`);
-      console.dir(this);
-      this(item.color);
-    },
-    print
-  );
-
-  function print(color) {
-    console.log(`context color: ${color}`);
-  }
-}());
-
-//-----------------------------------
 // Quita los acentos del texto
 function ignoreAccent (text) {
-    var accent = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüû",
-        normal = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuu",
+    var accent = "ÂâÀàÁáÄäÃãÅåÊêÈèÉéËëÎîÌìÍíÏïÔôÒòÓóÖöÕõÛûÙùÚúÜüÑñÝýÿ",
+        normal = "AaAaAaAaAaAaEeEeEeEeIiIiIiIiOoOoOoOoOoUuUuUuUuNnYyy",
         length = accent.length;
     for (var i = 0; i < length; i += 1) {
         text = text.replace(accent.charAt(i), normal.charAt(i));

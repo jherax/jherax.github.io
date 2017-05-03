@@ -88,12 +88,12 @@ Object.defineProperties(jsu, {
       cparent = window,
       i, subns, nspartsLength;
     // we want to be able to include or exclude the root namespace so we strip it if it's in the namespace
-    if (nsparts[0] === "window") { nsparts = nsparts.slice(1); }
+    if (nsparts[0] === "window") nsparts = nsparts.slice(1);
     // loop through the parts and create a nested namespace if necessary
     for (i = 0, nspartsLength = nsparts.length; i < nspartsLength; i += 1) {
       subns = nsparts[i];
       // check if the namespace is a valid variable name
-      if (!reName.test(subns)) { throw new Error('Incorrect namespace'); }
+      if (!reName.test(subns)) throw new Error('Incorrect namespace');
       // check if the current parent already has the namespace declared,
       // if it isn't, then create it
       if (typeof cparent[subns] === 'undefined') {
@@ -138,8 +138,8 @@ Object.defineProperties(jsu, {
     timeFormat: 'HH:mm',
     dateFormat: 'MM/dd/yyyy',
     dateFormatError: 'The date format is incorrect',
-    dateIsGreater: 'The date can't be greater than today',
-    dateIsLesser: 'The date can't be lesser than today',
+    dateIsGreater: 'The date can\'t be greater than today',
+    dateIsLesser: 'The date can\'t be lesser than today',
     validateForm: 'The button must be inside a &lt;form&gt;',
     validateRequired: 'This field is required',
     validateFormat: 'The format is incorrect'
@@ -824,68 +824,124 @@ Object.defineProperties(jsu, {
   //-----------------------------------
   // Validates the text format, depending on the type supplied.
   // Date validations are run according to regional setting.
-  var isValidFormat = (function() {
-    var _DATETIME = /[dMyHhms]+/g;
+  var validators = (function() {
+    /**
+     * Datetime format flags.
+     *
+     * @private
+     * @type {RegExp}
+     */
+    const DATETIME = /[dMyHhms]+/g;
 
-    function _dtFormatter(format) {
-      return ('^' +
-        escapeRegExp(format).replace(_DATETIME, function(match) {
-          switch (match) {
-            case 'yyyy':
-              return '([1-2][0,9][0-9][0-9])';
-            case 'MM':
-              return '((0[1-9])|(1[0-2]))';
-            case 'dd':
-              return '((0[1-9])|([1-2][0-9])|(3[0-1]))';
-            case 'HH':
-              return '([0-1][0-9]|[2][0-3])';
-            case 'hh':
-              return '([0][0-9]|[1][0-2])';
-            case 'mm':
-              return '([0-5][0-9])';
-            case 'ss':
-              return '([0-5][0-9])';
-          }
-        }) + '$');
+    /**
+     * Replaces every flag in a datetime format, to use instead a raw string to build a RegExp pattern.
+     *
+     * @private
+     * @param  {String} match: the text matched in the RegExp
+     * @return {String}
+     */
+    function replacer(match) {
+      // eslint-disable-next-line
+      switch (match) {
+        case 'yyyy':
+          return '([1-2][0,9][0-9][0-9])';
+        case 'MM':
+          return '((0[1-9])|(1[0-2]))';
+        case 'dd':
+          return '((0[1-9])|([1-2][0-9])|(3[0-1]))';
+        case 'HH':
+          return '([0-1][0-9]|[2][0-3])';
+        case 'hh':
+          return '([0][0-9]|[1][0-2])';
+        case 'mm':
+          return '([0-5][0-9])';
+        case 'ss':
+          return '([0-5][0-9])';
+      }
+      return '';
     }
 
-    function _validate(obj, pattern) {
-      obj = fieldType.isWritable(obj) ? obj.value : obj.toString();
-      return pattern.test(obj);
+    /**
+     * Builds the string pattern used to build the RegExp object.
+     *
+     * @private
+     * @param  {String} format: raw string used to build the pattern in a RegExp
+     * @return {String}
+     */
+    function buildStringPattern(format) {
+      format = escapeRegExp(format).replace(DATETIME, replacer);
+      return `^${format}$`;
     }
-    //built-in validators
-    var _PATTERNS = {
-      //Validates the date format according to regional setting
-      date: new RegExp(_dtFormatter(_language.dateFormat)),
-      //Validates the time format: HH:mm:ss
+
+    /**
+     * Built-in validator patterns.
+     *
+     * @private
+     * @type {Object}
+     */
+    const PATTERNS = {
+      // validates the date format according to regional setting
+      date: new RegExp(buildStringPattern(_language.dateFormat)),
+      // validates the time format: HH:mm:ss
       time: (/^([0-1][0-9]|[2][0-3]):([0-5][0-9])(?::([0-5][0-9])){0,1}$/),
-      //Validates the date-time format according to regional setting
-      datetime: new RegExp(_dtFormatter(_language.dateFormat + ' ' + _language.timeFormat)),
-      email: (/^([0-9a-zñÑ](?:[\-.\w]*[0-9a-zñÑ])*@(?:[0-9a-zñÑ][\-\wñÑ]*[0-9a-zñÑ]\.)+[a-z]{2,9})$/i),
-      url: (/((?:http|ftp|https):\/\/[\w\-_]+(?:\.[\w\-_]+)+(?:[\w\-\.,@?\^=%&:\/~\+#]*[\w\-\@?\^=%&\/~\+#])?)/gi),
+      // validates the date-time format according to regional setting
+      datetime: new RegExp(buildStringPattern(`${_language.dateFormat} ${_language.timeFormat}`)),
+      email: (/^([0-9a-zñÑ](?:[-.\w]*[0-9a-zñÑ])*@(?:[0-9a-zñÑ][-\wñÑ]*[0-9a-zñÑ]\.)+[a-z]{2,9})$/i),
+      url: (/((?:http|ftp|https):\/\/[\w\-_]+(?:\.[\w\-_]+)+(?:[\w\-.,@?^=%&:/~+#]*[\w\-@?^=%&/~+#])?)/gi),
       ipv4: (/^(?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d{1,2})\.){3}(?:25[0-5]|2[0-4]\d|[01]\d\d|\d{1,2})$/),
-      //Validates the password strength (must have 8+ characters, 1+ number, 1+ uppercase)
+      // validates the password strength (must have 8+ characters, 1+ number, 1+ uppercase)
       password: (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/),
-      //Validates latitudes range from -90 to 90
+      // validates latitudes range from -90 to 90
       latitude: (/^-?([1-8]?[1-9]|[1-9]0|0),{1}\d{1,6}$/),
-      //Validates longitudes range from -180 to 180
-      longitude: (/^-?([1]?[1-7][1-9]|[1]?[1-8][0]|[1-9]?[0-9]),{1}\d{1,6}$/)
+      // validates longitudes range from -180 to 180
+      longitude: (/^-?([1]?[1-7][1-9]|[1]?[1-8][0]|[1-9]?[0-9]),{1}\d{1,6}$/),
     };
-    var validator = {};
-    Object.keys(_PATTERNS).forEach(function(key) {
-      validator[key] = function(text, pattern) {
-        return _validate(text, pattern || _PATTERNS[key]);
-      }
-    });
-    //Set properties as not writable
-    setPropertiesNotWritable(validator, Object.keys(validator), null, true);
-    Object.defineProperty(validator, 'set', jherax.setDescriptor(
-      function(property, value) {
-        if (!isFunction(value)) return;
-        setPropertiesNotWritable(this, property, value, true);
-      }
-    ));
-    return validator;
+
+    /**
+     * Validates the provided text against a regular expression pattern.
+     *
+     * @private
+     * @param  {String|Element} text: the text to validate
+     * @param  {RegExp} pattern: regular expression pattern
+     * @return {Boolean}
+     */
+    function validate(text, pattern) {
+      text = fieldType.isWritable(text) ? text.value : text.toString();
+      return pattern.test(text);
+    }
+
+    /**
+     * Initializes the namespace with all the built-in validators
+     *
+     * @private
+     * @return {Object}
+     */
+    function initValidators() {
+      // @namespace
+      const validators = {};
+      // registers the validators in the namespace
+      Object.keys(PATTERNS).forEach((validatorName) => {
+        validators[validatorName] = function(text, pattern) {
+          return validate(text, pattern || PATTERNS[validatorName]);
+        };
+      });
+      //Set properties as not writable
+      setPropertiesNotWritable(validators, Object.keys(validators), null, true);
+      // registers a function to add/configure validators
+      Object.defineProperty(validators, 'set', jherax.setDescriptor(
+        (validatorName, fn) => {
+          if (typeof fn !== 'function') return;
+          // the validator function should return a boolean
+          if (typeof fn('test') !== 'boolean') {
+            throw new Error('The validator function should return a boolean');
+          }
+          setPropertiesNotWritable(validators, validatorName, fn, true);
+        }
+      ));
+      return validators;
+    }
+
+    return initValidators();
   }());
   //-----------------------------------
   // @private
@@ -901,19 +957,20 @@ Object.defineProperties(jsu, {
       var type, i;
       if (date instanceof Date) return date;
       if (typeof date !== 'string') {
-        if (+date) { return new Date(+date); }
+        if (+date) return new Date(+date);
         return new Date();
       }
       type = date.length > 10 ? 'datetime' : 'date';
-      e.error = (e.error || !isValidFormat[type](date));
-      if (e.error) { return new Date(); }
+      e.error = (e.error || !validators[type](date));
+      if (e.error) return new Date();
+      const DATETIME = /[dMyHhms]+/g;
       var date = 'y/M/d',
         dateParts = date.split(/\D/),
         formatParts = _language.dateFormat.split(/[^yMd]/);
       for (i in formatParts) {
-        if (_Y.test(formatParts[i])) { date = date.replace('y', dateParts[i]); continue }
-        if (_M.test(formatParts[i])) { date = date.replace('M', dateParts[i]); continue }
-        if (_D.test(formatParts[i])) { date = date.replace('d', dateParts[i]); continue }
+        if (_Y.test(formatParts[i])) { date = date.replace('y', dateParts[i]); continue; }
+        if (_M.test(formatParts[i])) { date = date.replace('M', dateParts[i]); continue; }
+        if (_D.test(formatParts[i])) { date = date.replace('d', dateParts[i]); continue; }
       }
       dateParts.splice(0, 3);
       return new Date(date + ' ' + dateParts.join(':'));
@@ -963,6 +1020,7 @@ Object.defineProperties(jsu, {
     if (typeof options === 'string') {
       options = {date: options};
     }
+    defaults.formatDate.outputFormat = _language.dateFormat;
     const opt = Object.assign({}, defaults.formatDate, options);
     const dateParts = opt.date.split(/\D/);
     const formatParts = opt.inputFormat.split(/\W/);
@@ -987,7 +1045,9 @@ Object.defineProperties(jsu, {
       _DATE = (/[dMy]+/g),
       _HOUR = (/[Hhms]+/g);
 
-    function _fillZero(n) { return ('0' + n).slice(-2); }
+    function _fillZero(n) {
+      return ('0' + n).slice(-2);
+    }
 
     function fnDate(o) {
       return (o.ISO8601 ? 'yyyy-MM-dd' : _language.dateFormat).replace(_DATE, function(match) {
@@ -1045,14 +1105,14 @@ Object.defineProperties(jsu, {
   }());
   //-----------------------------------
   // @private
-  var _ISO_8601 = /(?:(\d{4})-(\d{2})-(\d{2}))(?:T(?:(\d{2})(?:\:(\d{2}))?(?:\:(\d{2}))?)?(?:([+\-]\d{2})(?:\:?(\d{2}))?)?)?/;
+  var ISO_8601 = /(?:(\d{4})-(\d{2})-(\d{2}))(?:T(?:(\d{2})(?:\:(\d{2}))?(?:\:(\d{2}))?)?(?:([+\-]\d{2})(?:\:?(\d{2}))?)?)?/;
 
   // Gets the Date object from a string that meets the ISO 8601 format
   function dateFromISO8601(date) {
     if (typeof date !== 'string') {
       throw new CustomError('ISO 8601 wrong format » {0}', date);
     }
-    var r = date.match(_ISO_8601);
+    var r = date.match(ISO_8601);
     if (!r) throw new CustomError('ISO 8601 wrong format » {0}', date);
     var gmt = new Date(),
       th = +r[7] || (gmt.getTimezoneOffset() / -60), //normalize the hours offset
@@ -1062,7 +1122,7 @@ Object.defineProperties(jsu, {
       m = r[5] || 0,
       s = r[6] || 0,
       ms;
-    if (th < 0 && tm > 0) { tm = -tm; } //fixes minutes offset
+    if (th < 0 && tm > 0) tm = -tm; //fixes minutes offset
     ms = -60000 * (th * 60 + tm); //corrects the time offset
     gmt = new Date(Date.UTC(r[1], M, r[3], h, m, s) + ms);
     return new Date(gmt);
@@ -1385,12 +1445,12 @@ Object.defineProperties(jsu, {
   //-----------------------------------
   // Validates the format of the first element, depending on the type supplied.
   // Date validations are run according to regional setting
-  $.fn.isValidFormat = function(type) {
+  $.fn.validators = function(type) {
     if (!this.length) return false;
-    if (!isValidFormat[type]) {
-      throw new CustomError('Property isValidFormat.{0} does not exist', type);
+    if (!validators[type]) {
+      throw new CustomError('Property validators.{0} does not exist', type);
     }
-    return isValidFormat[type](this.get(0));
+    return validators[type](this.get(0));
   };
   //-----------------------------------
   // Evaluates whether the current element contains a value with a date.
@@ -1415,7 +1475,7 @@ Object.defineProperties(jsu, {
     return this.each(function(i, dom) {
       var len = dom.maxLength;
       dom.maxLength = 524000; //firefox fix
-      if (len < 1) { len = 524000; } //chrome fix
+      if (len < 1) len = 524000; //chrome fix
       $(dom).off('.jsu-numericInput')
         .on(nsEvents('focus blur input paste', 'jsu-numericInput'), { max: len }, function(e) {
           var pos = e.type !== 'blur' ? getCaretPosition(e.target) : 0,
@@ -1429,7 +1489,7 @@ Object.defineProperties(jsu, {
           }
           digits = text.match(/\d/g);
           text = !digits ? '' : digits.join('').substr(0, e.data.max);
-          if (e.type === 'blur' && parseFloat(text) === 0) { text = '0'; }
+          if (e.type === 'blur' && parseFloat(text) === 0) text = '0';
           pos = Math.max(pos - (e.target.value.length - text.length), 0);
           e.target.value = text;
           e.target.maxLength = e.data.max;
@@ -1441,12 +1501,12 @@ Object.defineProperties(jsu, {
           var key = (e.which || e.keyCode),
             ctrl = !!(e.ctrlKey || e.metaKey);
           // Allow: (numbers), (keypad numbers),
-          // Allow: (backspace, tab, delete), (home, end, arrows)
+          // Allow: (home, end, arrows), (backspace, tab, delete),
           // Allow: (Ctrl+A), (Ctrl+C), (Ctrl+V), (Ctrl+X)
-          return ((key >= 48 && key <= 57) || (key >= 96 && key <= 105) ||
-            (key == 8 || key == 9 || key == 46) || (key >= 35 && key <= 40) ||
-            (ctrl && key == 65) || (ctrl && key == 67) ||
-            (ctrl && key == 86) || (ctrl && key == 88));
+          return (
+            (key >= 48 && key <= 57) || (key >= 96 && key <= 105) ||
+            (key >= 35 && key <= 40) || (key === 8 || key === 9 || key === 46) ||
+            (ctrl && (key === 65 || key === 67 || key === 86 || key === 88)));
         });
     });
   };
@@ -1454,12 +1514,12 @@ Object.defineProperties(jsu, {
   // Sets a mask of allowed characters for the matched elements
   $.fn.customInput = function(mask) {
     mask = mask instanceof RegExp ? mask : escapeRegExp(mask);
-    if (!mask) { throw new CustomError('Mask must be RegExp or string'); }
-    if (typeof mask === 'string') { mask = '[' + mask + ']'; }
+    if (!mask) throw new CustomError('Mask must be RegExp or string');
+    if (typeof mask === 'string') mask = '[' + mask + ']';
     return this.each(function(i, dom) {
       var len = dom.maxLength;
       dom.maxLength = 524000; //firefox fix
-      if (len < 1) { len = 524000; } //chrome fix
+      if (len < 1) len = 524000; //chrome fix
       $(dom).off('.jsu-customInput')
         .on(nsEvents('focus blur input paste', 'jsu-customInput'), { max: len }, function(e) {
           var pos = e.type !== 'blur' ? getCaretPosition(e.target) : 0,
@@ -1491,11 +1551,13 @@ Object.defineProperties(jsu, {
   };
   //-----------------------------------
   // @private
-  function _filterLength(n) { return (n && n.length) }
+  function _filterLength(n) {
+    return (n && n.length);
+  }
 
   // Prevents press specific keys for the matched elements
   $.fn.disableKey = function(keys) {
-    if (!keys) { return this; }
+    if (!keys) return this;
     keys = keys.toString().split('');
     keys = keys.filter(_filterLength);
     return this.each(function() {
@@ -1509,8 +1571,8 @@ Object.defineProperties(jsu, {
   //-----------------------------------
   // Validates the elements marked or performs a custom validation
   (function() {
-    // Creates the filters based on those properties defined in isValidFormat
-    var _ALLFILTERS = $.map(isValidFormat, function(value, key) {
+    // Creates the filters based on those properties defined in validators
+    var _ALLFILTERS = $.map(validators, function(value, key) {
       return '.vld-' + key;
     }).join(',');
     // Shows a tooltip for the validation message
@@ -1526,7 +1588,7 @@ Object.defineProperties(jsu, {
 
       //removes the validation message when the [blur] event is raised
       $(dom).attr('data-role', 'tooltip').trigger('blur.tooltip');
-      if (args.target.focus) { args.target.focus(); }
+      if (args.target.focus) args.target.focus();
 
       $('<span class="vld-tooltip">')
         .appendTo(jherax.wrapper)
@@ -1551,7 +1613,7 @@ Object.defineProperties(jsu, {
     }
     // Determines whether first option in a select should be validated
     function _fnValidateFirstItem(dom, o) {
-      if (dom.length === 0) { return true; }
+      if (dom.length === 0) return true;
       //treat the first item of the <select> element as an invalid option
       return (o.firstItemInvalid && dom.selectedIndex === 0);
     }
@@ -1608,7 +1670,7 @@ Object.defineProperties(jsu, {
               tag = input.nodeName.toLowerCase();
             // Gets the html5 data- attribute; modern browsers admit: dom.dataset[attribute]
             if (btn.getAttribute('data-group') !== input.getAttribute('data-group')) return true; //continue
-            if (fieldType.isWritable(input)) { input.value = $.trim(input.value); }
+            if (fieldType.isWritable(input)) input.value = $.trim(input.value);
 
             // Validates the elements marked with the css class "vld-required"
             // Looks for empty [input, select] elements, and those having the [value] attribute equal to "0"
@@ -1621,7 +1683,7 @@ Object.defineProperties(jsu, {
                 if (checkbox.is(':checked') || $('[name="' + checkbox.attr('name') + '"]').filter(':checked').length) {
                   return true; //continue
                 }
-                if (tag === 'span') { checkbox.addClass('vld-required'); }
+                if (tag === 'span') checkbox.addClass('vld-required');
                 checkbox = checkbox.get(0);
               }
               _fnTooltip(checkbox, event, _language.validateRequired, d.position);
@@ -1630,8 +1692,8 @@ Object.defineProperties(jsu, {
 
             if (!fieldType.isWritable(input) || !input.value.length) return true; //continue
             // Validates the elements marked with specific formats like "vld-email"
-            for (type in isValidFormat) {
-              if ($input.hasClass('vld-' + type) && !isValidFormat[type](input)) {
+            for (type in validators) {
+              if ($input.hasClass('vld-' + type) && !validators[type](input)) {
                 _fnTooltip(input, event, _language.validateFormat, d.position);
                 return (submit = false); //break
               }
@@ -1643,7 +1705,7 @@ Object.defineProperties(jsu, {
             submit = false;
           }
           setPropertiesNotWritable($.fn.easyValidate, 'canSubmit', submit);
-          if (!submit) { event.stopImmediatePropagation(); }
+          if (!submit) event.stopImmediatePropagation();
           return submit;
 
         }); //end btn.click
@@ -1727,7 +1789,7 @@ Object.defineProperties(jsu, {
   jherax.setCaretPosition = setCaretPosition;
   jherax.capitalize = capitalize;
   jherax.numericFormat = numericFormat;
-  jherax.isValidFormat = isValidFormat;
+  jherax.validators = validators;
   jherax.isValidDate = isValidDate;
   jherax.formatDate = formatDate; //undocumented
   jherax.dateToString = dateToString;
