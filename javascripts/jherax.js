@@ -1,20 +1,9 @@
-"use strict";
-
 /*
  *  JSU Library
  *  Author: David Rivera
- *  Created: 2013/06/26
- *  Version: 4.0.0
  -------------------------------------
  *  Source:
  *  http://github.com/jherax/js-utils
- -------------------------------------
- *  Documentation:
- *  http://jherax.github.io
- *  http://jherax.github.io/?lang=spanish
- -------------------------------------
- *  Has dependency on jQuery
- *  http://jquery.com/
  -------------------------------------
  *  Abstract:
  *  This is a library of utilities for JavaScript and jQuery.
@@ -22,35 +11,29 @@
  -------------------------------------
  *  Released under the MIT license
  *  https://raw.githubusercontent.com/jherax/js-utils/master/LICENSE
- *  Copyright (C) 2013-2016 jherax
+ *  Copyright (C) 2013-2017 jherax
  */
 
 // Avoid console errors in browsers that lack a console.
-(function(window, $) {
+!(function(root, $) {
   var method,
     methods = [
       'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
       'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
       'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
-      'timeStamp', 'trace', 'warn'
+      'timeStamp', 'trace', 'warn',
     ],
     length = methods.length,
-    console = (window.console = window.console || {});
+    console = (root.console = root.console || {});
 
   while (length -= 1) {
     method = methods[length];
-
     // Only stub undefined methods.
     if (!console[method]) {
       console[method] = $.noop;
     }
   }
 }(window, jQuery));
-
-// Creates the global namespace
-if (window.jsu && jsu.author !== 'jherax') {
-  throw new Error('A variable with namespace [jsu] is already in use');
-}
 
 // Creates the initial properties
 var jsu = window.jsu || {
@@ -65,30 +48,23 @@ var jsu = window.jsu || {
 };
 
 Object.defineProperties(jsu, {
+  // selector where dynamic HTML is placed
+  wrapper: 'body',
   author: jsu.setDescriptor('jherax'),
-  version: jsu.setDescriptor('4.0.0'),
-  dependencies: jsu.setDescriptor(['jQuery']),
-  //selector where dynamic HTML is placed
-  wrapper: {
-    writable: true,
-    configurable: false,
-    enumerable: true,
-    value: 'body'
-  },
-  //polyfill to get the host of the site
-  siteOrigin: jsu.setDescriptor((function() {
+  // ponyfill to get the host of the site
+  origin: jsu.setDescriptor((function() {
     var port = location.port ? ':' + location.port : '';
     return (location.origin || (location.protocol + '//' + location.hostname + port));
   }()), true),
-  //utility to create safe namespaces
+  // utility to create safe namespaces
   createNS: jsu.setDescriptor(function(namespace) {
     // @see https://gist.github.com/jherax/97cce1801527b84782a2
-    var nsparts = namespace.toString().split("."),
+    var nsparts = namespace.toString().split('.'),
       reName = (/^[A-Za-z_]\w+/),
       cparent = window,
       i, subns, nspartsLength;
     // we want to be able to include or exclude the root namespace so we strip it if it's in the namespace
-    if (nsparts[0] === "window") nsparts = nsparts.slice(1);
+    if (nsparts[0] === 'window') nsparts = nsparts.slice(1);
     // loop through the parts and create a nested namespace if necessary
     for (i = 0, nspartsLength = nsparts.length; i < nspartsLength; i += 1) {
       subns = nsparts[i];
@@ -108,16 +84,15 @@ Object.defineProperties(jsu, {
   }, true),
 });
 
-//-----------------------------------
+// -----------------------------------
 // Immediately-invoked Function Expressions (IIFE)
 // We pass the namespace as an argument to a self-invoking function.
-// "regional" is the context of the local namespace.
-(function(regional) {
+// 'regional' is the context of the local namespace, and '$' is jQuery.
+(function(regional, $) {
   // Creates the messages for specific culture
   regional.spanish = {
     culture: 'es',
     deprecated: ' "{0}" está en desuso, use "{1}" en su lugar ',
-    wordPattern: /\s(?:Y|O|Del?|Por|Al?|L[ao]s?|[SC]on|En|Se|Que|Una?)\b/g,
     decimalMark: ',',
     thousandsMark: '.',
     timeFormat: 'HH:mm',
@@ -127,12 +102,11 @@ Object.defineProperties(jsu, {
     dateIsLesser: 'La fecha no puede ser menor a hoy',
     validateForm: 'El botón debe estar dentro de un &lt;form&gt;',
     validateRequired: 'Este campo es requerido',
-    validateFormat: 'El formato es incorrecto'
+    validateFormat: 'El formato es incorrecto',
   };
   regional.english = {
     culture: 'en',
     deprecated: ' "{0}" is deprecated, use "{1}" instead ',
-    wordPattern: null,
     decimalMark: '.',
     thousandsMark: ',',
     timeFormat: 'HH:mm',
@@ -142,14 +116,14 @@ Object.defineProperties(jsu, {
     dateIsLesser: 'The date can\'t be lesser than today',
     validateForm: 'The button must be inside a &lt;form&gt;',
     validateRequired: 'This field is required',
-    validateFormat: 'The format is incorrect'
+    validateFormat: 'The format is incorrect',
   };
 
-  //-----------------------------------
+  // -----------------------------------
   // You can add more languages using $.extend
   regional.current = $.extend({}, regional.spanish);
 
-  //-----------------------------------
+  // -----------------------------------
   // Sets the default language configuration
   Object.defineProperty(regional, 'set', jsu.setDescriptor(
     function(obj, callback) {
@@ -160,28 +134,26 @@ Object.defineProperties(jsu, {
       if ($.isFunction(callback)) callback.apply(regional);
     }, true));
 
-}(jsu.createNS('jsu.regional')));
+}(jsu.createNS('jsu.regional'), jQuery));
 
-//-----------------------------------
+// -----------------------------------
 // We provide an object to override default settings.
-// "config" is the context of the local namespace, and "$" is the jQuery object.
-(function(config, $) {
+// 'config' is the context of the local namespace.
+(function(config) {
   config.position = null; //{ at:null, my:null };
-})(jsu.createNS('jsu.config'), jQuery);
+}(jsu.createNS('jsu.config')));
 
-//-----------------------------------
+// -----------------------------------
 // Immediately-invoked Function Expressions (IIFE)
-// "jherax" is the context of the local namespace, and "$" is jQuery.
-(function(window, $, jherax) {
-
-  //===================================
-  /* PRIVATE MEMBERS */
-  //===================================
+// 'jsu' is the context of the local namespace, and '$' is jQuery.
+(function(window, $, jsu) {
+  'use strict';
 
   // Sets the default language configuration
-  jherax.regional.set('spanish');
-  var _toString = Object.prototype.toString,
-    _language = jherax.regional.current;
+  jsu.regional.set('spanish');
+
+  var LANGUAGE = jsu.regional.current,
+    _toString = Object.prototype.toString;
 
   /**
    * Create a custom exception notifier.
@@ -223,8 +195,8 @@ Object.defineProperties(jsu, {
     }
     //prevents direct reference to Error.prototype
     CustomError.prototype = Object.create(Error.prototype, {
-      constructor: jherax.setDescriptor(CustomError),
-      name: jherax.setDescriptor('JSU Error')
+      constructor: jsu.setDescriptor(CustomError),
+      name: jsu.setDescriptor('JSU Error')
     });
     return CustomError;
   }());
@@ -268,7 +240,7 @@ Object.defineProperties(jsu, {
     });
   }
 
-  //-----------------------------------
+  // -----------------------------------
   // @private
   var SELECTABLE_TYPES = (/text|password|search|tel|url/);
 
@@ -276,7 +248,7 @@ Object.defineProperties(jsu, {
   // The @fn parameter provides a callback to execute additional code
   // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
   // @private
-  function _fixSelection(dom, fn) {
+  function fixSelection(dom, fn) {
     var validType = SELECTABLE_TYPES.test(dom.type),
       selection = {
         start: validType ? dom.selectionStart : 0,
@@ -285,7 +257,7 @@ Object.defineProperties(jsu, {
     if (validType && isFunction(fn)) fn(dom);
     return selection;
   }
-  //-----------------------------------
+  // -----------------------------------
   // Detects the browser via userAgent, since
   // jQuery 1.9+ deprecated the browser property.
   var browser = (function() {
@@ -305,7 +277,7 @@ Object.defineProperties(jsu, {
     b.version = o.version;
     return Object.freeze(b);
   }());
-  //-----------------------------------
+  // -----------------------------------
   /**
    * Determines if the entry parameter is a DOM Element
    *
@@ -316,7 +288,7 @@ Object.defineProperties(jsu, {
     if ('HTMLElement' in window) return !!(obj && obj instanceof HTMLElement);
     return !!(obj && typeof obj === 'object' && obj.nodeType === 1 && obj.nodeName);
   }
-  //-----------------------------------
+  // -----------------------------------
   // Determines if the @obj parameter is a function
   function isFunction(obj) {
     return typeof obj === 'function';
@@ -342,9 +314,9 @@ Object.defineProperties(jsu, {
     );
   }
 
-  //-----------------------------------
+  // -----------------------------------
   // @private
-  function _reducer(flat, cv) {
+  function reducer(flat, cv) {
     return flat.concat(Array.isArray(cv) ? flatten(cv) : cv);
   }
 
@@ -358,7 +330,7 @@ Object.defineProperties(jsu, {
    * @return {Array}
    */
   function flatten(array) {
-    return array.reduce(_reducer, []);
+    return array.reduce(reducer, []);
   }
 
   /**
@@ -379,7 +351,7 @@ Object.defineProperties(jsu, {
     return array.reduce((total, cv) => total + (+cv), 0);
   }
 
-  //-----------------------------------
+  // -----------------------------------
   // Determines whether the @dom parameter is a text or checkable <input>
   // http://www.quackit.com/html_5/tags/html_input_tag.cfm
   // http://github.com/jherax/js-utils#inputTypeisText
@@ -415,30 +387,7 @@ Object.defineProperties(jsu, {
       return SELECT.test(dom.nodeName);
     },
   };
-
-  /**
-   * Determines whether an event listener (defined by @eventName + @namespace) was bound to a DOM element.
-   *
-   * @see  https://gist.github.com/jherax/22f3f1b696943af63fbd
-   *
-   * @param  {DOMElement} dom: element to which search for a namespaced-event listener.
-   * @param  {String} eventName: the name of the event to search for.
-   * @param  {String} namespace: the namespace in which the event was registered.
-   * @return {Boolean}
-   */
-  function handlerExist(dom, eventName, namespace) {
-    let listener;
-    let listeners = $._data(dom, 'events');
-    if (listeners) listeners = listeners[eventName];
-    for (let i in listeners) {
-      listener = listeners[i];
-      if (namespace === (listener.namespace || (listener.data && listener.data.handler))) {
-        return true;
-      }
-    }
-    return false;
-  }
-  //-----------------------------------
+  // -----------------------------------
   // @private
   var SPACES_TABS = /\s+|\t+/g;
 
@@ -448,7 +397,7 @@ Object.defineProperties(jsu, {
     eventName = eventName.trim().replace('.', '') + namespace;
     return eventName.replace(SPACES_TABS, namespace + ' ');
   }
-  //-----------------------------------
+  // -----------------------------------
   // @private
   const ESCAPE_CHARS = /[.*+?=!:${}()\|\-\^\[\]\/\\]/g;
 
@@ -463,7 +412,7 @@ Object.defineProperties(jsu, {
     if (typeof text !== 'string') return null;
     return text.replace(ESCAPE_CHARS, '\\$&');
   }
-  //-----------------------------------
+  // -----------------------------------
   // Dynamically adds a script.
   // This method is useful to insert JavaScript code from an external file.
   function addScript(path) {
@@ -508,7 +457,7 @@ Object.defineProperties(jsu, {
       throw new CustomError(result);
     });
   }
-  //-----------------------------------
+  // -----------------------------------
   // Dynamically adds an external stylesheet file (CSS).
   // This method is useful to inject a css file to the document.
   function addCSS(path, before) {
@@ -534,10 +483,11 @@ Object.defineProperties(jsu, {
     }
     return file;
   }
-  //-----------------------------------
+  // -----------------------------------
   /**
    * @private
    */
+  const URL_PARAM = /(.+)=([^&]+)/;
   const TYPES = {
     _true: /true/i,
     _false: /false/i,
@@ -546,11 +496,6 @@ Object.defineProperties(jsu, {
     _object: /^[{[].*[}\]]$/,
     _number: /^[0-9]+$/,
   };
-
-  /**
-   * @private
-   */
-  const URL_PARAM = /(.+)=([^&]+)/;
 
   /**
    * Parses the input value to the correct data type
@@ -584,7 +529,7 @@ Object.defineProperties(jsu, {
    */
   function getValue(text) {
     let value = parseType(decodeURIComponent(text));
-    // prevents a string such as "00" be converted to number 0
+    // prevents a string such as '00' be converted to number 0
     if (typeof value === 'number' && String(value).length !== text.length) {
       value = text;
     }
@@ -601,7 +546,7 @@ Object.defineProperties(jsu, {
    * @param  {String} key: (optional) specific parameter in the url-search to extract
    * @return {Object}
    */
-  function urlParamsToObject(url = window.location.search, key) {
+  function urlParamsToObject(url = location.search, key) {
     let m;
     const paramsObj = {};
     url.split(/[?&#]/g).forEach((param) => { // eslint-disable-line
@@ -625,7 +570,7 @@ Object.defineProperties(jsu, {
    * @return {Primitive}
    */
   function urlParameter(...args) {
-    let url = window.location.search,
+    let url = location.search,
       key = args[0],
       value = '';
     if (args.length > 1) {
@@ -683,7 +628,7 @@ Object.defineProperties(jsu, {
       return cloner(source, dest, cache);
     };
   })();
-  //-----------------------------------
+  // -----------------------------------
   // Gets the selected text in the document and inside the text boxes.
   function getSelectedText() {
     var selection,
@@ -693,7 +638,7 @@ Object.defineProperties(jsu, {
     if (_getSelection) {
       // Get selected text from an input field
       if (fieldType.isWritable(dom)) {
-        selection = _fixSelection(dom);
+        selection = fixSelection(dom);
         sel.start = selection.start;
         sel.end = selection.end;
         if (sel.end > sel.start) {
@@ -711,12 +656,12 @@ Object.defineProperties(jsu, {
     if (sel.text !== '') sel.text = sel.text.trim();
     return sel;
   }
-  //-----------------------------------
+  // -----------------------------------
   // Gets the current position of the cursor in the @dom element
   function getCaretPosition(dom) {
     var selection, sel;
     if ('selectionStart' in dom) {
-      return _fixSelection(dom).start;
+      return fixSelection(dom).start;
     } else { // IE below version 9
       selection = document.selection;
       if (selection) {
@@ -727,13 +672,13 @@ Object.defineProperties(jsu, {
     }
     return -1;
   }
-  //-----------------------------------
+  // -----------------------------------
   // Sets the @position of the cursor in the @dom element
   function setCaretPosition(dom, pos) {
     var _createTextRange, range;
     pos = +pos || 0;
     if ('selectionStart' in dom) {
-      _fixSelection(dom, function(dom) {
+      fixSelection(dom, function(dom) {
         dom.setSelectionRange(pos, pos);
       });
     } else { // IE below version 9
@@ -748,80 +693,31 @@ Object.defineProperties(jsu, {
       }
     }
   }
-  //-----------------------------------
-  // Applies a transformation to the text,
-  // also it removes all consecutive spaces
-  var capitalize = (function() {
-    const TEXTAREA = /textarea/i,
-      LINEBREAK = /\r|\n/g,
-      PARAGRAPH = /^[¶\s]+|[¶\s]+$/g,
-      SECTION = /\s*¶+\s*/g,
-      SPACES = /\s{2,}/g,
-      WORD = /(?:^|-|:|;|\s|\.|\(|\/)[a-záéíóúüñ]/g,
-      FIRST = /^\w/;
-
-    const matchToUpper = (m) => m.toUpperCase();
-    const matchToLower = (m) => m.toLowerCase();
-
-    return function(obj, type) {
-      var isInput = fieldType.isWritable(obj),
-        text = isInput ? obj.value : obj && obj.toString();
-      if (!text || !text.length) return '';
-      if (TEXTAREA.test(obj.nodeName)) {
-        text = text.replace(LINEBREAK, '¶').replace(SPACES, ' ');
-        while (PARAGRAPH.test(text)) text = text.replace(PARAGRAPH, '');
-        text = text.replace(SECTION, '\n');
-      } else {
-        text = text.replace(SPACES, ' ').trim();
-      }
-      switch (type) {
-        case 'word':
-          text = text.toLowerCase().replace(WORD, matchToUpper);
-          text = (_language.wordPattern instanceof RegExp ?
-            text.replace(_language.wordPattern, matchToLower) : text);
-          break;
-        case 'title':
-          text = text.replace(WORD, matchToUpper);
-          break;
-        case 'first':
-          text = text.replace(FIRST, matchToUpper);
-          break;
-        case 'upper':
-          text = text.toUpperCase();
-          break;
-        case 'lower':
-          text = text.toLowerCase();
-          break;
-      }
-      if (isInput) obj.value = text;
-      return text;
-    };
-  }());
-  //-----------------------------------
+  // -----------------------------------
   // @private
-  var _DIGIT_THOUSANDS = (/\B(?=(\d{3})+(?!\d))/g);
+  var THOUSANDS_MARK = (/\B(?=(\d{3})+(?!\d))/g);
 
   // Sets the numeric format according to current culture.
-  // Places the decimal and thousand separators specified in _language
+  // Places the decimal and thousand separators specified in LANGUAGE
   function numericFormat(obj, o) {
     o = $.extend({
-      inDecimalMark: _language.decimalMark,
-      inThousandsMark: _language.thousandsMark,
-      outDecimalMark: _language.decimalMark,
-      outThousandsMark: _language.thousandsMark
+      inDecimalMark: LANGUAGE.decimalMark,
+      inThousandsMark: LANGUAGE.thousandsMark,
+      outDecimalMark: LANGUAGE.decimalMark,
+      outThousandsMark: LANGUAGE.thousandsMark
     }, o);
     var isInput = fieldType.isWritable(obj),
       text = isInput ? obj.value : obj && obj.toString();
     if (!text || !text.length) return '';
     var thousands = new RegExp(escapeRegExp(o.inThousandsMark), 'g'),
       number = text.replace(thousands, '').split(o.inDecimalMark) || [''],
-      integer = number[0].replace(_DIGIT_THOUSANDS, o.outThousandsMark),
+      integer = number[0].replace(THOUSANDS_MARK, o.outThousandsMark),
       decimal = number.length > 1 ? o.outDecimalMark + number[1] : '';
     text = integer + decimal;
     if (isInput) obj.value = text;
     return text;
   }
-  //-----------------------------------
+  // -----------------------------------
   // Validates the text format, depending on the type supplied.
   // Date validations are run according to regional setting.
   var validators = (function() {
@@ -881,11 +777,11 @@ Object.defineProperties(jsu, {
      */
     const PATTERNS = {
       // validates the date format according to regional setting
-      date: new RegExp(buildStringPattern(_language.dateFormat)),
+      date: new RegExp(buildStringPattern(LANGUAGE.dateFormat)),
       // validates the time format: HH:mm:ss
       time: (/^([0-1][0-9]|[2][0-3]):([0-5][0-9])(?::([0-5][0-9])){0,1}$/),
       // validates the date-time format according to regional setting
-      datetime: new RegExp(buildStringPattern(`${_language.dateFormat} ${_language.timeFormat}`)),
+      datetime: new RegExp(buildStringPattern(`${LANGUAGE.dateFormat} ${LANGUAGE.timeFormat}`)),
       email: (/^([0-9a-zñÑ](?:[-.\w]*[0-9a-zñÑ])*@(?:[0-9a-zñÑ][-\wñÑ]*[0-9a-zñÑ]\.)+[a-z]{2,9})$/i),
       url: (/((?:http|ftp|https):\/\/[\w\-_]+(?:\.[\w\-_]+)+(?:[\w\-.,@?^=%&:/~+#]*[\w\-@?^=%&/~+#])?)/gi),
       ipv4: (/^(?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d{1,2})\.){3}(?:25[0-5]|2[0-4]\d|[01]\d\d|\d{1,2})$/),
@@ -928,7 +824,7 @@ Object.defineProperties(jsu, {
       //Set properties as not writable
       setPropertiesNotWritable(validators, Object.keys(validators), null, true);
       // registers a function to add/configure validators
-      Object.defineProperty(validators, 'set', jherax.setDescriptor(
+      Object.defineProperty(validators, 'set', jsu.setDescriptor(
         (validatorName, fn) => {
           if (typeof fn !== 'function') return;
           // the validator function should return a boolean
@@ -943,7 +839,7 @@ Object.defineProperties(jsu, {
 
     return initValidators();
   }());
-  //-----------------------------------
+  // -----------------------------------
   // @private
   const _YMD = (/[yMd]+/gi);
   var _Y = (/y+/);
@@ -966,7 +862,7 @@ Object.defineProperties(jsu, {
       const DATETIME = /[dMyHhms]+/g;
       var date = 'y/M/d',
         dateParts = date.split(/\D/),
-        formatParts = _language.dateFormat.split(/[^yMd]/);
+        formatParts = LANGUAGE.dateFormat.split(/[^yMd]/);
       for (i in formatParts) {
         if (_Y.test(formatParts[i])) { date = date.replace('y', dateParts[i]); continue; }
         if (_M.test(formatParts[i])) { date = date.replace('M', dateParts[i]); continue; }
@@ -985,9 +881,9 @@ Object.defineProperties(jsu, {
       }, o);
       var e = { error: false };
       var dif = (_parser(text, e) - _parser(o.compareTo, e)) / 1000 / 3600 / 24;
-      if (e.error) { o.response = _language.dateFormatError; return false; }
-      if (o.isFuture && dif < 0) { o.response = _language.dateIsLesser; return false; }
-      if (!o.isFuture && dif > 0) { o.response = _language.dateIsGreater; return false; }
+      if (e.error) { o.response = LANGUAGE.dateFormatError; return false; }
+      if (o.isFuture && dif < 0) { o.response = LANGUAGE.dateIsLesser; return false; }
+      if (!o.isFuture && dif > 0) { o.response = LANGUAGE.dateIsGreater; return false; }
       return true;
     };
   }());
@@ -1020,7 +916,7 @@ Object.defineProperties(jsu, {
     if (typeof options === 'string') {
       options = {date: options};
     }
-    defaults.formatDate.outputFormat = _language.dateFormat;
+    defaults.formatDate.outputFormat = LANGUAGE.dateFormat;
     const opt = Object.assign({}, defaults.formatDate, options);
     const dateParts = opt.date.split(/\D/);
     const formatParts = opt.inputFormat.split(/\W/);
@@ -1036,7 +932,7 @@ Object.defineProperties(jsu, {
     });
   }
 
-  //-----------------------------------
+  // -----------------------------------
   // Displays the date according to the format specified by .dateFormat and .timeFormat in jsu.regional
   // The supported formats for ISO 8601 are: [YYYY-MM-DD] and [YYYY-MM-DDThh:mm]
   var dateToString = (function() {
@@ -1050,7 +946,7 @@ Object.defineProperties(jsu, {
     }
 
     function fnDate(o) {
-      return (o.ISO8601 ? 'yyyy-MM-dd' : _language.dateFormat).replace(_DATE, function(match) {
+      return (o.ISO8601 ? 'yyyy-MM-dd' : LANGUAGE.dateFormat).replace(_DATE, function(match) {
         switch (match) {
           case 'dd':
             return _fillZero(o.date.getDate());
@@ -1063,7 +959,7 @@ Object.defineProperties(jsu, {
     }
 
     function fnTime(o) {
-      return (o.ISO8601 ? 'HH:mm' : _language.timeFormat).replace(_HOUR, function(match) {
+      return (o.ISO8601 ? 'HH:mm' : LANGUAGE.timeFormat).replace(_HOUR, function(match) {
         var h = o.date.getHours();
         switch (match) {
           case 'HH':
@@ -1103,7 +999,7 @@ Object.defineProperties(jsu, {
       };
     };
   }());
-  //-----------------------------------
+  // -----------------------------------
   // @private
   var ISO_8601 = /(?:(\d{4})-(\d{2})-(\d{2}))(?:T(?:(\d{2})(?:\:(\d{2}))?(?:\:(\d{2}))?)?(?:([+\-]\d{2})(?:\:?(\d{2}))?)?)?/;
 
@@ -1127,12 +1023,12 @@ Object.defineProperties(jsu, {
     gmt = new Date(Date.UTC(r[1], M, r[3], h, m, s) + ms);
     return new Date(gmt);
   }
-  //-----------------------------------
+  // -----------------------------------
   // Delegates the blur event to removing the tooltips
   $(document).off('blur.jsu-tooltip').on(nsEvents('blur', 'jsu-tooltip'), '[data-role=tooltip]', function() {
     $('.vld-tooltip').remove();
   });
-  //-----------------------------------
+  // -----------------------------------
   // Displays a tooltip next to the @dom element
   function showTooltip(dom, msg, pos) {
     dom = $(dom);
@@ -1140,11 +1036,11 @@ Object.defineProperties(jsu, {
       at: 'right center',
       my: 'left+6 center',
       collision: 'flipfit'
-    }, jherax.config.position, pos);
+    }, jsu.config.position, pos);
     dom.attr('data-role', 'tooltip').trigger(nsEvents('blur', 'tooltip'));
     if (dom.focus) dom.focus(); //sets focus before showing the tooltip
     var vld = $('<span class="vld-tooltip">').html(msg);
-    vld.appendTo(jherax.wrapper).position({
+    vld.appendTo(jsu.wrapper).position({
       of: dom,
       at: pos.at,
       my: pos.my,
@@ -1152,7 +1048,7 @@ Object.defineProperties(jsu, {
     }).hide().fadeIn(400);
     return false;
   }
-  //-----------------------------------
+  // -----------------------------------
   // Shows the overlay screen with the loading animation
   function showLoading(o) {
     if (o === false)
@@ -1187,7 +1083,7 @@ Object.defineProperties(jsu, {
     loading.center({ of: d.of });
     return true;
   }
-  //-----------------------------------
+  // -----------------------------------
   // @private
   var _$DIV = $('<div>');
 
@@ -1198,7 +1094,7 @@ Object.defineProperties(jsu, {
     var html = _$DIV.text(value).html();
     return $.trim(html);
   }
-  //-----------------------------------
+  // -----------------------------------
   // Detects the width of the scrollbar
   function getScrollbarWidth() {
     var outer = $('<div>').css({ visibility: 'hidden', width: 100, overflow: 'scroll' }).appendTo('body'),
@@ -1206,7 +1102,7 @@ Object.defineProperties(jsu, {
     outer.remove();
     return 100 - barWidth;
   }
-  //-----------------------------------
+  // -----------------------------------
   // Updates the HTML5 browser cache
   function updateCache() {
     if (handlerExist(window, 'load', 'jsu-updateCache')) return;
@@ -1217,19 +1113,19 @@ Object.defineProperties(jsu, {
           //the browser downloads a new version of the cache manifest,
           //and must reload the page in order to access to the new resources
           appCache.swapCache();
-          window.location.reload(true);
+          location.reload(true);
         }
       });
     });
   }
 
-  //===================================
+  // ===================================
   /* JQUERY EXTENSIONS */
-  //===================================
+  // ===================================
 
   // Reverses the array of matched elements
   $.fn.reverse = Array.prototype.reverse;
-  //-----------------------------------
+  // -----------------------------------
   // Detects if an element is before or after another element
   $.fn.isAfter = function(sel) {
     return this.prevAll().filter(sel).length !== 0;
@@ -1237,19 +1133,19 @@ Object.defineProperties(jsu, {
   $.fn.isBefore = function(sel) {
     return this.nextAll().filter(sel).length !== 0;
   };
-  //-----------------------------------
+  // -----------------------------------
   // Detects if the element has vertical scrollbar
   $.fn.hasVScroll = function() {
     if (!this.length) return false;
     return this.get(0).scrollHeight > this.get(0).clientHeight;
   };
-  //-----------------------------------
+  // -----------------------------------
   // Detects if the element has horizontal scrollbar
   $.fn.hasHScroll = function() {
     if (!this.length) return false;
     return this.get(0).scrollWidth > this.get(0).clientWidth;
   };
-  //-----------------------------------
+  // -----------------------------------
   // Position an element relative to another element
   (function() {
     // http://api.jqueryui.com/position/
@@ -1362,7 +1258,7 @@ Object.defineProperties(jsu, {
       });
     };
   })();
-  //-----------------------------------
+  // -----------------------------------
   // Centers an element relative to another.
   // https://gist.github.com/jherax/ad41f92597e6d95bdee1
   // https://jsfiddle.net/apaul34208/e4y6F (css:calc)
@@ -1387,7 +1283,7 @@ Object.defineProperties(jsu, {
       });
     }
   };
-  //-----------------------------------
+  // -----------------------------------
   // TODO: Refactor all jQuery plugins and split to another file
   // Limits the max length in the input:text
   $.fn.maxLength = function(length, o) {
@@ -1396,7 +1292,7 @@ Object.defineProperties(jsu, {
       at: 'right bottom',
       my: 'right top+6',
       collision: 'flipfit'
-    }, jherax.config.position, o);
+    }, jsu.config.position, o);
     return this.each(function(i, dom) {
       var count = 'Max: ' + length;
       if (!fieldType.isWritable(dom)) return true; //continue
@@ -1416,7 +1312,7 @@ Object.defineProperties(jsu, {
           count = 'Max: ' + len + '/' + length;
           if (!$('#' + id).text(count).length) {
             $('<span class="vld-tooltip" id="' + id + '">')
-              .text(count).appendTo(jherax.wrapper).position({
+              .text(count).appendTo(jsu.wrapper).position({
                 of: dom,
                 at: o.at,
                 my: o.my,
@@ -1426,23 +1322,14 @@ Object.defineProperties(jsu, {
         });
     });
   };
-  //-----------------------------------
-  // Apply the capitalized format to text when the blur event is raised
-  $.fn.capitalize = function(type) {
-    return this.each(function(i, dom) {
-      $(dom).off('.jsu-capitalize').on(nsEvents('blur', 'jsu-capitalize'), function() {
-        capitalize(this, type);
-      });
-    });
-  };
-  //-----------------------------------
+  // -----------------------------------
   // Displays a tooltip next to the current element
   $.fn.showTooltip = function(msg, pos) {
     return this.each(function(i, dom) {
       showTooltip(dom, msg, pos);
     });
   };
-  //-----------------------------------
+  // -----------------------------------
   // Validates the format of the first element, depending on the type supplied.
   // Date validations are run according to regional setting
   $.fn.validators = function(type) {
@@ -1452,16 +1339,16 @@ Object.defineProperties(jsu, {
     }
     return validators[type](this.get(0));
   };
-  //-----------------------------------
+  // -----------------------------------
   // Evaluates whether the current element contains a value with a date.
   // The result of the validation will be shown in a tooltip
   $.fn.isValidDate = function(o) {
     if (!this.length) return false;
     return isValidDate(this.get(0), o);
   };
-  //-----------------------------------
+  // -----------------------------------
   // Sets the numeric format according to current culture.
-  // Places the decimal and thousand separators specified in _language
+  // Places the decimal and thousand separators specified in LANGUAGE
   $.fn.numericFormat = function(o) {
     return this.each(function(i, dom) {
       $(dom).off('.jsu-numericFormat').on(nsEvents('keyup blur', 'jsu-numericFormat'), function() {
@@ -1469,7 +1356,7 @@ Object.defineProperties(jsu, {
       });
     });
   };
-  //-----------------------------------
+  // -----------------------------------
   // The matched elements accept only numeric characters
   $.fn.numericInput = function() {
     return this.each(function(i, dom) {
@@ -1510,7 +1397,7 @@ Object.defineProperties(jsu, {
         });
     });
   };
-  //-----------------------------------
+  // -----------------------------------
   // Sets a mask of allowed characters for the matched elements
   $.fn.customInput = function(mask) {
     mask = mask instanceof RegExp ? mask : escapeRegExp(mask);
@@ -1549,7 +1436,7 @@ Object.defineProperties(jsu, {
         });
     });
   };
-  //-----------------------------------
+  // -----------------------------------
   // @private
   function _filterLength(n) {
     return (n && n.length);
@@ -1568,7 +1455,7 @@ Object.defineProperties(jsu, {
       });
     });
   };
-  //-----------------------------------
+  // -----------------------------------
   // Validates the elements marked or performs a custom validation
   (function() {
     // Creates the filters based on those properties defined in validators
@@ -1591,7 +1478,7 @@ Object.defineProperties(jsu, {
       if (args.target.focus) args.target.focus();
 
       $('<span class="vld-tooltip">')
-        .appendTo(jherax.wrapper)
+        .appendTo(jsu.wrapper)
         .html(messageType)
         .position({
           of: args.target,
@@ -1638,11 +1525,11 @@ Object.defineProperties(jsu, {
           at: 'right center',
           my: 'left+6 center',
           collision: 'flipfit'
-        }, jherax.config.position),
+        }, jsu.config.position),
         d = $.extend({
           fnValidator: null,
           firstItemInvalid: false,
-          container: jherax.wrapper,
+          container: jsu.wrapper,
           requiredForm: false,
           position: position,
           onBeforeTooltip: null
@@ -1651,7 +1538,7 @@ Object.defineProperties(jsu, {
       return this.each(function(index, btn) {
         var handlers, $btn = $(btn);
         if (d.requiredForm && !$btn.closest('form').length) {
-          showTooltip(btn, _language.validateForm);
+          showTooltip(btn, LANGUAGE.validateForm);
           return true; //continue with next element
         }
         // Execute a callback before displaying the tooltip,
@@ -1686,7 +1573,7 @@ Object.defineProperties(jsu, {
                 if (tag === 'span') checkbox.addClass('vld-required');
                 checkbox = checkbox.get(0);
               }
-              _fnTooltip(checkbox, event, _language.validateRequired, d.position);
+              _fnTooltip(checkbox, event, LANGUAGE.validateRequired, d.position);
               return (submit = false); //break
             } //end of "vld-required" elements
 
@@ -1694,7 +1581,7 @@ Object.defineProperties(jsu, {
             // Validates the elements marked with specific formats like "vld-email"
             for (type in validators) {
               if ($input.hasClass('vld-' + type) && !validators[type](input)) {
-                _fnTooltip(input, event, _language.validateFormat, d.position);
+                _fnTooltip(input, event, LANGUAGE.validateFormat, d.position);
                 return (submit = false); //break
               }
             } //end of specific format validation
@@ -1765,39 +1652,38 @@ Object.defineProperties(jsu, {
     });
   };
 
-  //===================================
+  // ===================================
   /* PUBLIC API */
-  //===================================
+  // ===================================
 
-  jherax.browser = browser;
-  jherax.isDOM = isDOM;
-  jherax.isFunction = isFunction;
-  jherax.multiFilter = multiFilter; //undocumented
-  jherax.flatten = flatten; //undocumented
-  jherax.sumValues = sumValues; //undocumented
-  jherax.fieldType = fieldType;
-  jherax.handlerExist = handlerExist;
-  jherax.nsEvents = nsEvents;
-  jherax.addScript = addScript;
-  jherax.addCSS = addCSS;
-  jherax.escapeRegExp = escapeRegExp;
-  jherax.urlParamsToObject = urlParamsToObject;
-  jherax.urlParameter = urlParameter;
-  jherax.clone = clone; //undocumented
-  jherax.getSelectedText = getSelectedText;
-  jherax.getCaretPosition = getCaretPosition;
-  jherax.setCaretPosition = setCaretPosition;
-  jherax.capitalize = capitalize;
-  jherax.numericFormat = numericFormat;
-  jherax.validators = validators;
-  jherax.isValidDate = isValidDate;
-  jherax.formatDate = formatDate; //undocumented
-  jherax.dateToString = dateToString;
-  jherax.dateFromISO8601 = dateFromISO8601;
-  jherax.showTooltip = showTooltip;
-  jherax.showLoading = showLoading;
-  jherax.getHtmlText = getHtmlText;
-  jherax.getScrollbarWidth = getScrollbarWidth;
-  jherax.updateCache = updateCache; //undocumented
+  jsu.browser = browser;
+  jsu.isDOM = isDOM;
+  jsu.isFunction = isFunction;
+  jsu.multiFilter = multiFilter; //undocumented
+  jsu.flatten = flatten; //undocumented
+  jsu.sumValues = sumValues; //undocumented
+  jsu.fieldType = fieldType;
+  jsu.handlerExist = handlerExist;
+  jsu.nsEvents = nsEvents;
+  jsu.addScript = addScript;
+  jsu.addCSS = addCSS;
+  jsu.escapeRegExp = escapeRegExp;
+  jsu.urlParamsToObject = urlParamsToObject;
+  jsu.urlParameter = urlParameter;
+  jsu.clone = clone; //undocumented
+  jsu.getSelectedText = getSelectedText;
+  jsu.getCaretPosition = getCaretPosition;
+  jsu.setCaretPosition = setCaretPosition;
+  jsu.numericFormat = numericFormat;
+  jsu.validators = validators;
+  jsu.isValidDate = isValidDate;
+  jsu.formatDate = formatDate; //undocumented
+  jsu.dateToString = dateToString;
+  jsu.dateFromISO8601 = dateFromISO8601;
+  jsu.showTooltip = showTooltip;
+  jsu.showLoading = showLoading;
+  jsu.getHtmlText = getHtmlText;
+  jsu.getScrollbarWidth = getScrollbarWidth;
+  jsu.updateCache = updateCache; //undocumented
 
 }(window, jQuery, jsu));
