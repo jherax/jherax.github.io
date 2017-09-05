@@ -581,53 +581,6 @@ Object.defineProperties(jsu, {
     if (m) value = getValue(m[2]);
     return value;
   }
-
-  /**
-   * Creates a deep copy of an object.
-   * https://gist.github.com/jherax/05204bdf9eb47eeffdc8
-   *
-   * @param  {Any} from: Source object to clone
-   * @param  {Object} dest: (Optional) destination object to merge with
-   * @return {Any} The cloned object
-   */
-  var clone = (() => {
-    const constructors = [Date, RegExp, Function, String, Number, Boolean];
-    ['Map', 'Set'].forEach((c) => {
-      if (c in window) constructors.push(window[c]);
-    });
-
-    function compare(obj) {
-      return obj === this;
-    }
-
-    function cloner(source, dest, cache) {
-      let prop;
-      // determines whether @source is a primitive value or a function
-      if (source == null || typeof source !== 'object') return source;
-      // checks if @source refers to an object created previously
-      if (_toString.call(source) === '[object Object]') {
-        if (cache.find(compare, source)) return source;
-        // keeps reference to created objects
-        cache.push(source);
-      }
-
-      // determines whether @source is an instance of any of the constructors
-      if (~constructors.indexOf(source.constructor)) return new source.constructor(source);
-      if (source.constructor !== Object && source.constructor !== Array) return source;
-      // creates a new object and recursively iterates over its properties
-      dest = dest || new source.constructor();
-      for (prop in source) {
-        // merges @source into @dest
-        dest[prop] = cloner(source[prop], dest[prop], cache);
-      }
-      return dest;
-    }
-
-    return (source, dest) => {
-      const cache = [];
-      return cloner(source, dest, cache);
-    };
-  })();
   // -----------------------------------
   // Gets the selected text in the document and inside the text boxes.
   function getSelectedText() {
@@ -1670,7 +1623,6 @@ Object.defineProperties(jsu, {
   jsu.escapeRegExp = escapeRegExp;
   jsu.urlParamsToObject = urlParamsToObject;
   jsu.urlParameter = urlParameter;
-  jsu.clone = clone; //undocumented
   jsu.getSelectedText = getSelectedText;
   jsu.getCaretPosition = getCaretPosition;
   jsu.setCaretPosition = setCaretPosition;
