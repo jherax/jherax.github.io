@@ -648,27 +648,40 @@ Object.defineProperties(jsu, {
   }
   // -----------------------------------
   // @private
-  var THOUSANDS_MARK = (/\B(?=(\d{3})+(?!\d))/g);
+  const THOUSANDS_MARK = (/\B(?=(\d{3})+(?!\d))/g);
 
-  // Sets the numeric format according to current culture.
-  // Places the decimal and thousand separators specified in LANGUAGE
-  function numericFormat(obj, o) {
-    o = $.extend({
-      inDecimalMark: LANGUAGE.decimalMark,
-      inThousandsMark: LANGUAGE.thousandsMark,
-      outDecimalMark: LANGUAGE.decimalMark,
-      outThousandsMark: LANGUAGE.thousandsMark
-    }, o);
-    var isInput = fieldType.isWritable(obj),
-      text = isInput ? obj.value : obj && obj.toString();
-    if (!text || !text.length) return '';
-    var thousands = new RegExp(escapeRegExp(o.inThousandsMark), 'g'),
-      number = text.replace(thousands, '').split(o.inDecimalMark) || [''],
-      integer = number[0].replace(THOUSANDS_MARK, o.outThousandsMark),
-      decimal = number.length > 1 ? o.outDecimalMark + number[1] : '';
-    text = integer + decimal;
-    if (isInput) obj.value = text;
-    return text;
+  /**
+   * Sets the numeric format according to the settings passed in.
+   *
+   * @param {String} value - the number to format
+   * @param {Object} options - settings for input and output values
+   * @returns {String}
+   */
+  function formatNumber(value, options) {
+    options = Object.assign({
+      digits: 2, // after decimal mark
+      in: {
+        decimalMark: LANGUAGE.decimalMark,
+        thousandsMark: LANGUAGE.thousandsMark,
+      },
+      out: {
+        decimalMark: LANGUAGE.decimalMark,
+        thousandsMark: LANGUAGE.thousandsMark,
+      },
+    }, options);
+    if (!value || !value.length) return '';
+    const isInput = fieldType.isWritable(value) ? value : null,
+      thousands = new RegExp(escapeRegExp(options.in.thousandsMark), 'g'),
+      number = (isInput ? isInput.value : value)
+        .replace(thousands, '').split(options.in.decimalMark);
+    let [integer, decimal = ''] = number;
+    if (integer !== '0' && !+integer) return '';
+    integer = integer.replace(THOUSANDS_MARK, options.out.thousandsMark);
+    decimal = decimal.substring(0, options.digits).trim();
+    if (decimal) decimal = options.out.decimalMark + decimal;
+    value = integer.trim() + decimal;
+    if (isInput) isInput.value = value;
+    return value;
   }
   // -----------------------------------
   // Validates the text format, depending on the type supplied.
@@ -1302,10 +1315,10 @@ Object.defineProperties(jsu, {
   // -----------------------------------
   // Sets the numeric format according to current culture.
   // Places the decimal and thousand separators specified in LANGUAGE
-  $.fn.numericFormat = function(o) {
+  $.fn.formatNumber = function(o) {
     return this.each(function(i, dom) {
-      $(dom).off('.jsu-numericFormat').on(nsEvents('keyup blur', 'jsu-numericFormat'), function() {
-        numericFormat(this, o);
+      $(dom).off('.jsu-formatNumber').on(nsEvents('keyup blur', 'jsu-formatNumber'), function() {
+        formatNumber(this, o);
       });
     });
   };
@@ -1626,7 +1639,7 @@ Object.defineProperties(jsu, {
   jsu.getSelectedText = getSelectedText;
   jsu.getCaretPosition = getCaretPosition;
   jsu.setCaretPosition = setCaretPosition;
-  jsu.numericFormat = numericFormat;
+  jsu.formatNumber = formatNumber;
   jsu.validators = validators;
   jsu.isValidDate = isValidDate;
   jsu.formatDate = formatDate; //undocumented
