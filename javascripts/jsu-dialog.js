@@ -205,7 +205,7 @@
             // Unbinds  the event handler and triggers the previous actions
             $(button).off(".jsu-showConfirm").trigger(type);
             // Triggers the awful asp.net postback
-            if ((/[_]{2}doPostBack/).test(button.href))
+            if ((/__doPostBack/).test(button.href))
                 setTimeout(button.href.replace(/javascript:/i, ""), 1);
         }).dialog("close");
     }

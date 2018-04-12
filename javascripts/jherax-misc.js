@@ -232,17 +232,18 @@ if (typeof Array.prototype.filter !== 'function') {
                 dataType: "json",
                 success: function (data) {
                     data = $.parseJSON(data.d);
-                    var x,
-                        head = [], body = [],
-                        dataLength = data.length;
+                    var dataLength = data.length;
                     if (!dataLength) return;
+                    var x,
+                        head = [],
+                        body = [],
+                        img = /^img$/i;
                     //Creates header and body templates
                     for (x = 0; x < dataLength; x+=1) {
                         head.push('<div class="tt-head-cell">' + data[x] + '</div>');
-                        if (!(/^img$/i).test(data[x])) body.push('<div class="">{{' + data[x] + '}}</div>');
+                        if (!img.test(data[x])) body.push('<div class="">{{' + data[x] + '}}</div>');
                         else body.push('<div class="image"><img src="{{' + data[x] + '}}"/></div>');
                     }
-                    x = dataLength = null;
                     //Fix the padding-right of the last column
                     head[head.length - 1] = head[head.length - 1].replace('">', ' last-cell">');
                     body[body.length - 1] = body[body.length - 1].replace('">', ' last-cell">');
@@ -306,11 +307,13 @@ if (typeof Array.prototype.filter !== 'function') {
         return this.each(function () {
             var x, colsLength,
                 txb = $(this),
-                head = [], body = [];
+                head = [],
+                body = [],
+                img = /^img$/i;
             //Creates header and body templates
-            for (x = 0, colsLength = o.columns.length; x < colsLength; x+=1) {
+            for (x = 0, colsLength = o.columns.length; x < colsLength; x += 1) {
                 head.push('<div class="tt-head-cell">' + o.columns[x] + '</div>');
-                if (!(/^img$/i).test(o.columns[x])) body.push('<div class="">{{' + o.columns[x] + '}}</div>');
+                if (!img.test(o.columns[x])) body.push('<div class="">{{' + o.columns[x] + '}}</div>');
                 else body.push('<div class="image"><img src="{{' + o.columns[x] + '}}"/></div>');
             }
             //Fix the padding-right of the last column

@@ -242,7 +242,7 @@ Object.defineProperties(jsu, {
 
   // -----------------------------------
   // @private
-  var SELECTABLE_TYPES = (/text|password|search|tel|url/);
+  var SELECTABLE_TYPES = /text|password|search|tel|url/;
 
   // Fix: failed to read the 'selectionStart' property from 'HTMLInputElement'
   // The @fn parameter provides a callback to execute additional code
@@ -355,7 +355,8 @@ Object.defineProperties(jsu, {
   // Determines whether the @dom parameter is a text or checkable <input>
   // http://www.quackit.com/html_5/tags/html_input_tag.cfm
   // http://github.com/jherax/js-utils#inputTypeisText
-  const SELECT = /select/i,
+  const
+    SELECT = /select/i,
     TEXTAREA = /textarea/i,
     TEXT = /text|password|file|number|search|tel|url|email|datetime|datetime-local|date|time|month|week/i,
     RADIO = /checkbox|radio/i,
@@ -389,17 +390,21 @@ Object.defineProperties(jsu, {
   };
   // -----------------------------------
   // @private
-  var SPACES_TABS = /\s+|\t+/g;
+  var SPACES = /\s+/g;
 
   // Builds the event name, by appending "." + @namespace at the end of @eventName
   function nsEvents(eventName, namespace) {
     namespace = '.' + namespace;
     eventName = eventName.trim().replace('.', '') + namespace;
-    return eventName.replace(SPACES_TABS, namespace + ' ');
+    return eventName.replace(SPACES, namespace + ' ');
   }
   // -----------------------------------
   // @private
-  const ESCAPE_CHARS = /[.*+?=!:${}()\|\-\^\[\]\/\\]/g;
+  var UNICODE = new RegExp('[\\w\u0128-\uFFFF__\-]');
+
+  // -----------------------------------
+  // @private
+  const SPECIAL_CHARS = /[.*+?=!:${}()\|\-\^\[\]\/\\]/g;
 
   /**
    * Escapes the special characters in the entry parameter, so that
@@ -410,7 +415,7 @@ Object.defineProperties(jsu, {
    */
   function escapeRegExp(text) {
     if (typeof text !== 'string') return null;
-    return text.replace(ESCAPE_CHARS, '\\$&');
+    return text.replace(SPECIAL_CHARS, '\\$&');
   }
   // -----------------------------------
   // Dynamically adds a script.
@@ -648,7 +653,7 @@ Object.defineProperties(jsu, {
   }
   // -----------------------------------
   // @private
-  const THOUSANDS_MARK = (/\B(?=(\d{3})+(?!\d))/g);
+  const THOUSANDS_MARK = /\B(?=(?:\d{3})+(?!\d))/g;
 
   /**
    * Sets the numeric format according to the settings passed in.
@@ -684,17 +689,17 @@ Object.defineProperties(jsu, {
     return value;
   }
   // -----------------------------------
+  /**
+   * Datetime format flags.
+   *
+   * @private
+   * @type {RegExp}
+   */
+  const DATETIME = /[dMyHhms]+/g;
+
   // Validates the text format, depending on the type supplied.
   // Date validations are run according to regional setting.
   var validators = (function() {
-    /**
-     * Datetime format flags.
-     *
-     * @private
-     * @type {RegExp}
-     */
-    const DATETIME = /[dMyHhms]+/g;
-
     /**
      * Replaces every flag in a datetime format, to use instead a raw string to build a RegExp pattern.
      *
@@ -807,10 +812,12 @@ Object.defineProperties(jsu, {
   }());
   // -----------------------------------
   // @private
-  const _YMD = (/[yMd]+/gi);
-  var _Y = (/y+/);
-  var _M = (/M+/);
-  var _D = (/d+/);
+  const
+    NONDIGIT = /\D/,
+    _YMD = /[yMd]+/gi,
+    _Y = /y+/,
+    _M = /M+/,
+    _D = /d+/;
 
   // Evaluates whether the @dom element contains a value with a date.
   // The result of the validation is written to @o.response
@@ -825,9 +832,8 @@ Object.defineProperties(jsu, {
       type = date.length > 10 ? 'datetime' : 'date';
       e.error = (e.error || !validators[type](date));
       if (e.error) return new Date();
-      const DATETIME = /[dMyHhms]+/g;
       var date = 'y/M/d',
-        dateParts = date.split(/\D/),
+        dateParts = date.split(NONDIGIT),
         formatParts = LANGUAGE.dateFormat.split(/[^yMd]/);
       for (i in formatParts) {
         if (_Y.test(formatParts[i])) { date = date.replace('y', dateParts[i]); continue; }
@@ -884,7 +890,7 @@ Object.defineProperties(jsu, {
     }
     defaults.formatDate.outputFormat = LANGUAGE.dateFormat;
     const opt = Object.assign({}, defaults.formatDate, options);
-    const dateParts = opt.date.split(/\D/);
+    const dateParts = opt.date.split(NONDIGIT);
     const formatParts = opt.inputFormat.split(/\W/);
     for (let i = 0; i < formatParts.length; i += 1) {
       if (_Y.test(formatParts[i])) { y = dateParts[i]; continue; }
@@ -902,10 +908,10 @@ Object.defineProperties(jsu, {
   // Displays the date according to the format specified by .dateFormat and .timeFormat in jsu.regional
   // The supported formats for ISO 8601 are: [YYYY-MM-DD] and [YYYY-MM-DDThh:mm]
   var dateToString = (function() {
-    var _TYPE = (/\[object\s(?:String|Number|Date)\]/),
-      _MSDATE = (/Date/),
-      _DATE = (/[dMy]+/g),
-      _HOUR = (/[Hhms]+/g);
+    var _TYPE = /\[object\s(?:String|Number|Date)\]/,
+      _MSDATE = /Date/,
+      _DATE = /[dMy]+/g,
+      _HOUR = /[Hhms]+/g;
 
     function _fillZero(n) {
       return ('0' + n).slice(-2);
@@ -1127,7 +1133,7 @@ Object.defineProperties(jsu, {
         vertical = _VERTICAL.test(pos);
       if (!horizontal && !vertical)
         return 'center center';
-      if (!(/\s/).test(pos)) {
+      if (!SPACES.test(pos)) {
         if (!horizontal) return 'center ' + pos;
         if (!vertical) return pos + ' center';
       }
